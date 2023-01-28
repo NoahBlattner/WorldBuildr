@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>WorldBuildr:  Fichier source de gamecanvas.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">WorldBuildr<span id="projectnumber">&#160;0.1</span>
+   </div>
+   <div id="projectbrief">WorldBuildr</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Recherche');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Chargement...</div>
+<div class="SRStatus" id="Searching">Recherche...</div>
+<div class="SRStatus" id="NoMatches">Aucune correspondance</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">gamecanvas.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="gamecanvas_8h.html">Aller à la documentation de ce fichier.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#ifndef GAMECANVAS_H</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#define GAMECANVAS_H</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;QObject&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;QPointer&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;QTime&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;QTimer&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;QElapsedTimer&gt;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">class </span><a class="code hl_class" href="class_game_core.html">GameCore</a>;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">class </span><a class="code hl_class" href="class_game_scene.html">GameScene</a>;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">class </span><a class="code hl_class" href="class_game_view.html">GameView</a>;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">class </span><a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html">QGraphicsScene</a>;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">class </span><a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qgraphicsscenemouseevent.html">QGraphicsSceneMouseEvent</a>;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keyword">class </span><a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qgraphicstextitem.html">QGraphicsTextItem</a>;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">class </span><a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qkeyevent.html">QKeyEvent</a>;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="class_game_canvas.html">   50</a></span><span class="keyword">class </span><a class="code hl_class" href="class_game_canvas.html">GameCanvas</a> : <span class="keyword">public</span> <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qobject.html">QObject</a></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>{</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    Q_OBJECT</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="class_game_canvas.html#adb7601674515e62b496d57d87c6803e4ac04e11b3b4fa2170d115c93bd63bd0dd">   54</a></span>    <span class="keyword">enum</span> { <a class="code hl_enumvalue" href="class_game_canvas.html#adb7601674515e62b496d57d87c6803e4ac04e11b3b4fa2170d115c93bd63bd0dd">KEEP_PREVIOUS_TICK_INTERVAL</a> = -1  };</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keyword">explicit</span> <a class="code hl_class" href="class_game_canvas.html">GameCanvas</a>(<a class="code hl_class" href="class_game_view.html">GameView</a>* pView, <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qobject.html">QObject</a>* pParent = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <a class="code hl_function" href="class_game_canvas.html#aee8b07a06718401c80e3d74c21a8da45">~GameCanvas</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <a class="code hl_class" href="class_game_scene.html">GameScene</a>* <a class="code hl_function" href="class_game_canvas.html#ab207f2189a7a28a7024f8c05e6254451">createScene</a>();</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <a class="code hl_class" href="class_game_scene.html">GameScene</a>* <a class="code hl_function" href="class_game_canvas.html#ab207f2189a7a28a7024f8c05e6254451">createScene</a>(<span class="keyword">const</span> <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qrectf.html">QRectF</a>&amp; rSceneRect);</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <a class="code hl_class" href="class_game_scene.html">GameScene</a>* <a class="code hl_function" href="class_game_canvas.html#ab207f2189a7a28a7024f8c05e6254451">createScene</a>(qreal x, qreal y, qreal width, qreal height);</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_game_canvas.html#a326898c390ed700b827c33cf08e25009">setCurrentScene</a>(<a class="code hl_class" href="class_game_scene.html">GameScene</a>* pScene);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <a class="code hl_class" href="class_game_scene.html">GameScene</a>* <a class="code hl_function" href="class_game_canvas.html#a7897fa78ef39001d1c7c37d737179647">currentScene</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_game_canvas.html#ae9484ea730a2fa1e63fd29825d702bb7">setHudScene</a>(<a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html">QGraphicsScene</a>* pHudScene);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html">QGraphicsScene</a>* <a class="code hl_function" href="class_game_canvas.html#a7e1169c6a338f058672daef519894432">hudScene</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_game_canvas.html#a102153a6332fa9af8cc956c126f6740c">startTick</a>(<span class="keywordtype">int</span> tickInterval = <a class="code hl_enumvalue" href="class_game_canvas.html#adb7601674515e62b496d57d87c6803e4ac04e11b3b4fa2170d115c93bd63bd0dd">KEEP_PREVIOUS_TICK_INTERVAL</a>);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_game_canvas.html#aa484cf048075d69f85995e0816209087">stopTick</a>();</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_game_canvas.html#ad35bdf9fc3ef94c78ececc47812797b1">isTicking</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_game_canvas.html#a7736798ad6218b4329bf4b29064f7d6a">startMouseTracking</a>();</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_game_canvas.html#ae345211fcf3ad4e35b154c52ed963357">stopMouseTracking</a>();</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qpointf.html">QPointF</a> <a class="code hl_function" href="class_game_canvas.html#a83d91283bfbbc81a7f1803bd794deeb0">currentMousePosition</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>signals:</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="class_game_canvas.html#a99349a816a8b3d359572785a4cbcf560">   79</a></span>    <span class="keywordtype">void</span> <a class="code hl_signal" href="class_game_canvas.html#a99349a816a8b3d359572785a4cbcf560">requestToCloseApp</a>();</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="keyword">public</span> slots:</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_game_canvas.html#aa49aacbe404a31e49b7de95de5a75028">eventFilter</a>(<a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qobject.html">QObject</a>* pObject, <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qevent.html">QEvent</a>* pEvent) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_game_canvas.html#a715222b95919af0139301f46d8c512b2">initDetailedInfos</a>();</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_game_canvas.html#a6397ae2f5e23b0b2a9c721bb150e5092">keyPressed</a>(<a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qkeyevent.html">QKeyEvent</a>* pKeyEvent);</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_game_canvas.html#a74f0e5f0df216b7c5069dc9117c330f9">keyReleased</a>(<a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qkeyevent.html">QKeyEvent</a>* pKeyEvent);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_game_canvas.html#a36fb0afa102b2cc80b47228b8d9d4d33">mouseMoved</a>(<a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qgraphicsscenemouseevent.html">QGraphicsSceneMouseEvent</a>* pMouseEvent);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_game_canvas.html#aad4f02d850de04625cc3d0414a59c58d">mouseButtonPressed</a>(<a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qgraphicsscenemouseevent.html">QGraphicsSceneMouseEvent</a>* pMouseEvent);</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_game_canvas.html#a8194f570ae64d46e92109de72d17e51f">mouseButtonReleased</a>(<a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qgraphicsscenemouseevent.html">QGraphicsSceneMouseEvent</a>* pMouseEvent);</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="class_game_canvas.html#a280cc20b73895ab6949987a69ab42303">   96</a></span>    <a class="code hl_class" href="class_game_view.html">GameView</a>* <a class="code hl_variable" href="class_game_canvas.html#a280cc20b73895ab6949987a69ab42303">m_pView</a>;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno"><a class="line" href="class_game_canvas.html#a5d7c1a195715b2ee6e5b1f2b5580b8fa">   97</a></span>    <a class="code hl_class" href="class_game_core.html">GameCore</a>* <a class="code hl_variable" href="class_game_canvas.html#a5d7c1a195715b2ee6e5b1f2b5580b8fa">m_pGameCore</a>;</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno"><a class="line" href="class_game_canvas.html#a74b789030e47b080b2bd2da7163fa5bc">   98</a></span>    <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qpointer.html">QPointer&lt;QGraphicsTextItem&gt;</a> <a class="code hl_variable" href="class_game_canvas.html#a74b789030e47b080b2bd2da7163fa5bc">m_pDetailedInfosItem</a>; <span class="comment">// Smart Pointer pour qu&#39;il soit mis à zéro au cas où l&#39;item est effacé par GameScene::clear()</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno"><a class="line" href="class_game_canvas.html#ae9f58d2c0e65f512aab0deaf7795d8eb">  100</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="class_game_canvas.html#ae9f58d2c0e65f512aab0deaf7795d8eb">m_keepTicking</a>;</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="class_game_canvas.html#a866c49fe28304b2749b8180caabcc53a">  101</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="class_game_canvas.html#a866c49fe28304b2749b8180caabcc53a">m_tickInterval</a>;</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno"><a class="line" href="class_game_canvas.html#a5badd5b1fc98e4e978acf90264f4e04c">  103</a></span>    <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qelapsedtimer.html">QElapsedTimer</a> <a class="code hl_variable" href="class_game_canvas.html#a5badd5b1fc98e4e978acf90264f4e04c">m_lastUpdateTime</a>;</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno"><a class="line" href="class_game_canvas.html#a2ddc3620711593a152e296ae3337573f">  104</a></span>    <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qtimer.html">QTimer</a> <a class="code hl_variable" href="class_game_canvas.html#a2ddc3620711593a152e296ae3337573f">m_tickTimer</a>;</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="preprocessor">#ifdef QT_DEBUG</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    <span class="keywordtype">void</span> resetStatistics();</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    <span class="keywordtype">int</span> m_tickCount;</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <span class="keywordtype">int</span> m_totalElapsedTime;</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    <span class="keywordtype">int</span> m_maxTickDuration;</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    <span class="keywordtype">int</span> m_minTickDuration;</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    <span class="keywordtype">int</span> m_statsTrigger;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="keyword">private</span> slots:</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_game_canvas.html#a3ab607561cd7cddfd1a0f1ae7a549e50">onInit</a>();</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    <span class="keywordtype">void</span> <a class="code hl_slot" href="class_game_canvas.html#aaea337998c0b5b05885229b4840436fa">onTick</a>();</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>};</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="preprocessor">#endif </span><span class="comment">// GAMECANVAS_H</span></div>
+<div class="ttc" id="aclass_game_canvas_html"><div class="ttname"><a href="class_game_canvas.html">GameCanvas</a></div><div class="ttdoc">Classe de gestion des scènes du jeu et de sa cadence.</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8h_source.html#l00050">gamecanvas.h:51</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a102153a6332fa9af8cc956c126f6740c"><div class="ttname"><a href="class_game_canvas.html#a102153a6332fa9af8cc956c126f6740c">GameCanvas::startTick</a></div><div class="ttdeci">void startTick(int tickInterval=KEEP_PREVIOUS_TICK_INTERVAL)</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00133">gamecanvas.cpp:133</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a280cc20b73895ab6949987a69ab42303"><div class="ttname"><a href="class_game_canvas.html#a280cc20b73895ab6949987a69ab42303">GameCanvas::m_pView</a></div><div class="ttdeci">GameView * m_pView</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8h_source.html#l00096">gamecanvas.h:96</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a2ddc3620711593a152e296ae3337573f"><div class="ttname"><a href="class_game_canvas.html#a2ddc3620711593a152e296ae3337573f">GameCanvas::m_tickTimer</a></div><div class="ttdeci">QTimer m_tickTimer</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8h_source.html#l00104">gamecanvas.h:104</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a326898c390ed700b827c33cf08e25009"><div class="ttname"><a href="class_game_canvas.html#a326898c390ed700b827c33cf08e25009">GameCanvas::setCurrentScene</a></div><div class="ttdeci">void setCurrentScene(GameScene *pScene)</div><div class="ttdoc">Change la scène de jeu actuellement affichée.</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00103">gamecanvas.cpp:103</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a36fb0afa102b2cc80b47228b8d9d4d33"><div class="ttname"><a href="class_game_canvas.html#a36fb0afa102b2cc80b47228b8d9d4d33">GameCanvas::mouseMoved</a></div><div class="ttdeci">void mouseMoved(QGraphicsSceneMouseEvent *pMouseEvent)</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00267">gamecanvas.cpp:267</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a3ab607561cd7cddfd1a0f1ae7a549e50"><div class="ttname"><a href="class_game_canvas.html#a3ab607561cd7cddfd1a0f1ae7a549e50">GameCanvas::onInit</a></div><div class="ttdeci">void onInit()</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00289">gamecanvas.cpp:289</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a5badd5b1fc98e4e978acf90264f4e04c"><div class="ttname"><a href="class_game_canvas.html#a5badd5b1fc98e4e978acf90264f4e04c">GameCanvas::m_lastUpdateTime</a></div><div class="ttdeci">QElapsedTimer m_lastUpdateTime</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8h_source.html#l00103">gamecanvas.h:103</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a5d7c1a195715b2ee6e5b1f2b5580b8fa"><div class="ttname"><a href="class_game_canvas.html#a5d7c1a195715b2ee6e5b1f2b5580b8fa">GameCanvas::m_pGameCore</a></div><div class="ttdeci">GameCore * m_pGameCore</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8h_source.html#l00097">gamecanvas.h:97</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a6397ae2f5e23b0b2a9c721bb150e5092"><div class="ttname"><a href="class_game_canvas.html#a6397ae2f5e23b0b2a9c721bb150e5092">GameCanvas::keyPressed</a></div><div class="ttdeci">void keyPressed(QKeyEvent *pKeyEvent)</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00226">gamecanvas.cpp:226</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a715222b95919af0139301f46d8c512b2"><div class="ttname"><a href="class_game_canvas.html#a715222b95919af0139301f46d8c512b2">GameCanvas::initDetailedInfos</a></div><div class="ttdeci">void initDetailedInfos()</div><div class="ttdoc">Initialise l'affichage des informations détaillées.</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00212">gamecanvas.cpp:212</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a74b789030e47b080b2bd2da7163fa5bc"><div class="ttname"><a href="class_game_canvas.html#a74b789030e47b080b2bd2da7163fa5bc">GameCanvas::m_pDetailedInfosItem</a></div><div class="ttdeci">QPointer&lt; QGraphicsTextItem &gt; m_pDetailedInfosItem</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8h_source.html#l00098">gamecanvas.h:98</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a74f0e5f0df216b7c5069dc9117c330f9"><div class="ttname"><a href="class_game_canvas.html#a74f0e5f0df216b7c5069dc9117c330f9">GameCanvas::keyReleased</a></div><div class="ttdeci">void keyReleased(QKeyEvent *pKeyEvent)</div><div class="ttdoc">Gère le relâchement d'une touche du clavier.</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00254">gamecanvas.cpp:254</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a7736798ad6218b4329bf4b29064f7d6a"><div class="ttname"><a href="class_game_canvas.html#a7736798ad6218b4329bf4b29064f7d6a">GameCanvas::startMouseTracking</a></div><div class="ttdeci">void startMouseTracking()</div><div class="ttdoc">Enclenche le suivi du déplacement de la souris.</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00163">gamecanvas.cpp:163</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a7897fa78ef39001d1c7c37d737179647"><div class="ttname"><a href="class_game_canvas.html#a7897fa78ef39001d1c7c37d737179647">GameCanvas::currentScene</a></div><div class="ttdeci">GameScene * currentScene() const</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00108">gamecanvas.cpp:108</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a7e1169c6a338f058672daef519894432"><div class="ttname"><a href="class_game_canvas.html#a7e1169c6a338f058672daef519894432">GameCanvas::hudScene</a></div><div class="ttdeci">QGraphicsScene * hudScene() const</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00123">gamecanvas.cpp:123</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a8194f570ae64d46e92109de72d17e51f"><div class="ttname"><a href="class_game_canvas.html#a8194f570ae64d46e92109de72d17e51f">GameCanvas::mouseButtonReleased</a></div><div class="ttdeci">void mouseButtonReleased(QGraphicsSceneMouseEvent *pMouseEvent)</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00281">gamecanvas.cpp:281</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a83d91283bfbbc81a7f1803bd794deeb0"><div class="ttname"><a href="class_game_canvas.html#a83d91283bfbbc81a7f1803bd794deeb0">GameCanvas::currentMousePosition</a></div><div class="ttdeci">QPointF currentMousePosition() const</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00175">gamecanvas.cpp:175</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a866c49fe28304b2749b8180caabcc53a"><div class="ttname"><a href="class_game_canvas.html#a866c49fe28304b2749b8180caabcc53a">GameCanvas::m_tickInterval</a></div><div class="ttdeci">int m_tickInterval</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8h_source.html#l00101">gamecanvas.h:101</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_a99349a816a8b3d359572785a4cbcf560"><div class="ttname"><a href="class_game_canvas.html#a99349a816a8b3d359572785a4cbcf560">GameCanvas::requestToCloseApp</a></div><div class="ttdeci">void requestToCloseApp()</div></div>
+<div class="ttc" id="aclass_game_canvas_html_aa484cf048075d69f85995e0816209087"><div class="ttname"><a href="class_game_canvas.html#aa484cf048075d69f85995e0816209087">GameCanvas::stopTick</a></div><div class="ttdeci">void stopTick()</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00150">gamecanvas.cpp:150</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_aa49aacbe404a31e49b7de95de5a75028"><div class="ttname"><a href="class_game_canvas.html#aa49aacbe404a31e49b7de95de5a75028">GameCanvas::eventFilter</a></div><div class="ttdeci">bool eventFilter(QObject *pObject, QEvent *pEvent) override</div><div class="ttdoc">Filtre et dispatch les événements intéressants de la scène.</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00181">gamecanvas.cpp:181</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_aad4f02d850de04625cc3d0414a59c58d"><div class="ttname"><a href="class_game_canvas.html#aad4f02d850de04625cc3d0414a59c58d">GameCanvas::mouseButtonPressed</a></div><div class="ttdeci">void mouseButtonPressed(QGraphicsSceneMouseEvent *pMouseEvent)</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00274">gamecanvas.cpp:274</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_aaea337998c0b5b05885229b4840436fa"><div class="ttname"><a href="class_game_canvas.html#aaea337998c0b5b05885229b4840436fa">GameCanvas::onTick</a></div><div class="ttdeci">void onTick()</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00301">gamecanvas.cpp:301</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_ab207f2189a7a28a7024f8c05e6254451"><div class="ttname"><a href="class_game_canvas.html#ab207f2189a7a28a7024f8c05e6254451">GameCanvas::createScene</a></div><div class="ttdeci">GameScene * createScene()</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00076">gamecanvas.cpp:76</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_ad35bdf9fc3ef94c78ececc47812797b1"><div class="ttname"><a href="class_game_canvas.html#ad35bdf9fc3ef94c78ececc47812797b1">GameCanvas::isTicking</a></div><div class="ttdeci">bool isTicking() const</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00158">gamecanvas.cpp:158</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_adb7601674515e62b496d57d87c6803e4ac04e11b3b4fa2170d115c93bd63bd0dd"><div class="ttname"><a href="class_game_canvas.html#adb7601674515e62b496d57d87c6803e4ac04e11b3b4fa2170d115c93bd63bd0dd">GameCanvas::KEEP_PREVIOUS_TICK_INTERVAL</a></div><div class="ttdeci">@ KEEP_PREVIOUS_TICK_INTERVAL</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8h_source.html#l00054">gamecanvas.h:54</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_ae345211fcf3ad4e35b154c52ed963357"><div class="ttname"><a href="class_game_canvas.html#ae345211fcf3ad4e35b154c52ed963357">GameCanvas::stopMouseTracking</a></div><div class="ttdeci">void stopMouseTracking()</div><div class="ttdoc">Déclenche le suivi du déplacement de la souris.</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00168">gamecanvas.cpp:168</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_ae9484ea730a2fa1e63fd29825d702bb7"><div class="ttname"><a href="class_game_canvas.html#ae9484ea730a2fa1e63fd29825d702bb7">GameCanvas::setHudScene</a></div><div class="ttdeci">void setHudScene(QGraphicsScene *pHudScene)</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00114">gamecanvas.cpp:114</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_ae9f58d2c0e65f512aab0deaf7795d8eb"><div class="ttname"><a href="class_game_canvas.html#ae9f58d2c0e65f512aab0deaf7795d8eb">GameCanvas::m_keepTicking</a></div><div class="ttdeci">bool m_keepTicking</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8h_source.html#l00100">gamecanvas.h:100</a></div></div>
+<div class="ttc" id="aclass_game_canvas_html_aee8b07a06718401c80e3d74c21a8da45"><div class="ttname"><a href="class_game_canvas.html#aee8b07a06718401c80e3d74c21a8da45">GameCanvas::~GameCanvas</a></div><div class="ttdeci">~GameCanvas() override</div><div class="ttdef"><b>Definition:</b> <a href="gamecanvas_8cpp_source.html#l00064">gamecanvas.cpp:64</a></div></div>
+<div class="ttc" id="aclass_game_core_html"><div class="ttname"><a href="class_game_core.html">GameCore</a></div><div class="ttdoc">Classe qui gère la logique du jeu.</div><div class="ttdef"><b>Definition:</b> <a href="gamecore_8h_source.html#l00021">gamecore.h:22</a></div></div>
+<div class="ttc" id="aclass_game_scene_html"><div class="ttname"><a href="class_game_scene.html">GameScene</a></div><div class="ttdoc">Représente l'espace 2D du jeu.</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8h_source.html#l00047">gamescene.h:48</a></div></div>
+<div class="ttc" id="aclass_game_view_html"><div class="ttname"><a href="class_game_view.html">GameView</a></div><div class="ttdoc">Classe de visualisation d'un espace 2D de jeu.</div><div class="ttdef"><b>Definition:</b> <a href="gameview_8h_source.html#l00024">gameview.h:25</a></div></div>
+<div class="ttc" id="aqelapsedtimer_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qelapsedtimer.html">QElapsedTimer</a></div></div>
+<div class="ttc" id="aqevent_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qevent.html">QEvent</a></div></div>
+<div class="ttc" id="aqgraphicsscene_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicsscene.html">QGraphicsScene</a></div></div>
+<div class="ttc" id="aqgraphicsscenemouseevent_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicsscenemouseevent.html">QGraphicsSceneMouseEvent</a></div></div>
+<div class="ttc" id="aqgraphicstextitem_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicstextitem.html">QGraphicsTextItem</a></div></div>
+<div class="ttc" id="aqkeyevent_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qkeyevent.html">QKeyEvent</a></div></div>
+<div class="ttc" id="aqobject_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qobject.html">QObject</a></div></div>
+<div class="ttc" id="aqpointer_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qpointer.html">QPointer</a></div></div>
+<div class="ttc" id="aqpointf_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qpointf.html">QPointF</a></div></div>
+<div class="ttc" id="aqrectf_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qrectf.html">QRectF</a></div></div>
+<div class="ttc" id="aqtimer_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qtimer.html">QTimer</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Généré le Vendredi 27 Janvier 2023 12:18:20 pour WorldBuildr par&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6
+</small></address>
+</body>
+</html>

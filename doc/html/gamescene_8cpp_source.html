@@ -1,0 +1,373 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>WorldBuildr:  Fichier source de gamescene.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">WorldBuildr<span id="projectnumber">&#160;0.1</span>
+   </div>
+   <div id="projectbrief">WorldBuildr</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.9.6 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Recherche');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Chargement...</div>
+<div class="SRStatus" id="Searching">Recherche...</div>
+<div class="SRStatus" id="NoMatches">Aucune correspondance</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">gamescene.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="gamescene_8cpp.html">Aller à la documentation de ce fichier.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="gamescene_8h.html">gamescene.h</a>&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;cstdlib&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;QApplication&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;QBrush&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;QDebug&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;QGraphicsSceneMouseEvent&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;QGraphicsView&gt;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;QKeyEvent&gt;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;QPainter&gt;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;QPen&gt;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &quot;<a class="code" href="gamecore_8h.html">gamecore.h</a>&quot;</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &quot;<a class="code" href="resources_8h.html">resources.h</a>&quot;</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &quot;<a class="code" href="sprite_8h.html">sprite.h</a>&quot;</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="class_game_scene.html#a3c0c8e6e53638395313c7fd8378ae41b">   25</a></span><a class="code hl_function" href="class_game_scene.html#a3c0c8e6e53638395313c7fd8378ae41b">GameScene::GameScene</a>(<a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qobject.html">QObject</a>* pParent) : <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html">QGraphicsScene</a>(pParent) {</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <a class="code hl_function" href="class_game_scene.html#ae379e50ebfc2b3cc53906e9d8a11b1d2">init</a>();</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>}</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="class_game_scene.html#a07a2f83c646ae6d4843f768a29fedddd">   32</a></span><a class="code hl_function" href="class_game_scene.html#a3c0c8e6e53638395313c7fd8378ae41b">GameScene::GameScene</a>(<span class="keyword">const</span> <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qrectf.html">QRectF</a>&amp; rSceneRect, <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qobject.html">QObject</a>* pParent) : <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html">QGraphicsScene</a>(rSceneRect, pParent) {</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <a class="code hl_function" href="class_game_scene.html#ae379e50ebfc2b3cc53906e9d8a11b1d2">init</a>();</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>}</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="class_game_scene.html#a3a988b7299011578603513c043162aea">   42</a></span><a class="code hl_function" href="class_game_scene.html#a3c0c8e6e53638395313c7fd8378ae41b">GameScene::GameScene</a>(qreal X, qreal Y, qreal width, qreal height, <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qobject.html">QObject</a>* pParent) : <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html">QGraphicsScene</a>(X, Y, width, height, pParent) {</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <a class="code hl_function" href="class_game_scene.html#ae379e50ebfc2b3cc53906e9d8a11b1d2">init</a>();</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>}</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="class_game_scene.html#a921b4236d2a999c3b5edd8fe1d9086e1">   47</a></span><a class="code hl_function" href="class_game_scene.html#a921b4236d2a999c3b5edd8fe1d9086e1">GameScene::~GameScene</a>()  {</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="comment">// Plutôt que de laisser QGraphicsScene détruire tous les sprites dont elle</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="comment">// est propriétaire, on retire manuellement chaque sprite afin que le code</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="comment">// puisse faire les éventuelles étapes de nettoyages correctement.</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qlist.html">QList&lt;Sprite*&gt;</a> <a class="code hl_function" href="class_game_scene.html#adb1d95d4c9be4aec2012efef50192856">sprites</a> = this-&gt;<a class="code hl_function" href="class_game_scene.html#adb1d95d4c9be4aec2012efef50192856">sprites</a>();</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keywordflow">for</span>(<a class="code hl_class" href="class_sprite.html">Sprite</a>* pSprite : <a class="code hl_function" href="class_game_scene.html#adb1d95d4c9be4aec2012efef50192856">sprites</a>) {</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <a class="code hl_function" href="class_game_scene.html#a23eea9fd7ee67e208919214ae3f32a3a">removeSpriteFromScene</a>(pSprite);</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keyword">delete</span> pSprite;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    }</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <a class="code hl_function" href="class_game_scene.html#adb1d95d4c9be4aec2012efef50192856">sprites</a>.<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qlist.html#clear">clear</a>();</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="keyword">delete</span> <a class="code hl_variable" href="class_game_scene.html#ab9f3892411fc44e8da5b87a1eac6ea52">m_pBackgroundImage</a>;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <a class="code hl_variable" href="class_game_scene.html#ab9f3892411fc44e8da5b87a1eac6ea52">m_pBackgroundImage</a> = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>}</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="class_game_scene.html#a0a63f65536de7e4d07be813b48f8997c">   65</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_game_scene.html#a0a63f65536de7e4d07be813b48f8997c">GameScene::addSpriteToScene</a>(<a class="code hl_class" href="class_sprite.html">Sprite</a>* pSprite)</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>{</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    Q_ASSERT(pSprite != <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    this-&gt;<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#addItem">addItem</a>(pSprite);</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    pSprite-&gt;<a class="code hl_function" href="class_sprite.html#aac03f276e13a568726b6d4f4419326f2">setParentScene</a>(<span class="keyword">this</span>);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qobject.html#connect">connect</a>(pSprite, &amp;<a class="code hl_signal" href="class_sprite.html#ab0ea57d51a0c26ea5fa06f2ac060b0b8">Sprite::spriteDestroyed</a>, <span class="keyword">this</span>, &amp;<a class="code hl_slot" href="class_game_scene.html#a4ffc94c88c63929424ff6a63ff58570d">GameScene::onSpriteDestroyed</a>);</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    emit <a class="code hl_signal" href="class_game_scene.html#ad55d276f14699e18821070aa6988d781">spriteAddedToScene</a>(pSprite);</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>}</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="class_game_scene.html#a862e7dfcef9c3c9e86c2824369f13623">   81</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_game_scene.html#a0a63f65536de7e4d07be813b48f8997c">GameScene::addSpriteToScene</a>(<a class="code hl_class" href="class_sprite.html">Sprite</a>* pSprite, <span class="keywordtype">double</span> posX, <span class="keywordtype">double</span> posY)</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>{</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <a class="code hl_function" href="class_game_scene.html#a0a63f65536de7e4d07be813b48f8997c">addSpriteToScene</a>(pSprite);</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    pSprite-&gt;<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsitem.html#setPos">setPos</a>(posX, posY);</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>}</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno"><a class="line" href="class_game_scene.html#a23eea9fd7ee67e208919214ae3f32a3a">   90</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_game_scene.html#a23eea9fd7ee67e208919214ae3f32a3a">GameScene::removeSpriteFromScene</a>(<a class="code hl_class" href="class_sprite.html">Sprite</a>* pSprite)</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>{</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#removeItem">removeItem</a>(pSprite);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qobject.html#disconnect">disconnect</a>(pSprite, &amp;<a class="code hl_signal" href="class_sprite.html#ab0ea57d51a0c26ea5fa06f2ac060b0b8">Sprite::spriteDestroyed</a>, <span class="keyword">this</span>, &amp;<a class="code hl_slot" href="class_game_scene.html#a4ffc94c88c63929424ff6a63ff58570d">GameScene::onSpriteDestroyed</a>);</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <a class="code hl_variable" href="class_game_scene.html#a60ce9db4964386e739fe327c12ef0ee5">m_registeredForTickSpriteList</a>.<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qlist.html#removeAll">removeAll</a>(pSprite);</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    emit <a class="code hl_signal" href="class_game_scene.html#aaa598bf925ab41d72b7be94a2f38422b">spriteRemovedFromScene</a>(pSprite);</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>}</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno"><a class="line" href="class_game_scene.html#a1afbea38eb709b51019dcb1214446dc8">  107</a></span><a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qlist.html">QList&lt;Sprite*&gt;</a> <a class="code hl_function" href="class_game_scene.html#a1afbea38eb709b51019dcb1214446dc8">GameScene::collidingSprites</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_sprite.html">Sprite</a>* pSprite)<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qlist.html">QList&lt;Sprite*&gt;</a> spriteList;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    <span class="keyword">const</span> <span class="keyword">auto</span> <a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#collidingItems">collidingItems</a> = pSprite-&gt;<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsitem.html#collidingItems">collidingItems</a>();</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <span class="keywordflow">for</span>(<a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qgraphicsitem.html">QGraphicsItem</a>* pItem : <a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#collidingItems">collidingItems</a>) {</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        <span class="keywordflow">if</span> (pItem-&gt;type() == <a class="code hl_enumvalue" href="class_sprite.html#a61d6eda483981d43f257dc1c6ab38f46a75dfef17b8e0cd586a855b94b25ee67c">Sprite::SpriteItemType</a>)</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>            spriteList &lt;&lt; static_cast&lt;Sprite*&gt;(pItem);</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    }</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    <span class="keywordflow">return</span> spriteList;</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>}</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span> </div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno"><a class="line" href="class_game_scene.html#a3ebb24522499f4963d851c0482313f1b">  122</a></span><a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qlist.html">QList&lt;Sprite*&gt;</a> <a class="code hl_function" href="class_game_scene.html#a1afbea38eb709b51019dcb1214446dc8">GameScene::collidingSprites</a>(<span class="keyword">const</span> <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qrectf.html">QRectF</a> &amp;rRect)<span class="keyword"> const  </span>{</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qlist.html">QList&lt;Sprite*&gt;</a> collidingSpriteList;</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    <span class="keywordflow">for</span>(<a class="code hl_class" href="class_sprite.html">Sprite</a>* pSprite : <a class="code hl_function" href="class_game_scene.html#adb1d95d4c9be4aec2012efef50192856">sprites</a>())  {</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qrectf.html">QRectF</a> globalBBox = pSprite-&gt;globalBoundingRect();</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        <span class="keywordflow">if</span> (globalBBox.<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qrectf.html#intersects">intersects</a>(rRect)) {</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>            collidingSpriteList &lt;&lt; pSprite;</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        }</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    }</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    <span class="keywordflow">return</span> collidingSpriteList;</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>}</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno"><a class="line" href="class_game_scene.html#af9f365f59848f7fac1fe00b6683d2938">  138</a></span><a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qlist.html">QList&lt;Sprite*&gt;</a> <a class="code hl_function" href="class_game_scene.html#a1afbea38eb709b51019dcb1214446dc8">GameScene::collidingSprites</a>(<span class="keyword">const</span> <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qpainterpath.html">QPainterPath</a>&amp; rShape)<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qlist.html">QList&lt;Sprite*&gt;</a> collidingSpriteList;</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    <span class="keyword">auto</span> spriteList = <a class="code hl_function" href="class_game_scene.html#a1afbea38eb709b51019dcb1214446dc8">collidingSprites</a>(rShape.<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qpainterpath.html#boundingRect">boundingRect</a>());</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    <span class="keywordflow">for</span>(<a class="code hl_class" href="class_sprite.html">Sprite</a>* pSprite : spriteList)  {</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>        <span class="keywordflow">if</span> (pSprite-&gt;globalShape().intersects(rShape)) {</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>            collidingSpriteList &lt;&lt; pSprite;</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>        }</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>    }</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    <span class="keywordflow">return</span> collidingSpriteList;</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>}</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno"><a class="line" href="class_game_scene.html#adb1d95d4c9be4aec2012efef50192856">  152</a></span><a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qlist.html">QList&lt;Sprite*&gt;</a> <a class="code hl_function" href="class_game_scene.html#adb1d95d4c9be4aec2012efef50192856">GameScene::sprites</a>()<span class="keyword"> const  </span>{</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qlist.html">QList&lt;Sprite*&gt;</a> spriteList;</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    <span class="keyword">auto</span> allItems = this-&gt;<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#items">items</a>();</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    <span class="keywordflow">for</span>(<a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qgraphicsitem.html">QGraphicsItem</a>* pItem : allItems) {</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>        <span class="keywordflow">if</span> (pItem-&gt;type() == <a class="code hl_enumvalue" href="class_sprite.html#a61d6eda483981d43f257dc1c6ab38f46a75dfef17b8e0cd586a855b94b25ee67c">Sprite::SpriteItemType</a>)</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>            spriteList &lt;&lt; static_cast&lt;Sprite*&gt;(pItem);</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    }</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    <span class="keywordflow">return</span> spriteList;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>}</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span> </div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno"><a class="line" href="class_game_scene.html#a6eb9e237cfa9dc35179b4afc151a45ba">  164</a></span><a class="code hl_class" href="class_sprite.html">Sprite</a>* <a class="code hl_function" href="class_game_scene.html#a6eb9e237cfa9dc35179b4afc151a45ba">GameScene::spriteAt</a>(<span class="keyword">const</span> <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qpointf.html">QPointF</a>&amp; rPosition)<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qgraphicsitem.html">QGraphicsItem</a>* pTopMostVisibleItem = this-&gt;<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene-obsolete.html#itemAt-2">itemAt</a>(rPosition, <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qtransform.html">QTransform</a>());</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    <span class="keywordflow">if</span> (pTopMostVisibleItem &amp;&amp; pTopMostVisibleItem-&gt;<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsitem.html#type">type</a>() == <a class="code hl_enumvalue" href="class_sprite.html#a61d6eda483981d43f257dc1c6ab38f46a75dfef17b8e0cd586a855b94b25ee67c">Sprite::SpriteItemType</a>)</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span><a class="code hl_class" href="class_sprite.html">Sprite</a>*<span class="keyword">&gt;</span>(pTopMostVisibleItem);</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span> </div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>    <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>}</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span> </div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno"><a class="line" href="class_game_scene.html#ae454327f278da29222a78a20e2c16571">  182</a></span><a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qgraphicssimpletextitem.html">QGraphicsSimpleTextItem</a>* <a class="code hl_function" href="class_game_scene.html#ae454327f278da29222a78a20e2c16571">GameScene::createText</a>(<a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qpointf.html">QPointF</a> initialPosition, <span class="keyword">const</span> <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qstring.html">QString</a>&amp; rText, <span class="keywordtype">int</span> size, <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qcolor.html">QColor</a> color) {</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qgraphicssimpletextitem.html">QGraphicsSimpleTextItem</a>* pText = this-&gt;<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#addSimpleText">addSimpleText</a>(rText);</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>    pText-&gt;<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsitem.html#setPos">setPos</a>(initialPosition);</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qfont.html">QFont</a> textFont = pText-&gt;<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicssimpletextitem.html#font">font</a>();</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    textFont.<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qfont.html#setPixelSize">setPixelSize</a>(size);</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>    pText-&gt;<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicssimpletextitem.html#setFont">setFont</a>(textFont);</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    pText-&gt;<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qabstractgraphicsshapeitem.html#setBrush">setBrush</a>(<a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qbrush.html">QBrush</a>(color));</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    <span class="keywordflow">return</span> pText;</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>}</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno"><a class="line" href="class_game_scene.html#a3a7084ae134f9cfc35eead8273d72d4b">  193</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_game_scene.html#a3a7084ae134f9cfc35eead8273d72d4b">GameScene::setBackgroundImage</a>(<span class="keyword">const</span> <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qimage.html">QImage</a>&amp; rImage)  {</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="class_game_scene.html#ab9f3892411fc44e8da5b87a1eac6ea52">m_pBackgroundImage</a>)</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>        <span class="keyword">delete</span> <a class="code hl_variable" href="class_game_scene.html#ab9f3892411fc44e8da5b87a1eac6ea52">m_pBackgroundImage</a>;</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>    <a class="code hl_variable" href="class_game_scene.html#ab9f3892411fc44e8da5b87a1eac6ea52">m_pBackgroundImage</a> = <span class="keyword">new</span> <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qimage.html">QImage</a>(rImage);</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>}</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span> </div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno"><a class="line" href="class_game_scene.html#afa1f4704feee9fd390032d0f2cbf469c">  200</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_game_scene.html#afa1f4704feee9fd390032d0f2cbf469c">GameScene::setBackgroundColor</a>(<a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qcolor.html">QColor</a> color) {</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="class_game_scene.html#ab9f3892411fc44e8da5b87a1eac6ea52">m_pBackgroundImage</a>) {</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        <span class="keyword">delete</span> <a class="code hl_variable" href="class_game_scene.html#ab9f3892411fc44e8da5b87a1eac6ea52">m_pBackgroundImage</a>;</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>        <a class="code hl_variable" href="class_game_scene.html#ab9f3892411fc44e8da5b87a1eac6ea52">m_pBackgroundImage</a> = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    }</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    this-&gt;<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#backgroundBrush-prop">setBackgroundBrush</a>(<a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qbrush.html">QBrush</a>(color));</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>}</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span> </div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno"><a class="line" href="class_game_scene.html#a0744adccf2c7434c8feb0b5a8b49f9e5">  211</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_game_scene.html#a0744adccf2c7434c8feb0b5a8b49f9e5">GameScene::setWidth</a>(<span class="keywordtype">int</span> sceneWidth)  {</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>    <a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#sceneRect-prop">setSceneRect</a>(0,0, sceneWidth, <a class="code hl_function" href="class_game_scene.html#a1cfafa7568d4216ef527888c660722e9">height</a>());</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>}</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span> </div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno"><a class="line" href="class_game_scene.html#a8e95ad54d19f490cb1a1b3252828524a">  217</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_game_scene.html#a8e95ad54d19f490cb1a1b3252828524a">GameScene::setHeight</a>(<span class="keywordtype">int</span> sceneHeight)  {</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>    <a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#sceneRect-prop">setSceneRect</a>(0,0, <a class="code hl_function" href="class_game_scene.html#a7d317eafae0edcd80c6be3339a7161e8">width</a>(), sceneHeight);</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>}</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span> </div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno"><a class="line" href="class_game_scene.html#a0bfc0ba479a5b0388a737480e8871cbe">  223</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_game_scene.html#a0bfc0ba479a5b0388a737480e8871cbe">GameScene::registerSpriteForTick</a>(<a class="code hl_class" href="class_sprite.html">Sprite</a>* pSprite) {</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>    <a class="code hl_variable" href="class_game_scene.html#a60ce9db4964386e739fe327c12ef0ee5">m_registeredForTickSpriteList</a>.<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qlist.html#append">append</a>(pSprite);</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>}</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno"><a class="line" href="class_game_scene.html#aa40d3ff9e3b7c8296d91ef98d98358d1">  229</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_game_scene.html#aa40d3ff9e3b7c8296d91ef98d98358d1">GameScene::unregisterSpriteFromTick</a>(<a class="code hl_class" href="class_sprite.html">Sprite</a>* pSprite) {</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>    <a class="code hl_variable" href="class_game_scene.html#a60ce9db4964386e739fe327c12ef0ee5">m_registeredForTickSpriteList</a>.<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qlist.html#removeAll">removeAll</a>(pSprite);</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>}</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span> </div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno"><a class="line" href="class_game_scene.html#ab40590cf32aaf8d38678ddd91b729a8d">  236</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="class_game_scene.html#ab40590cf32aaf8d38678ddd91b729a8d">GameScene::isRegisteredForTick</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_sprite.html">Sprite</a>* pSprite)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span><span class="keyword"></span>{</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>    <span class="keywordflow">return</span> <a class="code hl_variable" href="class_game_scene.html#a60ce9db4964386e739fe327c12ef0ee5">m_registeredForTickSpriteList</a>.<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qlist.html#contains">contains</a>(pSprite);</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>}</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span> </div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno"><a class="line" href="class_game_scene.html#a2cd089fb5992b2686c7b99989bdd0d45">  245</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="class_game_scene.html#a2cd089fb5992b2686c7b99989bdd0d45">GameScene::isInsideScene</a>(<span class="keyword">const</span> <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qpointf.html">QPointF</a>&amp; rPosition)<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    <span class="keywordflow">return</span> <a class="code hl_propertyRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#sceneRect-prop">sceneRect</a>().contains(rPosition);</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>}</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span> </div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno"><a class="line" href="class_game_scene.html#aaa24f6900e350bd4cb210099c22e3f3b">  256</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="class_game_scene.html#a2cd089fb5992b2686c7b99989bdd0d45">GameScene::isInsideScene</a>(<span class="keyword">const</span> <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qrectf.html">QRectF</a>&amp; rRect)<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>    <span class="keywordflow">return</span> <a class="code hl_propertyRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#sceneRect-prop">sceneRect</a>().contains(rRect);</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>}</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span> </div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno"><a class="line" href="class_game_scene.html#a1104c296e752b64868338e0407ef869f">  262</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_game_scene.html#a1104c296e752b64868338e0407ef869f">GameScene::centerViewOn</a>(<span class="keyword">const</span> <a class="code hl_class" href="class_sprite.html">Sprite</a>* pSprite) {</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>    Q_ASSERT(!<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#views">views</a>().isEmpty());</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span> </div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>    <a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#views">views</a>().at(0)-&gt;centerOn(pSprite);</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>}</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span> </div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno"><a class="line" href="class_game_scene.html#a9e35715d726cb3aca5817dacd2ae0dfb">  270</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_game_scene.html#a1104c296e752b64868338e0407ef869f">GameScene::centerViewOn</a>(<a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qpointf.html">QPointF</a> pos) {</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>    Q_ASSERT(!<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#views">views</a>().isEmpty());</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span> </div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>    <a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#views">views</a>().at(0)-&gt;centerOn(pos);</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>}</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span> </div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno"><a class="line" href="class_game_scene.html#acd260c1d14c0a4176438e07eaf5e1b82">  278</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_game_scene.html#acd260c1d14c0a4176438e07eaf5e1b82">GameScene::tick</a>(<span class="keywordtype">long</span> <span class="keywordtype">long</span> elapsedTimeInMilliseconds) {</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>    <span class="keyword">auto</span> spriteListCopy = <a class="code hl_variable" href="class_game_scene.html#a60ce9db4964386e739fe327c12ef0ee5">m_registeredForTickSpriteList</a>; <span class="comment">// On travaille sur une copie au cas où</span></div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>                                        <span class="comment">// la liste originale serait modifiée</span></div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>                                        <span class="comment">// lors de l&#39;appel de tick auprès d&#39;un sprite.</span></div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>    <span class="keywordflow">for</span>(<a class="code hl_class" href="class_sprite.html">Sprite</a>* pSprite : spriteListCopy) {</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>        pSprite-&gt;tick(elapsedTimeInMilliseconds);</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>    }</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>}</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span> </div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno"><a class="line" href="class_game_scene.html#a0ad155d353cdbee98806d52587ef5171">  293</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_game_scene.html#a0ad155d353cdbee98806d52587ef5171">GameScene::drawBackground</a>(<a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qpainter.html">QPainter</a>* pPainter, <span class="keyword">const</span> <a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qrectf.html">QRectF</a>&amp; rRect)  {</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>    <a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#drawBackground">QGraphicsScene::drawBackground</a>(pPainter, rRect);</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="class_game_scene.html#ab9f3892411fc44e8da5b87a1eac6ea52">m_pBackgroundImage</a>)</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>        pPainter-&gt;<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qpainter.html#drawImage">drawImage</a>(0,0, *<a class="code hl_variable" href="class_game_scene.html#ab9f3892411fc44e8da5b87a1eac6ea52">m_pBackgroundImage</a>);</div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>}</div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span> </div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno"><a class="line" href="class_game_scene.html#ae379e50ebfc2b3cc53906e9d8a11b1d2">  300</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_game_scene.html#ae379e50ebfc2b3cc53906e9d8a11b1d2">GameScene::init</a>() {</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    <a class="code hl_variable" href="class_game_scene.html#ab9f3892411fc44e8da5b87a1eac6ea52">m_pBackgroundImage</a> = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span> </div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>    this-&gt;<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#backgroundBrush-prop">setBackgroundBrush</a>(<a class="code hl_classRef" href="http://qt-project.org/doc/qt-5/qbrush.html">QBrush</a>(Qt::black));</div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>    <span class="comment">//setBackgroundImage(QImage(GameFramework::imagesPath(&quot;demo&quot;) + &quot;landscape_background.jpg&quot;));</span></div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>    <span class="comment">//this-&gt;setBackgroundBrush(QBrush(Qt::white)); // fond blanc</span></div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span> </div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>}</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span> </div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno"><a class="line" href="class_game_scene.html#a4ffc94c88c63929424ff6a63ff58570d">  310</a></span><span class="keywordtype">void</span> <a class="code hl_slot" href="class_game_scene.html#a4ffc94c88c63929424ff6a63ff58570d">GameScene::onSpriteDestroyed</a>(<a class="code hl_class" href="class_sprite.html">Sprite</a>* pSprite) {</div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>    <a class="code hl_variable" href="class_game_scene.html#a60ce9db4964386e739fe327c12ef0ee5">m_registeredForTickSpriteList</a>.<a class="code hl_functionRef" href="http://qt-project.org/doc/qt-5/qlist.html#removeAll">removeAll</a>(pSprite);</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>}</div>
+<div class="ttc" id="aclass_game_scene_html_a0744adccf2c7434c8feb0b5a8b49f9e5"><div class="ttname"><a href="class_game_scene.html#a0744adccf2c7434c8feb0b5a8b49f9e5">GameScene::setWidth</a></div><div class="ttdeci">void setWidth(int sceneWidth)</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00211">gamescene.cpp:211</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_a0a63f65536de7e4d07be813b48f8997c"><div class="ttname"><a href="class_game_scene.html#a0a63f65536de7e4d07be813b48f8997c">GameScene::addSpriteToScene</a></div><div class="ttdeci">void addSpriteToScene(Sprite *pSprite)</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00065">gamescene.cpp:65</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_a0ad155d353cdbee98806d52587ef5171"><div class="ttname"><a href="class_game_scene.html#a0ad155d353cdbee98806d52587ef5171">GameScene::drawBackground</a></div><div class="ttdeci">virtual void drawBackground(QPainter *pPainter, const QRectF &amp;rRect) override</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00293">gamescene.cpp:293</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_a0bfc0ba479a5b0388a737480e8871cbe"><div class="ttname"><a href="class_game_scene.html#a0bfc0ba479a5b0388a737480e8871cbe">GameScene::registerSpriteForTick</a></div><div class="ttdeci">void registerSpriteForTick(Sprite *pSprite)</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00223">gamescene.cpp:223</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_a1104c296e752b64868338e0407ef869f"><div class="ttname"><a href="class_game_scene.html#a1104c296e752b64868338e0407ef869f">GameScene::centerViewOn</a></div><div class="ttdeci">void centerViewOn(const Sprite *pSprite)</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00262">gamescene.cpp:262</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_a1afbea38eb709b51019dcb1214446dc8"><div class="ttname"><a href="class_game_scene.html#a1afbea38eb709b51019dcb1214446dc8">GameScene::collidingSprites</a></div><div class="ttdeci">QList&lt; Sprite * &gt; collidingSprites(const Sprite *pSprite) const</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00107">gamescene.cpp:107</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_a1cfafa7568d4216ef527888c660722e9"><div class="ttname"><a href="class_game_scene.html#a1cfafa7568d4216ef527888c660722e9">GameScene::height</a></div><div class="ttdeci">int height() const</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8h_source.html#l00071">gamescene.h:71</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_a23eea9fd7ee67e208919214ae3f32a3a"><div class="ttname"><a href="class_game_scene.html#a23eea9fd7ee67e208919214ae3f32a3a">GameScene::removeSpriteFromScene</a></div><div class="ttdeci">void removeSpriteFromScene(Sprite *pSprite)</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00090">gamescene.cpp:90</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_a2cd089fb5992b2686c7b99989bdd0d45"><div class="ttname"><a href="class_game_scene.html#a2cd089fb5992b2686c7b99989bdd0d45">GameScene::isInsideScene</a></div><div class="ttdeci">bool isInsideScene(const QPointF &amp;rPosition) const</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00245">gamescene.cpp:245</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_a3a7084ae134f9cfc35eead8273d72d4b"><div class="ttname"><a href="class_game_scene.html#a3a7084ae134f9cfc35eead8273d72d4b">GameScene::setBackgroundImage</a></div><div class="ttdeci">void setBackgroundImage(const QImage &amp;rImage)</div><div class="ttdoc">Défini l'image de fond à utiliser pour cette scène.</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00193">gamescene.cpp:193</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_a3c0c8e6e53638395313c7fd8378ae41b"><div class="ttname"><a href="class_game_scene.html#a3c0c8e6e53638395313c7fd8378ae41b">GameScene::GameScene</a></div><div class="ttdeci">GameScene(QObject *pParent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00025">gamescene.cpp:25</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_a4ffc94c88c63929424ff6a63ff58570d"><div class="ttname"><a href="class_game_scene.html#a4ffc94c88c63929424ff6a63ff58570d">GameScene::onSpriteDestroyed</a></div><div class="ttdeci">void onSpriteDestroyed(Sprite *pSprite)</div><div class="ttdoc">Retire de la liste des sprite le sprite qui va être détruit.</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00310">gamescene.cpp:310</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_a60ce9db4964386e739fe327c12ef0ee5"><div class="ttname"><a href="class_game_scene.html#a60ce9db4964386e739fe327c12ef0ee5">GameScene::m_registeredForTickSpriteList</a></div><div class="ttdeci">QList&lt; Sprite * &gt; m_registeredForTickSpriteList</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8h_source.html#l00106">gamescene.h:106</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_a6eb9e237cfa9dc35179b4afc151a45ba"><div class="ttname"><a href="class_game_scene.html#a6eb9e237cfa9dc35179b4afc151a45ba">GameScene::spriteAt</a></div><div class="ttdeci">Sprite * spriteAt(const QPointF &amp;rPosition) const</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00164">gamescene.cpp:164</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_a7d317eafae0edcd80c6be3339a7161e8"><div class="ttname"><a href="class_game_scene.html#a7d317eafae0edcd80c6be3339a7161e8">GameScene::width</a></div><div class="ttdeci">int width() const</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8h_source.html#l00069">gamescene.h:69</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_a8e95ad54d19f490cb1a1b3252828524a"><div class="ttname"><a href="class_game_scene.html#a8e95ad54d19f490cb1a1b3252828524a">GameScene::setHeight</a></div><div class="ttdeci">void setHeight(int sceneHeight)</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00217">gamescene.cpp:217</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_a921b4236d2a999c3b5edd8fe1d9086e1"><div class="ttname"><a href="class_game_scene.html#a921b4236d2a999c3b5edd8fe1d9086e1">GameScene::~GameScene</a></div><div class="ttdeci">~GameScene() override</div><div class="ttdoc">Destruction de la scène.</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00047">gamescene.cpp:47</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_aa40d3ff9e3b7c8296d91ef98d98358d1"><div class="ttname"><a href="class_game_scene.html#aa40d3ff9e3b7c8296d91ef98d98358d1">GameScene::unregisterSpriteFromTick</a></div><div class="ttdeci">void unregisterSpriteFromTick(Sprite *pSprite)</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00229">gamescene.cpp:229</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_aaa598bf925ab41d72b7be94a2f38422b"><div class="ttname"><a href="class_game_scene.html#aaa598bf925ab41d72b7be94a2f38422b">GameScene::spriteRemovedFromScene</a></div><div class="ttdeci">void spriteRemovedFromScene(Sprite *pSprite)</div></div>
+<div class="ttc" id="aclass_game_scene_html_ab40590cf32aaf8d38678ddd91b729a8d"><div class="ttname"><a href="class_game_scene.html#ab40590cf32aaf8d38678ddd91b729a8d">GameScene::isRegisteredForTick</a></div><div class="ttdeci">bool isRegisteredForTick(const Sprite *pSprite) const</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00236">gamescene.cpp:236</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_ab9f3892411fc44e8da5b87a1eac6ea52"><div class="ttname"><a href="class_game_scene.html#ab9f3892411fc44e8da5b87a1eac6ea52">GameScene::m_pBackgroundImage</a></div><div class="ttdeci">QImage * m_pBackgroundImage</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8h_source.html#l00105">gamescene.h:105</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_acd260c1d14c0a4176438e07eaf5e1b82"><div class="ttname"><a href="class_game_scene.html#acd260c1d14c0a4176438e07eaf5e1b82">GameScene::tick</a></div><div class="ttdeci">virtual void tick(long long elapsedTimeInMilliseconds)</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00278">gamescene.cpp:278</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_ad55d276f14699e18821070aa6988d781"><div class="ttname"><a href="class_game_scene.html#ad55d276f14699e18821070aa6988d781">GameScene::spriteAddedToScene</a></div><div class="ttdeci">void spriteAddedToScene(Sprite *pSprite)</div></div>
+<div class="ttc" id="aclass_game_scene_html_adb1d95d4c9be4aec2012efef50192856"><div class="ttname"><a href="class_game_scene.html#adb1d95d4c9be4aec2012efef50192856">GameScene::sprites</a></div><div class="ttdeci">QList&lt; Sprite * &gt; sprites() const</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00152">gamescene.cpp:152</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_ae379e50ebfc2b3cc53906e9d8a11b1d2"><div class="ttname"><a href="class_game_scene.html#ae379e50ebfc2b3cc53906e9d8a11b1d2">GameScene::init</a></div><div class="ttdeci">void init()</div><div class="ttdoc">Initialise la scène.</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00300">gamescene.cpp:300</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_ae454327f278da29222a78a20e2c16571"><div class="ttname"><a href="class_game_scene.html#ae454327f278da29222a78a20e2c16571">GameScene::createText</a></div><div class="ttdeci">QGraphicsSimpleTextItem * createText(QPointF initialPosition, const QString &amp;rText, int size=10, QColor color=Qt::white)</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00182">gamescene.cpp:182</a></div></div>
+<div class="ttc" id="aclass_game_scene_html_afa1f4704feee9fd390032d0f2cbf469c"><div class="ttname"><a href="class_game_scene.html#afa1f4704feee9fd390032d0f2cbf469c">GameScene::setBackgroundColor</a></div><div class="ttdeci">void setBackgroundColor(QColor color)</div><div class="ttdoc">Défini la couleur de fond de cette scène.</div><div class="ttdef"><b>Definition:</b> <a href="gamescene_8cpp_source.html#l00200">gamescene.cpp:200</a></div></div>
+<div class="ttc" id="aclass_sprite_html"><div class="ttname"><a href="class_sprite.html">Sprite</a></div><div class="ttdoc">Classe qui représente un élément d'animation graphique 2D.</div><div class="ttdef"><b>Definition:</b> <a href="sprite_8h_source.html#l00114">sprite.h:115</a></div></div>
+<div class="ttc" id="aclass_sprite_html_a61d6eda483981d43f257dc1c6ab38f46a75dfef17b8e0cd586a855b94b25ee67c"><div class="ttname"><a href="class_sprite.html#a61d6eda483981d43f257dc1c6ab38f46a75dfef17b8e0cd586a855b94b25ee67c">Sprite::SpriteItemType</a></div><div class="ttdeci">@ SpriteItemType</div><div class="ttdef"><b>Definition:</b> <a href="sprite_8h_source.html#l00170">sprite.h:170</a></div></div>
+<div class="ttc" id="aclass_sprite_html_aac03f276e13a568726b6d4f4419326f2"><div class="ttname"><a href="class_sprite.html#aac03f276e13a568726b6d4f4419326f2">Sprite::setParentScene</a></div><div class="ttdeci">void setParentScene(GameScene *pScene)</div><div class="ttdef"><b>Definition:</b> <a href="sprite_8cpp_source.html#l00195">sprite.cpp:195</a></div></div>
+<div class="ttc" id="aclass_sprite_html_ab0ea57d51a0c26ea5fa06f2ac060b0b8"><div class="ttname"><a href="class_sprite.html#ab0ea57d51a0c26ea5fa06f2ac060b0b8">Sprite::spriteDestroyed</a></div><div class="ttdeci">void spriteDestroyed(Sprite *)</div></div>
+<div class="ttc" id="agamecore_8h_html"><div class="ttname"><a href="gamecore_8h.html">gamecore.h</a></div><div class="ttdoc">Déclaration de la classe GameCore.</div></div>
+<div class="ttc" id="agamescene_8h_html"><div class="ttname"><a href="gamescene_8h.html">gamescene.h</a></div><div class="ttdoc">Déclaration de la classe GameScene.</div></div>
+<div class="ttc" id="aqabstractgraphicsshapeitem_html_setBrush"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qabstractgraphicsshapeitem.html#setBrush">QAbstractGraphicsShapeItem::setBrush</a></div><div class="ttdeci">void setBrush(const QBrush &amp;brush)</div></div>
+<div class="ttc" id="aqbrush_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qbrush.html">QBrush</a></div></div>
+<div class="ttc" id="aqcolor_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qcolor.html">QColor</a></div></div>
+<div class="ttc" id="aqfont_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qfont.html">QFont</a></div></div>
+<div class="ttc" id="aqfont_html_setPixelSize"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qfont.html#setPixelSize">QFont::setPixelSize</a></div><div class="ttdeci">void setPixelSize(int pixelSize)</div></div>
+<div class="ttc" id="aqgraphicsitem_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicsitem.html">QGraphicsItem</a></div></div>
+<div class="ttc" id="aqgraphicsitem_html_collidingItems"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicsitem.html#collidingItems">QGraphicsItem::collidingItems</a></div><div class="ttdeci">QList&lt; QGraphicsItem * &gt; collidingItems(Qt::ItemSelectionMode mode) const</div></div>
+<div class="ttc" id="aqgraphicsitem_html_setPos"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicsitem.html#setPos">QGraphicsItem::setPos</a></div><div class="ttdeci">void setPos(const QPointF &amp;pos)</div></div>
+<div class="ttc" id="aqgraphicsitem_html_type"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicsitem.html#type">QGraphicsItem::type</a></div><div class="ttdeci">virtual int type() const</div></div>
+<div class="ttc" id="aqgraphicsscene-obsolete_html_itemAt-2"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicsscene-obsolete.html#itemAt-2">QGraphicsScene::itemAt</a></div><div class="ttdeci">QGraphicsItem * itemAt(const QPointF &amp;position) const</div></div>
+<div class="ttc" id="aqgraphicsscene_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicsscene.html">QGraphicsScene</a></div></div>
+<div class="ttc" id="aqgraphicsscene_html_addItem"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#addItem">QGraphicsScene::addItem</a></div><div class="ttdeci">void addItem(QGraphicsItem *item)</div></div>
+<div class="ttc" id="aqgraphicsscene_html_addSimpleText"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#addSimpleText">QGraphicsScene::addSimpleText</a></div><div class="ttdeci">QGraphicsSimpleTextItem * addSimpleText(const QString &amp;text, const QFont &amp;font)</div></div>
+<div class="ttc" id="aqgraphicsscene_html_backgroundBrush-prop"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#backgroundBrush-prop">QGraphicsScene::setBackgroundBrush</a></div><div class="ttdeci">void setBackgroundBrush(const QBrush &amp;brush)</div></div>
+<div class="ttc" id="aqgraphicsscene_html_collidingItems"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#collidingItems">QGraphicsScene::collidingItems</a></div><div class="ttdeci">QList&lt; QGraphicsItem * &gt; collidingItems(const QGraphicsItem *item, Qt::ItemSelectionMode mode) const</div></div>
+<div class="ttc" id="aqgraphicsscene_html_drawBackground"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#drawBackground">QGraphicsScene::drawBackground</a></div><div class="ttdeci">virtual void drawBackground(QPainter *painter, const QRectF &amp;rect)</div></div>
+<div class="ttc" id="aqgraphicsscene_html_items"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#items">QGraphicsScene::items</a></div><div class="ttdeci">QList&lt; QGraphicsItem * &gt; items(Qt::SortOrder order) const</div></div>
+<div class="ttc" id="aqgraphicsscene_html_removeItem"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#removeItem">QGraphicsScene::removeItem</a></div><div class="ttdeci">void removeItem(QGraphicsItem *item)</div></div>
+<div class="ttc" id="aqgraphicsscene_html_sceneRect-prop"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#sceneRect-prop">QGraphicsScene::setSceneRect</a></div><div class="ttdeci">void setSceneRect(const QRectF &amp;rect)</div></div>
+<div class="ttc" id="aqgraphicsscene_html_views"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicsscene.html#views">QGraphicsScene::views</a></div><div class="ttdeci">QList&lt; QGraphicsView * &gt; views() const</div></div>
+<div class="ttc" id="aqgraphicssimpletextitem_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicssimpletextitem.html">QGraphicsSimpleTextItem</a></div></div>
+<div class="ttc" id="aqgraphicssimpletextitem_html_font"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicssimpletextitem.html#font">QGraphicsSimpleTextItem::font</a></div><div class="ttdeci">QFont font() const</div></div>
+<div class="ttc" id="aqgraphicssimpletextitem_html_setFont"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qgraphicssimpletextitem.html#setFont">QGraphicsSimpleTextItem::setFont</a></div><div class="ttdeci">void setFont(const QFont &amp;font)</div></div>
+<div class="ttc" id="aqimage_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qimage.html">QImage</a></div></div>
+<div class="ttc" id="aqlist_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qlist.html">QList</a></div></div>
+<div class="ttc" id="aqlist_html_append"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qlist.html#append">QList::append</a></div><div class="ttdeci">void append(const T &amp;value)</div></div>
+<div class="ttc" id="aqlist_html_clear"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qlist.html#clear">QList::clear</a></div><div class="ttdeci">void clear()</div></div>
+<div class="ttc" id="aqlist_html_contains"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qlist.html#contains">QList::contains</a></div><div class="ttdeci">bool contains(const T &amp;value) const</div></div>
+<div class="ttc" id="aqlist_html_removeAll"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qlist.html#removeAll">QList::removeAll</a></div><div class="ttdeci">int removeAll(const T &amp;value)</div></div>
+<div class="ttc" id="aqobject_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qobject.html">QObject</a></div></div>
+<div class="ttc" id="aqobject_html_connect"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qobject.html#connect">QObject::connect</a></div><div class="ttdeci">QMetaObject::Connection connect(const QObject *sender, const char *signal, const QObject *receiver, const char *method, Qt::ConnectionType type)</div></div>
+<div class="ttc" id="aqobject_html_disconnect"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qobject.html#disconnect">QObject::disconnect</a></div><div class="ttdeci">bool disconnect(const QObject *sender, const char *signal, const QObject *receiver, const char *method)</div></div>
+<div class="ttc" id="aqpainter_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qpainter.html">QPainter</a></div></div>
+<div class="ttc" id="aqpainter_html_drawImage"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qpainter.html#drawImage">QPainter::drawImage</a></div><div class="ttdeci">void drawImage(const QRectF &amp;target, const QImage &amp;image, const QRectF &amp;source, Qt::ImageConversionFlags flags)</div></div>
+<div class="ttc" id="aqpainterpath_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qpainterpath.html">QPainterPath</a></div></div>
+<div class="ttc" id="aqpainterpath_html_boundingRect"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qpainterpath.html#boundingRect">QPainterPath::boundingRect</a></div><div class="ttdeci">QRectF boundingRect() const</div></div>
+<div class="ttc" id="aqpointf_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qpointf.html">QPointF</a></div></div>
+<div class="ttc" id="aqrectf_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qrectf.html">QRectF</a></div></div>
+<div class="ttc" id="aqrectf_html_intersects"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qrectf.html#intersects">QRectF::intersects</a></div><div class="ttdeci">bool intersects(const QRectF &amp;rectangle) const</div></div>
+<div class="ttc" id="aqstring_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qstring.html">QString</a></div></div>
+<div class="ttc" id="aqtransform_html"><div class="ttname"><a href="http://qt-project.org/doc/qt-5/qtransform.html">QTransform</a></div></div>
+<div class="ttc" id="aresources_8h_html"><div class="ttname"><a href="resources_8h.html">resources.h</a></div><div class="ttdoc">Méthodes utilitaires permettant d'accéder aux ressources.</div></div>
+<div class="ttc" id="asprite_8h_html"><div class="ttname"><a href="sprite_8h.html">sprite.h</a></div><div class="ttdoc">Déclaration de la classe Sprite.</div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Généré le Vendredi 27 Janvier 2023 12:18:20 pour WorldBuildr par&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6
+</small></address>
+</body>
+</html>
