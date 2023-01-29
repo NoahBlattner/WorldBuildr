@@ -6,7 +6,7 @@
 */
 #include "gamecanvas.h"
 
-#include "gamecore.h"
+#include "WorldBuildrGame/gamecore.h"
 #include "gamescene.h"
 #include "gameview.h"
 

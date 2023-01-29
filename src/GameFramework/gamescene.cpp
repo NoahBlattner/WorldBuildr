@@ -16,7 +16,7 @@
 #include <QPainter>
 #include <QPen>
 
-#include "gamecore.h"
+#include "WorldBuildrGame/gamecore.h"
 #include "resources.h"
 #include "sprite.h"
 

@@ -11,10 +11,10 @@
 #include <QDebug>
 #include <QSettings>
 
-#include "gamescene.h"
-#include "gamecanvas.h"
-#include "resources.h"
-#include "utilities.h"
+#include "GameFramework/gamescene.h"
+#include "GameFramework/gamecanvas.h"
+#include "GameFramework/resources.h"
+#include "GameFramework/utilities.h"
 
 const int SCENE_WIDTH = 1280;
 
