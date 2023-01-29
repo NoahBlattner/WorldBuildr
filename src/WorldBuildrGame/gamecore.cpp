@@ -17,6 +17,7 @@
 #include "GameFramework/resources.h"
 #include "GameFramework/utilities.h"
 #include "GameFramework/sprite.h"
+#include "EditorSprite.h"
 
 const int SCENE_WIDTH = 1280;
 
@@ -36,13 +37,8 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     m_pScene->addRect(m_pScene->sceneRect(), QPen(Qt::white));
     
     // Instancier et initialiser les sprites ici :
-    // Create and initialize sprites here:
-    // Create test sprite
-    Sprite* pSprite = new Sprite(GameFramework::imagesPath() + "demo/cartoon-tree.png");
-    pSprite->setPos(0, 0);
-    pSprite->setZValue(1);
-    m_pScene->addSpriteToScene(pSprite);
-
+    createEditorSprite(GameFramework::imagesPath() + "demo/ball.png");
+    createEditorSprite(GameFramework::imagesPath() + "demo/ufo1.png", QPointF(100, 100));
 
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,
@@ -92,5 +88,40 @@ void GameCore::mouseButtonPressed(QPointF mousePosition, Qt::MouseButtons button
 //! Traite le relâchement d'un bouton de la souris.
 void GameCore::mouseButtonReleased(QPointF mousePosition, Qt::MouseButtons buttons) {
     emit notifyMouseButtonReleased(mousePosition, buttons);
+}
+
+//! Traite le click d'un sprite d'editeur.
+//! \param pEditSprite    Sprite d'éditeur cliqué.
+void GameCore::onEditorSpriteClicked(EditorSprite *pEditSprite) {
+    selectSingleEditorSprite(pEditSprite);
+    // TODO Gérer la sélection multiple
+}
+
+//! Crée un sprite d'éditeur.
+//! \param imageFileName    Nom du fichier image à utiliser pour le sprite.
+//! \param position         Position du sprite. Défaut : QPointF(0, 0)
+void GameCore::createEditorSprite(const QString& imageFileName, QPointF position) {
+    auto* pEditorSprite = new EditorSprite(imageFileName);
+    pEditorSprite->setPos(position);
+    m_pScene->addSpriteToScene(pEditorSprite);
+    connect(pEditorSprite, &EditorSprite::editorSpriteClicked, this, &GameCore::onEditorSpriteClicked);
+
+}
+
+//! Sélectionne un sprite d'éditeur.
+//! \param pEditSprite    Sprite d'éditeur à sélectionner.
+void GameCore::selectSingleEditorSprite(EditorSprite *pEditSprite) {
+    foreach (EditorSprite* pSprite, m_pSelectedEditorSprites) {
+        pSprite->setEditSelected(false);
+    }
+
+    // Vide la liste des sprites sélectionnés
+    m_pSelectedEditorSprites.clear();
+
+    // Ajoute le sprite cliqué à la liste des sprites sélectionnés
+    m_pSelectedEditorSprites.append(pEditSprite);
+
+    // Indique au sprite qu'il est sélectionné
+    pEditSprite->setEditSelected(true);
 }
 

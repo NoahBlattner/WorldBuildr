@@ -14,6 +14,7 @@
 
 class GameCanvas;
 class GameScene;
+class EditorSprite;
 
 //! \brief Classe qui gère la logique du jeu.
 //!
@@ -46,8 +47,13 @@ private:
     GameCanvas* m_pGameCanvas = nullptr;
     GameScene* m_pScene = nullptr;
 
-private slots:
+    QList<EditorSprite*> m_pSelectedEditorSprites;
 
+    void createEditorSprite(const QString& imageFileName, QPointF position = QPointF(0, 0));
+    void selectSingleEditorSprite(EditorSprite* pEditSprite);
+
+private slots:
+    void onEditorSpriteClicked(EditorSprite* pEditSprite);
 };
 
 

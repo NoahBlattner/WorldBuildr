@@ -6,12 +6,14 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_PREFIX_PATH C:/Qt/6.4.0/mingw_64/)
+set(CMAKE_AUTOMOC TRUE)
 
 find_package(Qt6 COMPONENTS
         Core
         Gui
         Widgets
         REQUIRED)
+
 
 include_directories(src/GameFramework src/WorldBuildrGame src)
 
@@ -27,7 +29,7 @@ add_executable(WorldBuildr
         src/GameFramework/sprite.cpp src/GameFramework/sprite.h
         src/GameFramework/utilities.cpp src/GameFramework/utilities.h
         src/WorldBuildrGame/gamecore.cpp src/WorldBuildrGame/gamecore.h
-        src/WorldBuild.pro)
+        src/WorldBuild.pro src/WorldBuildrGame/EditorSprite.cpp src/WorldBuildrGame/EditorSprite.h)
 target_link_libraries(WorldBuildr
         Qt::Core
         Qt::Gui
