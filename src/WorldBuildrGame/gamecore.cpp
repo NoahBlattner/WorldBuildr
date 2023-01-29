@@ -10,11 +10,13 @@
 
 #include <QDebug>
 #include <QSettings>
+#include <iostream>
 
 #include "GameFramework/gamescene.h"
 #include "GameFramework/gamecanvas.h"
 #include "GameFramework/resources.h"
 #include "GameFramework/utilities.h"
+#include "GameFramework/sprite.h"
 
 const int SCENE_WIDTH = 1280;
 
@@ -33,8 +35,13 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     // Trace un rectangle blanc tout autour des limites de la scène.
     m_pScene->addRect(m_pScene->sceneRect(), QPen(Qt::white));
     
-    // Instancier et initialiser les sprite ici :
-    // ...
+    // Instancier et initialiser les sprites ici :
+    // Create and initialize sprites here:
+    // Create test sprite
+    Sprite* pSprite = new Sprite(GameFramework::imagesPath() + "demo/cartoon-tree.png");
+    pSprite->setPos(0, 0);
+    pSprite->setZValue(1);
+    m_pScene->addSpriteToScene(pSprite);
 
 
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.

@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QPointF>
+#include "sprite.h"
 
 
 class GameCanvas;
@@ -42,7 +43,6 @@ signals:
     void notifyKeyReleased(int key);
 
 private:
-
     GameCanvas* m_pGameCanvas = nullptr;
     GameScene* m_pScene = nullptr;
 

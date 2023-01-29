@@ -13,7 +13,7 @@ find_package(Qt6 COMPONENTS
         Widgets
         REQUIRED)
 
-include_directories(src)
+include_directories(src/GameFramework src/WorldBuildrGame src)
 
 add_executable(WorldBuildr
         src/GameFramework/main.cpp
@@ -21,12 +21,12 @@ add_executable(WorldBuildr
         src/GameFramework/mainfrm.cpp src/GameFramework/mainfrm.h
         src/GameFramework/gameview.cpp src/GameFramework/gameview.h
         src/GameFramework/gamecanvas.cpp src/GameFramework/gamecanvas.h
-        src/WorldBuildrGame/gamecore.cpp src/WorldBuildrGame/gamecore.h
         src/GameFramework/gamescene.cpp src/GameFramework/gamescene.h
         src/GameFramework/spritetickhandler.cpp src/GameFramework/spritetickhandler.h
         src/GameFramework/resources.cpp src/GameFramework/resources.h
         src/GameFramework/sprite.cpp src/GameFramework/sprite.h
         src/GameFramework/utilities.cpp src/GameFramework/utilities.h
+        src/WorldBuildrGame/gamecore.cpp src/WorldBuildrGame/gamecore.h
         src/WorldBuild.pro)
 target_link_libraries(WorldBuildr
         Qt::Core
