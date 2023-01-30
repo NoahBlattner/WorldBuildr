@@ -12,12 +12,13 @@
 #include <QSettings>
 #include <iostream>
 
-#include "GameFramework/gamescene.h"
-#include "GameFramework/gamecanvas.h"
-#include "GameFramework/resources.h"
-#include "GameFramework/utilities.h"
-#include "GameFramework/sprite.h"
+#include "gamescene.h"
+#include "gamecanvas.h"
+#include "resources.h"
+#include "utilities.h"
+#include "sprite.h"
 #include "EditorSprite.h"
+#include "SelectionZone.h"
 
 const int SCENE_WIDTH = 1280;
 
@@ -75,9 +76,12 @@ void GameCore::keyReleased(int key) {
     switch (key) {
         case Qt::Key_Shift:
             m_isShiftPressed = false;
+            if (m_pMultiSelectionZone != nullptr) {
+                m_pMultiSelectionZone->endSelection();
+                m_pMultiSelectionZone = nullptr;
+            }
             break;
     }
-
 }
 
 //! Cadence.
@@ -92,8 +96,7 @@ void GameCore::mouseMoved(QPointF newMousePosition) {
     emit notifyMouseMoved(newMousePosition);
 
     if (m_pMultiSelectionZone != nullptr) {
-        // On met à jour la taille du rectangle de sélection
-        // TODO Adpat size
+        m_pMultiSelectionZone->updateSelection(newMousePosition);
     }
 }
 
@@ -104,12 +107,11 @@ void GameCore::mouseButtonPressed(QPointF mousePosition, Qt::MouseButtons button
     switch (buttons) {
         case Qt::LeftButton:
             if (m_isShiftPressed) {
-                std::cout << "Shift + LeftButton" << std::endl;
-                m_pMultiSelectionZone = new Sprite;
-                m_pScene->addSpriteToScene(m_pMultiSelectionZone);
+                createSelectionZone(mousePosition);
             }
             break;
         case Qt::RightButton:
+            // On désélectionne tous les sprites
             unSelectAllEditorSprites();
             break;
     }
@@ -119,19 +121,21 @@ void GameCore::mouseButtonPressed(QPointF mousePosition, Qt::MouseButtons button
 void GameCore::mouseButtonReleased(QPointF mousePosition, Qt::MouseButtons buttons) {
     emit notifyMouseButtonReleased(mousePosition, buttons);
 
-    if (m_pMultiSelectionZone != nullptr) {
-        std::cout << m_pMultiSelectionZone->boundingRect().x() << std::endl;
-        std::cout << m_pMultiSelectionZone->boundingRect().y() << std::endl;
-        auto sprites = m_pScene->collidingSprites(m_pMultiSelectionZone);
-        for (auto* pSprite : sprites) {
-            auto* pEditorSprite = dynamic_cast<EditorSprite*>(pSprite);
-            if (pEditorSprite != nullptr) {
-                selectSingleEditorSprite(pEditorSprite);
-            }
-        }
-        m_pScene->removeSpriteFromScene(m_pMultiSelectionZone);
-    }
+    // Switch sur les boutons de la souris
+    switch (buttons) {
+        case Qt::LeftButton:
+            if (m_pMultiSelectionZone != nullptr) {
+                // On récupère tous les sprites qui sont dans la zone de sélection
+                auto sprites = m_pMultiSelectionZone->getCollidingEditorSprites();
 
+                // On sélectionne tous les sprites qui sont dans la zone de sélection
+                selectMultipleEditorSprites(sprites);
+
+                m_pMultiSelectionZone->endSelection();
+                m_pMultiSelectionZone = nullptr;
+            }
+            break;
+    }
 }
 
 //! Traite le click d'un sprite d'editeur.
@@ -152,7 +156,9 @@ void GameCore::createEditorSprite(const QString& imageFileName, QPointF position
     auto* pEditorSprite = new EditorSprite(imageFileName);
     pEditorSprite->setPos(position);
     m_pScene->addSpriteToScene(pEditorSprite);
-    connect(pEditorSprite, &EditorSprite::editorSpriteClicked, this, &GameCore::onEditorSpriteClicked);
+
+    // Connecte le signal de click du sprite à la fonction de traitement du click
+    connect(pEditorSprite, &EditorSprite::editorSpriteLeftClicked, this, &GameCore::onEditorSpriteClicked);
 }
 
 //! Sélectionne un sprite d'éditeur.
@@ -176,3 +182,21 @@ void GameCore::unSelectAllEditorSprites() {
     m_pSelectedEditorSprites.clear();
 }
 
+//! Sélectionne plusieurs sprites d'éditeur.
+void GameCore::selectMultipleEditorSprites(const QList<EditorSprite *> &pEditSprites) {
+    foreach (EditorSprite *pSprite, pEditSprites) {
+        selectSingleEditorSprite(pSprite);
+    }
+}
+
+//! Crée une zone de sélection à une position donnée.
+//! \param startPositon    Position de la souris.
+void GameCore::createSelectionZone(QPointF startPositon) {
+    if (m_pMultiSelectionZone != nullptr) {
+        m_pMultiSelectionZone->endSelection();
+        m_pMultiSelectionZone = nullptr;
+    }
+
+    m_pMultiSelectionZone = new SelectionZone(startPositon);
+    m_pScene->addSpriteToScene(m_pMultiSelectionZone);
+}

@@ -6,7 +6,6 @@
 #define WORLDBUILDR_EDITORSPRITE_H
 
 
-#include <QPaintEvent>
 #include "sprite.h"
 
 // TODO : Add documentation
@@ -27,7 +26,7 @@ private:
     bool m_isEditSelected = false;
 
 signals:
-    void editorSpriteClicked(EditorSprite* pSprite);
+    void editorSpriteLeftClicked(EditorSprite* pSprite);
 };
 
 

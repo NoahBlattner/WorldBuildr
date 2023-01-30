@@ -103,10 +103,12 @@ private:
     QElapsedTimer m_lastUpdateTime;
     QTimer m_tickTimer;
 
+    int m_tickCount;
+
+    Qt::MouseButtons previousMouseButtons;
+
 #ifdef QT_DEBUG
     void resetStatistics();
-
-    int m_tickCount;
     int m_totalElapsedTime;
     int m_maxTickDuration;
     int m_minTickDuration;

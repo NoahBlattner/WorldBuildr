@@ -15,7 +15,9 @@ EditorSprite::EditorSprite(const QString &imageFileName, QGraphicsItem *pParent)
 void EditorSprite::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mousePressEvent(event);
 
-    emit editorSpriteClicked(this);
+    if (event->button() == Qt::LeftButton) {
+        emit editorSpriteLeftClicked(this);
+    }
 }
 
 //! \brief Dessine le sprite.

@@ -15,6 +15,7 @@
 class GameCanvas;
 class GameScene;
 class EditorSprite;
+class SelectionZone;
 
 //! \brief Classe qui gère la logique du jeu.
 //!
@@ -49,16 +50,20 @@ private:
 
     bool m_isShiftPressed = false;
 
-    Sprite* m_pMultiSelectionZone = nullptr;
+    SelectionZone* m_pMultiSelectionZone = nullptr;
 
     QList<EditorSprite*> m_pSelectedEditorSprites;
 
     void createEditorSprite(const QString& imageFileName, QPointF position = QPointF(0, 0));
     void selectSingleEditorSprite(EditorSprite* pEditSprite);
+    void selectMultipleEditorSprites(const QList<EditorSprite *> &pEditSprites);
     void unSelectAllEditorSprites();
+
+    void createSelectionZone(QPointF startPositon);
 
 private slots:
     void onEditorSpriteClicked(EditorSprite* pEditSprite);
+
 };
 
 
