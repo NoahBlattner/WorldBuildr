@@ -59,12 +59,24 @@ GameCore::~GameCore() {
 void GameCore::keyPressed(int key) {
     emit notifyKeyPressed(key);
 
+    switch (key) {
+        case Qt::Key_Shift:
+            m_isShiftPressed = true;
+            break;
+    }
+
 }
 
 //! Traite le relâchement d'une touche.
 //! \param key Numéro de la touche (voir les constantes Qt)
 void GameCore::keyReleased(int key) {
     emit notifyKeyReleased(key);
+
+    switch (key) {
+        case Qt::Key_Shift:
+            m_isShiftPressed = false;
+            break;
+    }
 
 }
 
@@ -78,23 +90,59 @@ void GameCore::tick(long long elapsedTimeInMilliseconds) {
 //! doit être enclenchée avec GameCanvas::startMouseTracking().
 void GameCore::mouseMoved(QPointF newMousePosition) {
     emit notifyMouseMoved(newMousePosition);
+
+    if (m_pMultiSelectionZone != nullptr) {
+        // On met à jour la taille du rectangle de sélection
+        // TODO Adpat size
+    }
 }
 
 //! Traite l'appui sur un bouton de la souris.
 void GameCore::mouseButtonPressed(QPointF mousePosition, Qt::MouseButtons buttons) {
     emit notifyMouseButtonPressed(mousePosition, buttons);
+
+    switch (buttons) {
+        case Qt::LeftButton:
+            if (m_isShiftPressed) {
+                std::cout << "Shift + LeftButton" << std::endl;
+                m_pMultiSelectionZone = new Sprite;
+                m_pScene->addSpriteToScene(m_pMultiSelectionZone);
+            }
+            break;
+        case Qt::RightButton:
+            unSelectAllEditorSprites();
+            break;
+    }
 }
 
 //! Traite le relâchement d'un bouton de la souris.
 void GameCore::mouseButtonReleased(QPointF mousePosition, Qt::MouseButtons buttons) {
     emit notifyMouseButtonReleased(mousePosition, buttons);
+
+    if (m_pMultiSelectionZone != nullptr) {
+        std::cout << m_pMultiSelectionZone->boundingRect().x() << std::endl;
+        std::cout << m_pMultiSelectionZone->boundingRect().y() << std::endl;
+        auto sprites = m_pScene->collidingSprites(m_pMultiSelectionZone);
+        for (auto* pSprite : sprites) {
+            auto* pEditorSprite = dynamic_cast<EditorSprite*>(pSprite);
+            if (pEditorSprite != nullptr) {
+                selectSingleEditorSprite(pEditorSprite);
+            }
+        }
+        m_pScene->removeSpriteFromScene(m_pMultiSelectionZone);
+    }
+
 }
 
 //! Traite le click d'un sprite d'editeur.
 //! \param pEditSprite    Sprite d'éditeur cliqué.
 void GameCore::onEditorSpriteClicked(EditorSprite *pEditSprite) {
+    if (!m_isShiftPressed) { // Si la touche shift n'est pas enfoncée, on déselectionne tous les sprites
+        unSelectAllEditorSprites();
+    }
+
+    // On sélectionne le sprite cliqué
     selectSingleEditorSprite(pEditSprite);
-    // TODO Gérer la sélection multiple
 }
 
 //! Crée un sprite d'éditeur.
@@ -105,23 +153,26 @@ void GameCore::createEditorSprite(const QString& imageFileName, QPointF position
     pEditorSprite->setPos(position);
     m_pScene->addSpriteToScene(pEditorSprite);
     connect(pEditorSprite, &EditorSprite::editorSpriteClicked, this, &GameCore::onEditorSpriteClicked);
-
 }
 
 //! Sélectionne un sprite d'éditeur.
 //! \param pEditSprite    Sprite d'éditeur à sélectionner.
 void GameCore::selectSingleEditorSprite(EditorSprite *pEditSprite) {
+    // Ajoute le sprite cliqué à la liste des sprites sélectionnés
+    m_pSelectedEditorSprites.append(pEditSprite);
+
+    // Indique au sprite qu'il est sélectionné
+    pEditSprite->setEditSelected(true);
+}
+
+//! Désélectionne tous les sprites d'éditeur.
+void GameCore::unSelectAllEditorSprites() {
+    // Indique à tous les sprites qu'ils ne sont plus sélectionnés
     foreach (EditorSprite* pSprite, m_pSelectedEditorSprites) {
         pSprite->setEditSelected(false);
     }
 
     // Vide la liste des sprites sélectionnés
     m_pSelectedEditorSprites.clear();
-
-    // Ajoute le sprite cliqué à la liste des sprites sélectionnés
-    m_pSelectedEditorSprites.append(pEditSprite);
-
-    // Indique au sprite qu'il est sélectionné
-    pEditSprite->setEditSelected(true);
 }
 

@@ -47,10 +47,15 @@ private:
     GameCanvas* m_pGameCanvas = nullptr;
     GameScene* m_pScene = nullptr;
 
+    bool m_isShiftPressed = false;
+
+    Sprite* m_pMultiSelectionZone = nullptr;
+
     QList<EditorSprite*> m_pSelectedEditorSprites;
 
     void createEditorSprite(const QString& imageFileName, QPointF position = QPointF(0, 0));
     void selectSingleEditorSprite(EditorSprite* pEditSprite);
+    void unSelectAllEditorSprites();
 
 private slots:
     void onEditorSpriteClicked(EditorSprite* pEditSprite);

@@ -22,10 +22,7 @@ void EditorSprite::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 void EditorSprite::paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget) {
     Sprite::paint(pPainter, pOption, pWidget);
 
-    std::cout << "Painting sprite" << std::endl;
-
     if (m_isEditSelected) {
-        std::cout << "Painting border" << std::endl;
         pPainter->setPen(Qt::lightGray);
         pPainter->drawPath(shape());
     }
