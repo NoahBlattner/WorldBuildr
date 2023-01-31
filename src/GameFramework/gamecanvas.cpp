@@ -273,6 +273,7 @@ void GameCanvas::mouseMoved(QGraphicsSceneMouseEvent* pMouseEvent) {
 void GameCanvas::mouseButtonPressed(QGraphicsSceneMouseEvent* pMouseEvent) {
     m_pGameCore->mouseButtonPressed(pMouseEvent->scenePos(), pMouseEvent->buttons());
     previousMouseButtons = pMouseEvent->buttons();
+    previousMousePosition = pMouseEvent->scenePos();
 }
 
 //! Gère l'événement de relâchement d'un bouton de la souris.
@@ -280,6 +281,7 @@ void GameCanvas::mouseButtonReleased(QGraphicsSceneMouseEvent* pMouseEvent) {
     // Retrouver les boutons qui ont été relâchés.
     Qt::MouseButtons releasedButtons = previousMouseButtons & ~pMouseEvent->buttons();
     m_pGameCore->mouseButtonReleased(pMouseEvent->scenePos(), releasedButtons);
+    previousMousePosition = pMouseEvent->scenePos();
 }
 
 //! Instancie un objet de type GameCore, en charge de la logique du jeu.

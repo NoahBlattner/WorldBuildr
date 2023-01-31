@@ -42,7 +42,9 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     m_pEditorManager = new EditorManager(this);
     // Instancier et initialiser les sprites ici :
     m_pEditorManager->createEditorSprite(GameFramework::imagesPath() + "demo/ufo1.png", QPointF(100, 100));
-    m_pEditorManager->createEditorSprite(GameFramework::imagesPath() + "demo/ball.png");
+    m_pEditorManager->createEditorSprite(GameFramework::imagesPath() + "demo/ball.png", QPointF(200, 200));
+    m_pEditorManager->createEditorSprite(GameFramework::imagesPath() + "demo/tennisball.png", QPointF(300, 300));
+    m_pEditorManager->createEditorSprite(GameFramework::imagesPath() + "demo/plane_cartoon.png", QPointF(400, 400));
 
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,
