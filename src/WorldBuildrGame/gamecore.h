@@ -16,6 +16,7 @@ class GameCanvas;
 class GameScene;
 class EditorSprite;
 class SelectionZone;
+class EditorManager;
 
 //! \brief Classe qui gère la logique du jeu.
 //!
@@ -27,6 +28,8 @@ class GameCore : public QObject
 public:
     explicit GameCore(GameCanvas* pGameCanvas, QObject *parent = nullptr);
     ~GameCore() override;
+
+    GameScene* getScene() const;
 
     void keyPressed(int key);
     void keyReleased(int key);
@@ -48,21 +51,7 @@ private:
     GameCanvas* m_pGameCanvas = nullptr;
     GameScene* m_pScene = nullptr;
 
-    bool m_isShiftPressed = false;
-
-    SelectionZone* m_pMultiSelectionZone = nullptr;
-
-    QList<EditorSprite*> m_pSelectedEditorSprites;
-
-    void createEditorSprite(const QString& imageFileName, QPointF position = QPointF(0, 0));
-    void selectSingleEditorSprite(EditorSprite* pEditSprite);
-    void selectMultipleEditorSprites(const QList<EditorSprite *> &pEditSprites);
-    void unSelectAllEditorSprites();
-
-    void createSelectionZone(QPointF startPositon);
-
-private slots:
-    void onEditorSpriteClicked(EditorSprite* pEditSprite);
+    EditorManager* m_pEditorManager = nullptr;
 
 };
 

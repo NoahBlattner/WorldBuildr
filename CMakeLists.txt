@@ -29,7 +29,7 @@ add_executable(WorldBuildr
         src/GameFramework/sprite.cpp src/GameFramework/sprite.h
         src/GameFramework/utilities.cpp src/GameFramework/utilities.h
         src/WorldBuildrGame/gamecore.cpp src/WorldBuildrGame/gamecore.h
-        src/WorldBuild.pro src/WorldBuildrGame/EditorSprite.cpp src/WorldBuildrGame/EditorSprite.h src/WorldBuildrGame/SelectionZone.cpp src/WorldBuildrGame/SelectionZone.h)
+        src/WorldBuild.pro src/WorldBuildrGame/EditorSprite.cpp src/WorldBuildrGame/EditorSprite.h src/WorldBuildrGame/SelectionZone.cpp src/WorldBuildrGame/SelectionZone.h src/WorldBuildrGame/EditorManager.cpp src/WorldBuildrGame/EditorManager.h)
 target_link_libraries(WorldBuildr
         Qt::Core
         Qt::Gui
