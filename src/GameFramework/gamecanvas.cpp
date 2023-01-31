@@ -265,7 +265,8 @@ void GameCanvas::keyReleased(QKeyEvent* pKeyEvent) {
 //! Pour que cet événement soit pris en compte, la propriété MouseTracking de GameView
 //! doit être enclenchée.
 void GameCanvas::mouseMoved(QGraphicsSceneMouseEvent* pMouseEvent) {
-    m_pGameCore->mouseMoved(pMouseEvent->scenePos());
+    m_pGameCore->mouseMoved(pMouseEvent->scenePos(), previousMousePosition);
+    previousMousePosition = pMouseEvent->scenePos();
 }
 
 //! Gère l'événement d'appui sur un bouton de la souris.

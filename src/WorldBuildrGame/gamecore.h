@@ -34,14 +34,14 @@ public:
     void keyPressed(int key);
     void keyReleased(int key);
 
-    void mouseMoved(QPointF newMousePosition);
+    void mouseMoved(QPointF newMousePosition, QPointF oldMousePosition);
     void mouseButtonPressed(QPointF mousePosition, Qt::MouseButtons buttons);
     void mouseButtonReleased(QPointF mousePosition, Qt::MouseButtons buttons);
 
     void tick(long long elapsedTimeInMilliseconds);
 
 signals:
-    void notifyMouseMoved(QPointF newMousePosition);
+    void notifyMouseMoved(QPointF newMousePosition, QPointF oldMousePosition);
     void notifyMouseButtonPressed(QPointF mousePosition, Qt::MouseButtons buttons);
     void notifyMouseButtonReleased(QPointF mousePosition, Qt::MouseButtons buttons);
     void notifyKeyPressed(int key);

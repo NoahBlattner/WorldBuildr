@@ -8,7 +8,9 @@
 
 #include "sprite.h"
 
-// TODO : Add documentation
+//! Classe représentant un sprite dans l'éditeur.
+//! Elle peut être sélectionnée avec un clique de souris.
+//! Si elle est sélectionnée, elle est entourée d'une bordure.
 class EditorSprite : public Sprite {
     Q_OBJECT
 public:
@@ -18,9 +20,6 @@ public:
 
     void setEditSelected(bool selected);
     bool getEditSelected() const;
-
-protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
     bool m_isEditSelected = false;

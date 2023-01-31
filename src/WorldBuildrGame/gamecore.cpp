@@ -41,8 +41,8 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     // Créé le gestionnaire d'éditeur
     m_pEditorManager = new EditorManager(this);
     // Instancier et initialiser les sprites ici :
-    m_pEditorManager->createEditorSprite(GameFramework::imagesPath() + "demo/ball.png");
     m_pEditorManager->createEditorSprite(GameFramework::imagesPath() + "demo/ufo1.png", QPointF(100, 100));
+    m_pEditorManager->createEditorSprite(GameFramework::imagesPath() + "demo/ball.png");
 
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,
@@ -78,8 +78,8 @@ void GameCore::tick(long long elapsedTimeInMilliseconds) {
 //! La souris a été déplacée.
 //! Pour que cet événement soit pris en compte, la propriété MouseTracking de GameView
 //! doit être enclenchée avec GameCanvas::startMouseTracking().
-void GameCore::mouseMoved(QPointF newMousePosition) {
-    emit notifyMouseMoved(newMousePosition);
+void GameCore::mouseMoved(QPointF newMousePosition, QPointF oldMousePosition) {
+    emit notifyMouseMoved(newMousePosition, oldMousePosition);
 }
 
 //! Traite l'appui sur un bouton de la souris.

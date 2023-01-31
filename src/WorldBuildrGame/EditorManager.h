@@ -21,12 +21,20 @@ public:
     void createEditorSprite(const QString& imageFileName, QPointF position = QPointF(0, 0));
 
 private:
+    // Etat de touche
     bool m_isShiftHeld = false;
+
+    // Etat de la souris
+    QPointF previousMousePosition;
+    Qt::MouseButtons m_heldMouseButtons;
+
     GameScene* m_pScene = nullptr;
 
     SelectionZone* m_pMultiSelectionZone = nullptr;
 
     QList<EditorSprite*> m_pSelectedEditorSprites;
+    EditorSprite* clickedSprite;
+    bool m_holdingEditorSprite = false;
 
     void selectSingleEditorSprite(EditorSprite* pEditSprite);
     void selectMultipleEditorSprites(const QList<EditorSprite *> &pEditSprites);
@@ -34,13 +42,15 @@ private:
 
     void createSelectionZone(QPointF startPositon);
 
+    void moveSelectedEditorSprites(QPointF moveVector);
+
 private slots:
-    void onEditorSpriteClicked(EditorSprite* pEditSprite);
+    void editorSpriteClicked(EditorSprite* pEditSprite);
 
     void onKeyPressed(int key);
     void onKeyReleased(int key);
 
-    void onMouseMoved(QPointF newMousePosition);
+    void onMouseMoved(QPointF newMousePosition, QPointF oldMousePosition);
     void onMouseButtonPressed(QPointF mousePosition, Qt::MouseButtons buttons);
     void onMouseButtonReleased(QPointF mousePosition, Qt::MouseButtons buttons);
 };

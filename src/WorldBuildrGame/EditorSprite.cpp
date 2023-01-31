@@ -11,15 +11,6 @@
 EditorSprite::EditorSprite(const QString &imageFileName, QGraphicsItem *pParent) : Sprite(imageFileName, pParent) {
 }
 
-//! \brief Gère le clic sur le sprite.
-void EditorSprite::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    QGraphicsItem::mousePressEvent(event);
-
-    if (event->button() == Qt::LeftButton) {
-        emit editorSpriteLeftClicked(this);
-    }
-}
-
 //! \brief Dessine le sprite.
 void EditorSprite::paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget) {
     Sprite::paint(pPainter, pOption, pWidget);
@@ -30,7 +21,7 @@ void EditorSprite::paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOp
     }
 }
 
-//! \brief Set si le sprite est sélectionné. Et met à jour l'affichage.
+//! \brief Set si le sprite est sélectionné et met à jour l'affichage.
 //! \param selected     True si le sprite est sélectionné.
 void EditorSprite::setEditSelected(bool selected) {
     m_isEditSelected = selected;

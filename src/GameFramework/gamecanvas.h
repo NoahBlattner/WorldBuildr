@@ -12,6 +12,7 @@
 #include <QTime>
 #include <QTimer>
 #include <QElapsedTimer>
+#include <QPointF>
 
 class GameCore;
 class GameScene;
@@ -106,6 +107,7 @@ private:
     int m_tickCount;
 
     Qt::MouseButtons previousMouseButtons;
+    QPointF previousMousePosition = QPointF(0, 0);
 
 #ifdef QT_DEBUG
     void resetStatistics();
