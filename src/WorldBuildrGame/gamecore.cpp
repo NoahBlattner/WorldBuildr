@@ -197,6 +197,5 @@ void GameCore::createSelectionZone(QPointF startPositon) {
         m_pMultiSelectionZone = nullptr;
     }
 
-    m_pMultiSelectionZone = new SelectionZone(startPositon);
-    m_pScene->addSpriteToScene(m_pMultiSelectionZone);
+    m_pMultiSelectionZone = new SelectionZone(m_pScene, startPositon);
 }
