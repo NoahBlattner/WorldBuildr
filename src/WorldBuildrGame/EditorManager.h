@@ -43,11 +43,14 @@ private:
     void selectEditorSprite(EditorSprite* pEditSprite);
     void selectSingleEditorSprite(EditorSprite* pEditSprite);
     void toggleSelectEditorSprite(EditorSprite* pEditSprite);
-    void selectMultipleEditorSprites(const QList<EditorSprite *> pEditSprites);
+    void selectMultipleEditorSprites(const QList<EditorSprite*>& pEditSprites);
     void unSelectEditorSprite(EditorSprite* pEditSprite);
     void unSelectAllEditorSprites();
 
     void createSelectionZone(QPointF startPositon);
+
+    void removeEditorSprite(EditorSprite* pEditSprite);
+    void removeSelectedEditorSprites();
 
     void moveSelectedEditorSprites(QPointF moveVector);
 

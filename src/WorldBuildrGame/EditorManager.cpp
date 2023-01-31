@@ -56,6 +56,9 @@ void EditorManager::onKeyReleased(int key) {
         case Qt::Key_Control:
             m_isCtrlHeld = false;
             break;
+        case Qt::Key_Delete:
+            removeSelectedEditorSprites();
+            break;
     }
 }
 
@@ -206,7 +209,7 @@ void EditorManager::updateMultiSelect(QPointF &newMousePosition) {// On met à j
 }
 
 //! Sélectionne plusieurs sprites d'éditeur.
-void EditorManager::selectMultipleEditorSprites(const QList<EditorSprite *> pEditSprites) {
+void EditorManager::selectMultipleEditorSprites(const QList<EditorSprite*> &pEditSprites) {
     foreach (EditorSprite* pSprite, pEditSprites) {
         selectEditorSprite(pSprite);
     }
@@ -232,7 +235,7 @@ void EditorManager::createEditorSprite(const QString& imageFileName, QPointF pos
 
 //! Traite le click d'un sprite d'editeur.
 //! \param pEditSprite    Sprite d'éditeur cliqué.
-void EditorManager::editorSpriteClicked(EditorSprite *pEditSprite) {
+void EditorManager::editorSpriteClicked(EditorSprite* pEditSprite) {
     if (m_isShiftHeld) { // Si la touche shift n'est pas enfoncée, on déselectionne tous les sprites
         toggleSelectEditorSprite(pEditSprite);
     } else { // Sinon on ajoute le sprite à la sélection
@@ -245,4 +248,19 @@ void EditorManager::moveSelectedEditorSprites(QPointF moveVector) {
     foreach (EditorSprite* pSprite, m_pSelectedEditorSprites) {
         pSprite->moveBy(moveVector.x(), moveVector.y());
     }
+}
+
+//! Supprime un sprite d'éditeur.
+void EditorManager::removeEditorSprite(EditorSprite* pEditSprite) {
+    m_pEditorSprites.removeOne(pEditSprite);
+    m_pScene->removeSpriteFromScene(pEditSprite);
+    delete pEditSprite;
+}
+
+//! Supprime tous les sprites sélectionnés.
+void EditorManager::removeSelectedEditorSprites() {
+    foreach (EditorSprite* pSprite, m_pSelectedEditorSprites) {
+        removeEditorSprite(pSprite);
+    }
+    unSelectAllEditorSprites();
 }
