@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
     w.show();
 
     // Pour un mode d'affichage fenêtré, plein écran
-    // w.showMaximized();
+    w.showMaximized();
 
     // Pour un mode d'affichage non-fenêtré, plein écran
     // w.showFullScreen();

@@ -253,7 +253,30 @@ void EditorManager::editorSpriteClicked(EditorSprite* pEditSprite) {
 //! Déplace tous les sprites sélectionnés d'un vecteur donné.
 void EditorManager::moveSelectedEditorSprites(QPointF moveVector) {
     foreach (EditorSprite* pSprite, m_pSelectedEditorSprites) {
+        // Calcule la nouvelle position du sprite
+        QRectF currentSpriteBounds = pSprite->sceneBoundingRect();
+        QRectF newSpriteBounds = currentSpriteBounds;
+        newSpriteBounds.translate(moveVector);
+
+        // Si le sprite sort de la scène sur l'axe X,
+        // on le déplace pour qu'il soit à la limite de la scène
+        if (newSpriteBounds.left() < 0) {
+            moveVector.setX(-currentSpriteBounds.left());
+        } else if (newSpriteBounds.right() > m_pScene->sceneRect().right()) {
+            moveVector.setX(m_pScene->sceneRect().right() - currentSpriteBounds.right());
+        }
+
+        // Si le sprite sort de la scène sur l'axe Y,
+        // on le déplace pour qu'il soit à la limite de la scène
+        if (newSpriteBounds.top() < 0) {
+            moveVector.setY(-currentSpriteBounds.top());
+        } else if (newSpriteBounds.bottom() > m_pScene->sceneRect().bottom()) {
+            moveVector.setY(m_pScene->sceneRect().bottom() - currentSpriteBounds.bottom());
+        }
+
+        // Déplace le sprite
         pSprite->moveBy(moveVector.x(), moveVector.y());
+
     }
 }
 
