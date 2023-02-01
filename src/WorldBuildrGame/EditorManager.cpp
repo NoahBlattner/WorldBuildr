@@ -9,7 +9,6 @@
 #include "EditorSprite.h"
 #include "SelectionZone.h"
 
-
 EditorManager::EditorManager(GameCore* core) {
     m_pScene = core->getScene();
 
@@ -36,7 +35,7 @@ void EditorManager::onKeyPressed(int key) {
             break;
         case Qt::Key_Escape:
             // On désélectionne tous les sprites
-            unSelectAllEditorSprites();
+            unselectAllEditorSprites();
             break;
         case Qt::Key_A:
             if (m_isCtrlHeld) {
@@ -77,7 +76,7 @@ void EditorManager::onMouseButtonPressed(QPointF mousePosition, Qt::MouseButtons
             break;
         case Qt::RightButton:
             // On désélectionne tous les sprites
-            unSelectAllEditorSprites();
+            unselectAllEditorSprites();
             break;
     }
 }
@@ -122,7 +121,7 @@ void EditorManager::onMouseButtonReleased(QPointF mousePosition, Qt::MouseButton
                 auto sprites = m_pMultiSelectionZone->endSelection();
 
                 // On désélectionne tous les sprites
-                unSelectAllEditorSprites();
+                unselectAllEditorSprites();
 
                 // On sélectionne tous les sprites qui sont dans la zone de sélection
                 selectMultipleEditorSprites(sprites);
@@ -153,7 +152,7 @@ void EditorManager::selectEditorSprite(EditorSprite *pEditSprite) {
 //! Sélectionne un sprite d'éditeur en désélectionnant tout les autres.
 void EditorManager::selectSingleEditorSprite(EditorSprite *pEditSprite) {
     // Désélectionne tous les sprites
-    unSelectAllEditorSprites();
+    unselectAllEditorSprites();
 
     // Sélectionne le sprite
     selectEditorSprite(pEditSprite);
@@ -162,14 +161,14 @@ void EditorManager::selectSingleEditorSprite(EditorSprite *pEditSprite) {
 //! Change la sélection d'un sprite d'éditeur.
 void EditorManager::toggleSelectEditorSprite(EditorSprite* pEditSprite) {
     if (m_pSelectedEditorSprites.contains(pEditSprite)) {
-        unSelectEditorSprite(pEditSprite);
+        unselectEditorSprite(pEditSprite);
     } else {
         selectEditorSprite(pEditSprite);
     }
 }
 
 //! Désélectionne un sprite d'éditeur.
-void EditorManager::unSelectEditorSprite(EditorSprite* pEditSprite) {
+void EditorManager::unselectEditorSprite(EditorSprite* pEditSprite) {
     // Enlève le sprite de la liste des sprites sélectionnés
     m_pSelectedEditorSprites.removeOne(pEditSprite);
 
@@ -178,7 +177,7 @@ void EditorManager::unSelectEditorSprite(EditorSprite* pEditSprite) {
 }
 
 //! Désélectionne tous les sprites d'éditeur.
-void EditorManager::unSelectAllEditorSprites() {
+void EditorManager::unselectAllEditorSprites() {
     // Indique à tous les sprites qu'ils ne sont plus sélectionnés
     foreach (EditorSprite* pSprite, m_pSelectedEditorSprites) {
         pSprite->setEditSelected(false);
@@ -226,7 +225,13 @@ void EditorManager::createEditorSprite(const QString& imageFileName, QPointF pos
     auto* pEditorSprite = new EditorSprite(imageFileName);
     m_pEditorSprites.append(pEditorSprite);
 
+    // On centre le point d'origine du sprite
+    pEditorSprite->setTransformOriginPoint(pEditorSprite->boundingRect().center());
+
+    // On place le sprite à la position donnée
     pEditorSprite->setPos(position);
+
+    // On ajoute le sprite à la scène
     m_pScene->addSpriteToScene(pEditorSprite);
 
     // Connecte le signal de click du sprite à la fonction de traitement du click
@@ -236,9 +241,11 @@ void EditorManager::createEditorSprite(const QString& imageFileName, QPointF pos
 //! Traite le click d'un sprite d'editeur.
 //! \param pEditSprite    Sprite d'éditeur cliqué.
 void EditorManager::editorSpriteClicked(EditorSprite* pEditSprite) {
-    if (m_isShiftHeld) { // Si la touche shift n'est pas enfoncée, on déselectionne tous les sprites
+    if (m_isShiftHeld) { // Si la touche shift est enfoncée
+        // On change la sélection du sprite
         toggleSelectEditorSprite(pEditSprite);
-    } else { // Sinon on ajoute le sprite à la sélection
+    } else {
+        // On sélectionne ce sprite uniquement
         selectSingleEditorSprite(pEditSprite);
     }
 }
@@ -262,5 +269,5 @@ void EditorManager::removeSelectedEditorSprites() {
     foreach (EditorSprite* pSprite, m_pSelectedEditorSprites) {
         removeEditorSprite(pSprite);
     }
-    unSelectAllEditorSprites();
+    unselectAllEditorSprites();
 }

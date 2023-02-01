@@ -13,6 +13,13 @@ class SelectionZone;
 class GameCore;
 class GameScene;
 
+//! Classe gérant l'éditeur de niveau.
+//! Elle gère la création et la destruction des sprites d'éditeur.
+//! Elle gère la sélection des sprites d'éditeur.
+//! Elle gère le drag and drop des sprites d'éditeur.
+//! Elle gère la création de zones de sélection.
+//!
+//! createEditorSprite() : Crée un sprite d'éditeur à la position donnée avec l'image donnée.
 class EditorManager : public QObject {
     Q_OBJECT
 
@@ -34,7 +41,7 @@ private:
     SelectionZone* m_pMultiSelectionZone = nullptr;
 
     // Drag and drop
-    EditorSprite* mouseDownEditorSprite;
+    EditorSprite* mouseDownEditorSprite = nullptr;
 
     // Liste des sprites
     QList<EditorSprite*> m_pEditorSprites;
@@ -44,8 +51,8 @@ private:
     void selectSingleEditorSprite(EditorSprite* pEditSprite);
     void toggleSelectEditorSprite(EditorSprite* pEditSprite);
     void selectMultipleEditorSprites(const QList<EditorSprite*>& pEditSprites);
-    void unSelectEditorSprite(EditorSprite* pEditSprite);
-    void unSelectAllEditorSprites();
+    void unselectEditorSprite(EditorSprite* pEditSprite);
+    void unselectAllEditorSprites();
 
     void createSelectionZone(QPointF startPositon);
 
