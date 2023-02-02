@@ -20,6 +20,10 @@ EditorManager::EditorManager(GameCore* core) {
     connect(core, &GameCore::notifyMouseButtonReleased, this, &EditorManager::onMouseButtonReleased);
 }
 
+GameScene* EditorManager::getScene() const {
+    return m_pScene;
+}
+
 /********************************************
  * Gestion des touche et boutons de la souris
  *******************************************/

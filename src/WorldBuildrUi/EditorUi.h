@@ -8,9 +8,14 @@
 
 #include <QWidget>
 
+class EditorManager;
+
 class EditorUi : public QWidget {
 public:
-    EditorUi();
+    EditorUi(EditorManager* editorManager);
+
+private:
+    EditorManager* m_pEditorManager;
 
 
 };

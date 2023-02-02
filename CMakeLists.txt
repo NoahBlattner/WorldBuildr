@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.24)
 project(WorldBuildr)
 
+set(UIS src/GameFramework/mainfrm.ui)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -14,8 +16,7 @@ find_package(Qt6 COMPONENTS
         Widgets
         REQUIRED)
 
-
-include_directories(src/GameFramework src/WorldBuildrGame src)
+include_directories(src/GameFramework src/WorldBuildrGame src/WorldBuildrUi src)
 
 add_executable(WorldBuildr
         src/GameFramework/main.cpp
@@ -29,7 +30,12 @@ add_executable(WorldBuildr
         src/GameFramework/sprite.cpp src/GameFramework/sprite.h
         src/GameFramework/utilities.cpp src/GameFramework/utilities.h
         src/WorldBuildrGame/gamecore.cpp src/WorldBuildrGame/gamecore.h
-        src/WorldBuild.pro src/WorldBuildrGame/EditorSprite.cpp src/WorldBuildrGame/EditorSprite.h src/WorldBuildrGame/SelectionZone.cpp src/WorldBuildrGame/SelectionZone.h src/WorldBuildrGame/EditorManager.cpp src/WorldBuildrGame/EditorManager.h src/WorldBuildrUi/EditorUi.cpp src/WorldBuildrUi/EditorUi.h)
+        src/WorldBuild.pro
+        src/WorldBuildrGame/EditorSprite.cpp src/WorldBuildrGame/EditorSprite.h
+        src/WorldBuildrGame/SelectionZone.cpp src/WorldBuildrGame/SelectionZone.h
+        src/WorldBuildrGame/EditorManager.cpp src/WorldBuildrGame/EditorManager.h
+        src/WorldBuildrUi/EditorUi.cpp src/WorldBuildrUi/EditorUi.h
+        src/WorldBuildrUi/EditorButton.cpp src/WorldBuildrUi/EditorButton.h)
 target_link_libraries(WorldBuildr
         Qt::Core
         Qt::Gui

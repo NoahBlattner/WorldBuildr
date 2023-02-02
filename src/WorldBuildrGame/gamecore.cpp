@@ -20,6 +20,7 @@
 #include "EditorSprite.h"
 #include "SelectionZone.h"
 #include "EditorManager.h"
+#include "EditorUi.h"
 
 const int SCENE_WIDTH = 1280;
 
@@ -45,6 +46,8 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     m_pEditorManager->createEditorSprite(GameFramework::imagesPath() + "demo/ball.png", QPointF(200, 200));
     m_pEditorManager->createEditorSprite(GameFramework::imagesPath() + "demo/tennisball.png", QPointF(300, 300));
     m_pEditorManager->createEditorSprite(GameFramework::imagesPath() + "demo/plane_cartoon.png", QPointF(400, 400));
+
+    EditorUi* pEditorUi = new EditorUi(m_pEditorManager);
 
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,

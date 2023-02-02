@@ -27,6 +27,8 @@ public:
     explicit EditorManager(GameCore* core);
     void createEditorSprite(const QString& imageFileName, QPointF position = QPointF(0, 0));
 
+    GameScene* getScene() const;
+
 private:
     GameScene* m_pScene = nullptr;
 
