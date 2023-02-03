@@ -15,7 +15,7 @@ class MainFrm;
 }
 
 class GameCanvas;
-class EditorUi;
+class EditorHudScene;
 
 //! \brief Fenêtre principale.
 //!
@@ -38,8 +38,6 @@ private:
     Ui::MainFrm *ui;
 
     GameCanvas* m_pGameCanvas;
-
-    EditorUi* m_pEditorUi;
 };
 
 #endif // WIDGET_H

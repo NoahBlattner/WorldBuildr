@@ -17,6 +17,7 @@ class GameScene;
 class EditorSprite;
 class SelectionZone;
 class EditorManager;
+class EditorHudScene;
 
 //! \brief Classe qui gère la logique du jeu.
 //!
@@ -52,6 +53,7 @@ private:
     GameScene* m_pScene = nullptr;
 
     EditorManager* m_pEditorManager = nullptr;
+    EditorHudScene* m_pHudScene = nullptr;
 
 };
 

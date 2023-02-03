@@ -20,7 +20,7 @@
 #include "EditorSprite.h"
 #include "SelectionZone.h"
 #include "EditorManager.h"
-#include "EditorUi.h"
+#include "EditorHudScene.h"
 
 const int SCENE_WIDTH = 1280;
 
@@ -47,7 +47,9 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     m_pEditorManager->createEditorSprite(GameFramework::imagesPath() + "demo/tennisball.png", QPointF(300, 300));
     m_pEditorManager->createEditorSprite(GameFramework::imagesPath() + "demo/plane_cartoon.png", QPointF(400, 400));
 
-    EditorUi* pEditorUi = new EditorUi(m_pEditorManager);
+    // Ajouter le hud
+    m_pHudScene = new EditorHudScene(m_pEditorManager);
+    pGameCanvas->setHudScene(m_pHudScene);
 
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,
@@ -59,7 +61,11 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
 //! Destructeur de GameCore : efface les scènes
 GameCore::~GameCore() {
     delete m_pScene;
+    delete m_pHudScene;
+    delete m_pEditorManager;
     m_pScene = nullptr;
+    m_pHudScene = nullptr;
+    m_pEditorManager = nullptr;
 }
 
 //! Traite la pression d'une touche.
