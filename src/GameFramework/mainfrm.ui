@@ -13,12 +13,19 @@
   <property name="windowTitle">
    <string>WorldBuildr</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="EditorHud" name="actionPanel"/>
+   </item>
    <item>
     <widget class="GameView" name="grvGame"/>
    </item>
-  </layout>
-  <widget class="EditorHud" name="editHud"/>
+   <!--
+    <item>
+     <widget class="TodoDetailsPanel" name="DetailsHud"/>
+    </item>
+   -->
+   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

@@ -20,7 +20,7 @@
 #include "EditorSprite.h"
 #include "SelectionZone.h"
 #include "EditorManager.h"
-#include "EditorHud.h"
+#include "ActionPanel.h"
 #include "GameView.h"
 
 const int SCENE_WIDTH = 1280;
@@ -50,7 +50,7 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     m_pEditorManager->createEditorSprite(GameFramework::imagesPath() + "demo/plane_cartoon.png", QPointF(400, 400));
 
     // Initialise le UI
-    m_pEditorHud->initHud(m_pEditorManager);
+    m_pEditorHud->initUI(m_pEditorManager);
 
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,

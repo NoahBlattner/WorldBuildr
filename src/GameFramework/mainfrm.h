@@ -15,7 +15,7 @@ class MainFrm;
 }
 
 class GameCanvas;
-class EditorHud;
+class ActionPanel;
 
 //! \brief Fenêtre principale.
 //!

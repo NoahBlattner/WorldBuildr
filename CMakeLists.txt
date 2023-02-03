@@ -34,12 +34,12 @@ add_executable(WorldBuildr
         src/WorldBuildrGame/EditorSprite.cpp src/WorldBuildrGame/EditorSprite.h
         src/WorldBuildrGame/SelectionZone.cpp src/WorldBuildrGame/SelectionZone.h
         src/WorldBuildrGame/EditorManager.cpp src/WorldBuildrGame/EditorManager.h
-        src/WorldBuildrUi/EditorHud.cpp src/WorldBuildrUi/EditorHud.h
-        src/WorldBuildrUi/EditorButton.cpp src/WorldBuildrUi/EditorButton.h src/WorldBuildrUi/EditorActionPanel.cpp src/WorldBuildrUi/EditorActionPanel.h)
+        src/WorldBuildrUi/ActionPanel.cpp src/WorldBuildrUi/ActionPanel.h
+        )
 target_link_libraries(WorldBuildr
         Qt::Core
         Qt::Gui
-        Qt::Widgets
+        Qt6::Widgets
         )
 
 if (WIN32)
