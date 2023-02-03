@@ -9,6 +9,7 @@
 #include "GameCore.h"
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QFileDialog>
 
 ActionPanel::ActionPanel(QWidget* pParent) : QWidget(pParent){
 }
@@ -25,6 +26,22 @@ void ActionPanel::initUI(EditorManager *editorManager) {
     addButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/addIcon.png"), "");
     layout->addWidget(addButton);
 
+    // Connexion des signaux
+    connect(addButton, &QPushButton::clicked, this, &ActionPanel::addButtonClicked);
+
     // TODO Autres boutons
+}
+
+//! Charge une image pour un sprite
+QString ActionPanel::loadSpriteImage() {
+    return QFileDialog::getOpenFileName(this, tr("Open Image"), GameFramework::imagesPath(), tr("Image Files (*.png *.jpg *.bmp)"));
+}
+
+//! Slot appelé lors du clic sur le bouton d'ajout de sprite
+void ActionPanel::addButtonClicked() {
+    QString imagePath = loadSpriteImage();
+    if(!imagePath.isEmpty()){
+        m_pEditorManager->createEditorSprite(imagePath);
+    }
 }
 
