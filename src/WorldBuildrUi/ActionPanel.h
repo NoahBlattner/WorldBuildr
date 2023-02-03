@@ -28,8 +28,6 @@ private:
 
 private slots:
     void addButtonClicked();
-
-    QString loadStyleSheet(const QString& path);
 };
 
 

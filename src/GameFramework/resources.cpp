@@ -79,9 +79,12 @@ plus élévé dans la hiérarchie :
         return resourcesPath() + QString("images") + QDir::separator();
     }
 
-    //! Indique le chemin d'accès aux resources style.
-    //! \return une chaîne de caractères contenant le chemin absolu du répertoire des styles.
-    QString stylePath() {
-        return resourcesPath() + QString("style") + QDir::separator();
+    //! Charge un string de style depuis un fichier
+    //! \param name Le nom du fichier de style
+    QString loadStyleSheetString(const QString& fileName) {
+        QFile file(resourcesPath() + "styles" + QDir::separator() + fileName);
+        file.open(QFile::ReadOnly);
+        QString styleSheet = QLatin1String(file.readAll());
+        return styleSheet;
     }
 }

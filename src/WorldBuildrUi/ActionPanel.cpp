@@ -25,7 +25,7 @@ void ActionPanel::initUI(EditorManager *editorManager) {
     // Création du bouton d'ajout de sprite
     addButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/addIcon.png"), "Ajouter un sprite");
     addButton->setToolTip("Ajouter un sprite");
-    addButton->setStyleSheet(loadStyleSheet(GameFramework::stylePath() + "buttonStyle.qss"));
+    addButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
     layout->addWidget(addButton);
 
     // Connexion des signaux
@@ -48,13 +48,5 @@ void ActionPanel::addButtonClicked() {
         // Création d'un nouveau sprite
         m_pEditorManager->createEditorSprite(imagePath);
     }
-}
-
-//! Charge un string de style depuis un fichier
-QString ActionPanel::loadStyleSheet(const QString& path) {
-    QFile file(path);
-    file.open(QFile::ReadOnly);
-    QString styleSheet = QLatin1String(file.readAll());
-    return styleSheet;
 }
 
