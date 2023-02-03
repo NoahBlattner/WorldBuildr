@@ -102,7 +102,7 @@ void GameView::drawForeground(QPainter* pPainter, const QRectF& rRect) {
         // ne pas désactiver les transformations s'il est enclenché.
         pPainter->save();
         pPainter->resetTransform();
-        //m_pHudScene->render(pPainter, sceneRect()); // dessine le hud sur la surface complète de la scène
+        //m_pEditorHud->render(pPainter, sceneRect()); // dessine le hud sur la surface complète de la scène
         m_pHudScene->render(pPainter, viewport()->rect()); // dessin le hud sur la surface visible
         pPainter->restore();
     }

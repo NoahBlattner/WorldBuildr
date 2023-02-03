@@ -5,7 +5,7 @@
 #ifndef WORLDBUILDR_EDITORMANAGER_H
 #define WORLDBUILDR_EDITORMANAGER_H
 
-#include <QObject>
+#include <QWidget>
 #include <QPointF>
 
 class EditorSprite;
@@ -20,7 +20,7 @@ class GameScene;
 //! Elle gère la création de zones de sélection.
 //!
 //! createEditorSprite() : Crée un sprite d'éditeur à la position donnée avec l'image donnée.
-class EditorManager : public QObject {
+class EditorManager : public QWidget {
     Q_OBJECT
 
 public:

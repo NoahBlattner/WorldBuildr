@@ -18,6 +18,7 @@
     <widget class="GameView" name="grvGame"/>
    </item>
   </layout>
+  <widget class="EditorHud" name="editHud"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -25,6 +26,11 @@
    <class>GameView</class>
    <extends>QGraphicsView</extends>
    <header>gameview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EditorHud</class>
+   <extends>QGraphicsScene</extends>
+   <header>EditorHud.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

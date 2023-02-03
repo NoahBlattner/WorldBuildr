@@ -5,11 +5,20 @@
 #ifndef WORLDBUILDR_EDITORACTIONPANEL_H
 #define WORLDBUILDR_EDITORACTIONPANEL_H
 
-#include <QGraphicsRectItem>
+#include <QGraphicsWidget>
 
-class EditorActionPanel : public QGraphicsRectItem {
+class QGraphicsLinearLayout;
+class EditorHud;
+class QPushButton;
+
+class EditorActionPanel : public QGraphicsWidget {
 public:
-    EditorActionPanel();
+    EditorActionPanel(EditorHud* parent = nullptr);
+
+private:
+    QGraphicsLinearLayout *layout = nullptr;
+
+    QPushButton* addButton = nullptr;
 
 };
 

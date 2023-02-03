@@ -17,6 +17,7 @@
 class GameCore;
 class GameScene;
 class GameView;
+class EditorHud;
 class QGraphicsScene;
 class QGraphicsSceneMouseEvent;
 class QGraphicsTextItem;
@@ -51,12 +52,14 @@ class QKeyEvent;
 class GameCanvas : public QObject
 {
     Q_OBJECT
+
 public:
     enum { KEEP_PREVIOUS_TICK_INTERVAL = -1  };
 
-    explicit GameCanvas(GameView* pView, QObject* pParent = nullptr);
+    explicit GameCanvas(GameView* pView, EditorHud* editHud, QObject* pParent = nullptr);
     ~GameCanvas() override;
 
+    EditorHud* getEditorHud();
 
     GameScene* createScene();
     GameScene* createScene(const QRectF& rSceneRect);
@@ -95,6 +98,7 @@ private:
     void mouseButtonReleased(QGraphicsSceneMouseEvent* pMouseEvent);
 
     GameView* m_pView;
+    EditorHud* m_pEditHud;
     GameCore* m_pGameCore;
     QPointer<QGraphicsTextItem> m_pDetailedInfosItem; // Smart Pointer pour qu'il soit mis à zéro au cas où l'item est effacé par GameScene::clear()
 
@@ -120,7 +124,6 @@ private:
 private slots:
     void onInit();
     void onTick();
-
 };
 
 #endif // GAMECANVAS_H

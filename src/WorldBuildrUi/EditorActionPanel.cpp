@@ -3,18 +3,22 @@
 //
 
 #include <iostream>
+
 #include "EditorActionPanel.h"
 #include "EditorButton.h"
 #include "resources.h"
-#include <QBrush>
+#include <QPushButton>
+#include <QIcon>
+#include <QGraphicsLinearLayout>
+#include "EditorHud.h"
+#include <QVBoxLayout>
 
-EditorActionPanel::EditorActionPanel() {
-    setRect(0, 0, 200, 200);
-    setBrush(QBrush(QColor(240, 240, 240, 100)));
+EditorActionPanel::EditorActionPanel(EditorHud* parent) : QGraphicsWidget() {
+    layout = new QGraphicsLinearLayout(Qt::Vertical, this);
 
-    auto* button = new EditorButton(GameFramework::imagesPath() + "tutorial/pacman_1.png",
-                                    []() { std::cout << "Hello World" << std::endl; },
-                                    this);
-    button->setPos(0, 0);
-    button->setScale(.2);
+    addButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/add.png"), "Add sprite");
+
+    layout->addItem(addButton);
+
+    setLayout(layout);
 }

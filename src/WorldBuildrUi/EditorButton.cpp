@@ -4,11 +4,11 @@
 
 #include "EditorButton.h"
 
-EditorButton::EditorButton(QString imagePath, void (*onClick)(), QGraphicsItem *parent) : QGraphicsPixmapItem(imagePath, parent) {
+EditorButton::EditorButton(const QString& imagePath, void (*onClick)(), QGraphicsItem *parent) : QGraphicsPixmapItem(imagePath, parent) {
     m_onClick = onClick;
 }
 
-void EditorButton::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+void EditorButton::clicked() {
     m_onClick();
 }
 

@@ -8,11 +8,11 @@
 #include <Sprite.h>
 
 class EditorButton : public QGraphicsPixmapItem {
-    public :
-        EditorButton(QString imagePath, void (*onClick)(), QGraphicsItem* parent = nullptr);
+public :
+        EditorButton(const QString& imagePath, void (*onClick)(), QGraphicsItem* parent = nullptr);
         ~EditorButton();
 
-        void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+        void clicked();
 
 private:
     void (*m_onClick)();
