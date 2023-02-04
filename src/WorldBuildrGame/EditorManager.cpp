@@ -57,6 +57,12 @@ void EditorManager::onKeyPressed(int key) {
                 selectMultipleEditorSprites(m_pEditorSprites);
             }
             break;
+        case Qt::Key_N:
+            if (m_isCtrlHeld) {
+                // On crée un nouveau sprite
+                addNewEditorSprite();
+            }
+            break;
     }
 }
 
@@ -240,7 +246,7 @@ void EditorManager::selectAllEditorSprites() {
 //! Crée un sprite d'éditeur.
 //! \param imageFileName    Nom du fichier image à utiliser pour le sprite.
 //! \param position         Position du sprite. Défaut : QPointF(0, 0)
-void EditorManager::createEditorSprite(QString imageFileName, QPointF position) {
+void EditorManager::addNewEditorSprite(QString imageFileName, QPointF position) {
     if (imageFileName.isEmpty()) { // Si le nom du fichier image est vide
         // On demande à l'utilisateur de choisir un fichier image
         imageFileName = loadImageToEditor();

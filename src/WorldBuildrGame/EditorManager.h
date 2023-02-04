@@ -19,7 +19,7 @@ class GameScene;
 //! Elle gère le drag and drop des sprites d'éditeur.
 //! Elle gère la création de zones de sélection.
 //!
-//! createEditorSprite() : Crée un sprite d'éditeur à la position donnée avec l'image donnée.
+//! addNewEditorSprite() : Crée un sprite d'éditeur à la position donnée avec l'image donnée.
 class EditorManager : public QWidget {
     Q_OBJECT
 
@@ -27,7 +27,7 @@ public:
     explicit EditorManager(GameCore* core);
 
     // Gestion de création
-    void createEditorSprite(QString imageFileName = QString(), QPointF position = QPointF(0, 0));
+    void addNewEditorSprite(QString imageFileName = QString(), QPointF position = QPointF(0, 0));
     void createSelectionZone(QPointF startPositon);
 
     // Gestion de la sélection
