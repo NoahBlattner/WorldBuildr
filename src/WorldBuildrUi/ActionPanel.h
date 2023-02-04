@@ -24,13 +24,14 @@ private:
 
     QPushButton* addButton = nullptr;
     QPushButton *removeButton = nullptr;
+    QPushButton* selectAllButton = nullptr;
 
-    QString loadSpriteImage();
+    QString loadImageToEditor();
 
 private slots:
     void addButtonClicked();
     void deleteButtonClicked();
-
+    void selectAllButtonClicked();
 };
 
 

@@ -214,6 +214,11 @@ void EditorManager::selectMultipleEditorSprites(const QList<EditorSprite*> &pEdi
     }
 }
 
+//! Sélectionne tous les sprites d'éditeur.
+void EditorManager::selectAllEditorSprites() {
+    selectMultipleEditorSprites(m_pEditorSprites);
+}
+
 /********************************************
  * Gestion des sprites d'éditeur
  *******************************************/
@@ -283,6 +288,7 @@ void EditorManager::moveSelectedEditorSprites(QPointF moveVector) {
 //! Supprime un sprite d'éditeur.
 void EditorManager::deleteEditorSprite(EditorSprite* pEditSprite) {
     m_pEditorSprites.removeOne(pEditSprite);
+    m_pSelectedEditorSprites.removeOne(pEditSprite);
     m_pScene->removeSpriteFromScene(pEditSprite);
     delete pEditSprite;
 }

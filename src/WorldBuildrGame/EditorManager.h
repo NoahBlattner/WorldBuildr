@@ -33,6 +33,7 @@ public:
     // Gestion de la sélection
     void selectEditorSprite(EditorSprite* pEditSprite);
     void selectSingleEditorSprite(EditorSprite* pEditSprite);
+    void selectAllEditorSprites();
     void toggleSelectEditorSprite(EditorSprite* pEditSprite);
     void selectMultipleEditorSprites(const QList<EditorSprite*>& pEditSprites);
     void unselectEditorSprite(EditorSprite* pEditSprite);
