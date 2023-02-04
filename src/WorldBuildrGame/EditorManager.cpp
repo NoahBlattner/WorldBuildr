@@ -2,12 +2,14 @@
 // Created by blatnoa on 31.01.2023.
 //
 
+#include <QFileDialog>
 #include "EditorManager.h"
 
 #include "GameCore.h"
 #include "GameScene.h"
 #include "EditorSprite.h"
 #include "SelectionZone.h"
+#include "resources.h"
 
 EditorManager::EditorManager(GameCore* core) {
     m_pScene = core->getScene();
@@ -18,6 +20,18 @@ EditorManager::EditorManager(GameCore* core) {
     connect(core, &GameCore::notifyMouseMoved, this, &EditorManager::onMouseMoved);
     connect(core, &GameCore::notifyMouseButtonPressed, this, &EditorManager::onMouseButtonPressed);
     connect(core, &GameCore::notifyMouseButtonReleased, this, &EditorManager::onMouseButtonReleased);
+}
+
+//! Copie une image sélectionnée dans le dossier d'images de l'éditeur
+//! et retourne le chemin de la nouvelle image
+//! \return Le chemin de l'image6
+QString EditorManager::loadImageToEditor() {
+    // Ouverture d'une boîte de dialogue pour charger une image
+    QString imagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), GameFramework::imagesPath(), tr("Image Files (*.png *.jpg *.bmp)"));
+    QString newImagePath = GameFramework::imagesPath() + "editorImages/" + imagePath.split("/").last();
+    QFile::copy(imagePath, newImagePath);
+
+    return newImagePath;
 }
 
 /********************************************
@@ -226,8 +240,16 @@ void EditorManager::selectAllEditorSprites() {
 //! Crée un sprite d'éditeur.
 //! \param imageFileName    Nom du fichier image à utiliser pour le sprite.
 //! \param position         Position du sprite. Défaut : QPointF(0, 0)
-void EditorManager::createEditorSprite(const QString& imageFileName, QPointF position) {
+void EditorManager::createEditorSprite(QString imageFileName, QPointF position) {
+    if (imageFileName.isEmpty()) { // Si le nom du fichier image est vide
+        // On demande à l'utilisateur de choisir un fichier image
+        imageFileName = loadImageToEditor();
+    }
+
+    // On crée le sprite d'éditeur
     auto* pEditorSprite = new EditorSprite(imageFileName);
+
+    // On ajoute le sprite à la liste des sprites d'éditeur
     m_pEditorSprites.append(pEditorSprite);
 
     // On centre le point d'origine du sprite

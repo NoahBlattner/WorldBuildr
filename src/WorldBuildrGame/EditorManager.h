@@ -27,7 +27,7 @@ public:
     explicit EditorManager(GameCore* core);
 
     // Gestion de création
-    void createEditorSprite(const QString& imageFileName, QPointF position = QPointF(0, 0));
+    void createEditorSprite(QString imageFileName = QString(), QPointF position = QPointF(0, 0));
     void createSelectionZone(QPointF startPositon);
 
     // Gestion de la sélection
@@ -66,6 +66,8 @@ private:
     QList<EditorSprite*> m_pEditorSprites;
     QList<EditorSprite*> m_pSelectedEditorSprites;
 
+    QString loadImageToEditor();
+
 private slots:
     void editorSpriteClicked(EditorSprite* pEditSprite);
 
@@ -77,6 +79,7 @@ private slots:
     void onMouseButtonReleased(QPointF mousePosition, Qt::MouseButtons buttons);
 
     void updateMultiSelect(QPointF &newMousePosition);
+
 };
 
 

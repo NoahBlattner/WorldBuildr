@@ -50,30 +50,13 @@ void ActionPanel::initUI(EditorManager *editorManager) {
     // TODO Autres boutons
 }
 
-//! Copie une image sélectionnée dans le dossier d'images de l'éditeur
-//! et retourne le chemin de la nouvelle image
-//! \return Le chemin de l'image
-QString ActionPanel::loadImageToEditor() {
-    // Ouverture d'une boîte de dialogue pour charger une image
-    QString imagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), GameFramework::imagesPath(), tr("Image Files (*.png *.jpg *.bmp)"));
-    QString newImagePath = GameFramework::imagesPath() + "editorImages/" + imagePath.split("/").last();
-    QFile::copy(imagePath, newImagePath);
-
-    return newImagePath;
-}
-
 /*********************
  * Gestion des signaux des boutons
  ********************/
 
 //! Slot appelé lors du clic sur le bouton d'ajout de sprite
 void ActionPanel::addButtonClicked() {
-    QString imagePath = loadImageToEditor();
-
-    if(!imagePath.isEmpty()){ // Si l'image n'est pas vide
-        // Création d'un nouveau sprite
-        m_pEditorManager->createEditorSprite(imagePath);
-    }
+    m_pEditorManager->createEditorSprite();
 }
 
 //! Slot appelé lors du clic sur le bouton de suppression de sprite
