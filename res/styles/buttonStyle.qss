@@ -6,6 +6,7 @@ QPushButton {
     border-color: beige;
     min-width: 10em;
     padding: 6px;
+    text-align: left;
 }
 
 QPushButton:pressed {
