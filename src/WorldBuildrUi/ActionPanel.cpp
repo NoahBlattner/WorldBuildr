@@ -21,6 +21,7 @@ void ActionPanel::initUI(EditorManager *editorManager) {
 
     // Création du layout
     layout = new QVBoxLayout(this);
+    layout->setAlignment(Qt::AlignCenter);
 
     // Création du bouton d'ajout de sprite
     addButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/addIcon.png"), "Ajouter un sprite");
@@ -28,8 +29,16 @@ void ActionPanel::initUI(EditorManager *editorManager) {
     addButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
     layout->addWidget(addButton);
 
+
+    // Création d'un bouton de suppression de sprite
+    removeButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/deleteIcon.png"), "Supprimer les sprites sélectionnés");
+    removeButton->setToolTip("Supprimer les sprites sélectionnés");
+    removeButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
+    layout->addWidget(removeButton);
+
     // Connexion des signaux
     connect(addButton, &QPushButton::clicked, this, &ActionPanel::addButtonClicked);
+    connect(removeButton, &QPushButton::clicked, this, &ActionPanel::deleteButtonClicked);
 
     // TODO Autres boutons
 }
@@ -48,5 +57,11 @@ void ActionPanel::addButtonClicked() {
         // Création d'un nouveau sprite
         m_pEditorManager->createEditorSprite(imagePath);
     }
+}
+
+//! Slot appelé lors du clic sur le bouton de suppression de sprite
+void ActionPanel::deleteButtonClicked() {
+    // Suppression des sprites sélectionnés
+    m_pEditorManager->deleteSelectedEditorSprites();
 }
 

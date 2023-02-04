@@ -20,10 +20,6 @@ EditorManager::EditorManager(GameCore* core) {
     connect(core, &GameCore::notifyMouseButtonReleased, this, &EditorManager::onMouseButtonReleased);
 }
 
-GameScene* EditorManager::getScene() const {
-    return m_pScene;
-}
-
 /********************************************
  * Gestion des touche et boutons de la souris
  *******************************************/
@@ -60,7 +56,7 @@ void EditorManager::onKeyReleased(int key) {
             m_isCtrlHeld = false;
             break;
         case Qt::Key_Delete:
-            removeSelectedEditorSprites();
+            deleteSelectedEditorSprites();
             break;
     }
 }
@@ -285,16 +281,15 @@ void EditorManager::moveSelectedEditorSprites(QPointF moveVector) {
 }
 
 //! Supprime un sprite d'éditeur.
-void EditorManager::removeEditorSprite(EditorSprite* pEditSprite) {
+void EditorManager::deleteEditorSprite(EditorSprite* pEditSprite) {
     m_pEditorSprites.removeOne(pEditSprite);
     m_pScene->removeSpriteFromScene(pEditSprite);
     delete pEditSprite;
 }
 
 //! Supprime tous les sprites sélectionnés.
-void EditorManager::removeSelectedEditorSprites() {
+void EditorManager::deleteSelectedEditorSprites() {
     foreach (EditorSprite* pSprite, m_pSelectedEditorSprites) {
-        removeEditorSprite(pSprite);
+            deleteEditorSprite(pSprite);
     }
-    unselectAllEditorSprites();
 }

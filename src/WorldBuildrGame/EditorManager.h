@@ -25,9 +25,25 @@ class EditorManager : public QWidget {
 
 public:
     explicit EditorManager(GameCore* core);
-    void createEditorSprite(const QString& imageFileName, QPointF position = QPointF(0, 0));
 
-    GameScene* getScene() const;
+    // Gestion de création
+    void createEditorSprite(const QString& imageFileName, QPointF position = QPointF(0, 0));
+    void createSelectionZone(QPointF startPositon);
+
+    // Gestion de la sélection
+    void selectEditorSprite(EditorSprite* pEditSprite);
+    void selectSingleEditorSprite(EditorSprite* pEditSprite);
+    void toggleSelectEditorSprite(EditorSprite* pEditSprite);
+    void selectMultipleEditorSprites(const QList<EditorSprite*>& pEditSprites);
+    void unselectEditorSprite(EditorSprite* pEditSprite);
+    void unselectAllEditorSprites();
+
+    // Gestion de suppression
+    void deleteEditorSprite(EditorSprite* pEditSprite);
+    void deleteSelectedEditorSprites();
+
+    // Gestion du drag and drop
+    void moveSelectedEditorSprites(QPointF moveVector);
 
 private:
     GameScene* m_pScene = nullptr;
@@ -48,20 +64,6 @@ private:
     // Liste des sprites
     QList<EditorSprite*> m_pEditorSprites;
     QList<EditorSprite*> m_pSelectedEditorSprites;
-
-    void selectEditorSprite(EditorSprite* pEditSprite);
-    void selectSingleEditorSprite(EditorSprite* pEditSprite);
-    void toggleSelectEditorSprite(EditorSprite* pEditSprite);
-    void selectMultipleEditorSprites(const QList<EditorSprite*>& pEditSprites);
-    void unselectEditorSprite(EditorSprite* pEditSprite);
-    void unselectAllEditorSprites();
-
-    void createSelectionZone(QPointF startPositon);
-
-    void removeEditorSprite(EditorSprite* pEditSprite);
-    void removeSelectedEditorSprites();
-
-    void moveSelectedEditorSprites(QPointF moveVector);
 
 private slots:
     void editorSpriteClicked(EditorSprite* pEditSprite);

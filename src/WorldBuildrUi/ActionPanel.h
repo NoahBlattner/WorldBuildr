@@ -23,11 +23,14 @@ private:
     QVBoxLayout* layout = nullptr;
 
     QPushButton* addButton = nullptr;
+    QPushButton *removeButton = nullptr;
 
     QString loadSpriteImage();
 
 private slots:
     void addButtonClicked();
+    void deleteButtonClicked();
+
 };
 
 
