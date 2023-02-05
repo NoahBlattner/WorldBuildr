@@ -224,12 +224,21 @@ void EditorManager::duplicateEditorSprite(EditorSprite* pEditSprite) {
 
     // On ajoute le sprite à l'éditeur
     addEditorSprite(newSprite, pEditSprite->pos() + QPointF(10, 10));
+
+    // On sélectionne le nouveau sprite
+    selectEditorSprite(newSprite);
 }
 
 //! Duplique tous les sprites d'éditeur sélectionnés.
 void EditorManager::duplicateSelectedEditorSprites() {
+    // Dupliquer la liste des sprites sélectionnés
+    auto spritesToDuplicate = m_pSelectedEditorSprites;
+
+    // On désélectionne tous les sprites
+    unselectAllEditorSprites();
+
     // Pour chaque sprite sélectionné
-    for (auto* pEditSprite : m_pSelectedEditorSprites) {
+    for (auto* pEditSprite : spritesToDuplicate) {
         // On le duplique
         duplicateEditorSprite(pEditSprite);
     }
