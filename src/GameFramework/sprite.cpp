@@ -38,7 +38,7 @@ Sprite::Sprite(const QPixmap& rPixmap, QGraphicsItem* pParent) : QGraphicsPixmap
 //! \param rImagePath  Chemin vers l'image à utiliser pour l'apparence du sprite.
 //! \param pParent     Pointeur sur le parent (afin d'obtenir une destruction automatique de cet objet).
 Sprite::Sprite(const QString& rImagePath, QGraphicsItem* pParent) : Sprite(QPixmap(rImagePath), pParent) {
-
+    m_imagePath = rImagePath;
 }
 
 //! Destructeur.

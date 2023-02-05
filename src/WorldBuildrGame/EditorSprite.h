@@ -13,6 +13,7 @@
 //! Si elle est sélectionnée, elle est entourée d'une bordure.
 class EditorSprite : public Sprite {
     Q_OBJECT
+
 public:
     explicit EditorSprite(const QString& imageFileName, QGraphicsItem* pParent = nullptr);
 

@@ -34,6 +34,18 @@ QString EditorManager::loadImageToEditor() {
     return newImagePath;
 }
 
+//! Traite le click d'un sprite d'editeur.
+//! \param pEditSprite    Sprite d'éditeur cliqué.
+void EditorManager::editorSpriteClicked(EditorSprite* pEditSprite) {
+    if (m_isShiftHeld) { // Si la touche shift est enfoncée
+        // On change la sélection du sprite
+        toggleSelectEditorSprite(pEditSprite);
+    } else {
+        // On sélectionne ce sprite uniquement
+        selectSingleEditorSprite(pEditSprite);
+    }
+}
+
 /********************************************
  * Gestion des touche et boutons de la souris
  *******************************************/
@@ -60,7 +72,13 @@ void EditorManager::onKeyPressed(int key) {
         case Qt::Key_N:
             if (m_isCtrlHeld) {
                 // On crée un nouveau sprite
-                addNewEditorSprite();
+                createNewEditorSprite();
+            }
+            break;
+        case Qt::Key_V:
+            if (m_isCtrlHeld) {
+                // On colle les sprites copiés
+                duplicateSelectedEditorSprites();
             }
             break;
     }
@@ -154,6 +172,70 @@ void EditorManager::onMouseButtonReleased(QPointF mousePosition, Qt::MouseButton
 }
 
 /********************************************
+ * Gestion de le création
+ *******************************************/
+
+//! Crée un sprite d'éditeur.
+//! \param imageFileName    Nom du fichier image à utiliser pour le sprite.
+//! \param position         Position du sprite. Défaut : QPointF(0, 0)
+void EditorManager::createNewEditorSprite(QString imageFileName, QPointF position) {
+    if (imageFileName.isEmpty()) { // Si le nom du fichier image est vide
+        // On demande à l'utilisateur de choisir un fichier image
+        imageFileName = loadImageToEditor();
+    }
+
+    // On crée le sprite d'éditeur
+    auto* pEditorSprite = new EditorSprite(imageFileName);
+
+    // On ajoute le sprite à l'éditeur
+    addEditorSprite(pEditorSprite, position);
+}
+
+//! Ajoute un sprite d'éditeur à l'éditeur.
+//! \param pEditorSprite    Pointeur vers le sprite d'éditeur à ajouter.
+//! \param position         Position du sprite. Défaut : QPointF(0, 0)
+void EditorManager::addEditorSprite(EditorSprite *pEditorSprite, const QPointF &position) {// On ajoute le sprite à la liste des sprites d'éditeur
+    m_pEditorSprites.append(pEditorSprite);
+
+    // On place le sprite à la position donnée
+    pEditorSprite->setPos(position);
+
+    // On ajoute le sprite à la scène
+    m_pScene->addSpriteToScene(pEditorSprite);
+
+    // Connecte le signal de click du sprite à la fonction de traitement du click
+    connect(pEditorSprite, &EditorSprite::editorSpriteLeftClicked, this, &EditorManager::editorSpriteClicked);
+}
+
+//! Crée une zone de sélection à une position donnée.
+//! \param startPositon    Position de la souris.
+void EditorManager::createSelectionZone(QPointF startPositon) {
+    if (m_pMultiSelectionZone != nullptr) {
+        m_pMultiSelectionZone->endSelection();
+    }
+
+    m_pMultiSelectionZone = new SelectionZone(m_pScene, startPositon);
+}
+
+//! Duplique un sprite d'éditeur.
+void EditorManager::duplicateEditorSprite(EditorSprite* pEditSprite) {
+    // On crée un nouveau sprite d'éditeur
+    auto* newSprite = new EditorSprite(pEditSprite->getImgPath());
+
+    // On ajoute le sprite à l'éditeur
+    addEditorSprite(newSprite, pEditSprite->pos() + QPointF(10, 10));
+}
+
+//! Duplique tous les sprites d'éditeur sélectionnés.
+void EditorManager::duplicateSelectedEditorSprites() {
+    // Pour chaque sprite sélectionné
+    for (auto* pEditSprite : m_pSelectedEditorSprites) {
+        // On le duplique
+        duplicateEditorSprite(pEditSprite);
+    }
+}
+
+/********************************************
  * Gestion de la sélection
  *******************************************/
 
@@ -178,6 +260,17 @@ void EditorManager::selectSingleEditorSprite(EditorSprite *pEditSprite) {
     selectEditorSprite(pEditSprite);
 }
 
+//! Désélectionne tous les sprites d'éditeur.
+void EditorManager::unselectAllEditorSprites() {
+    // Indique à tous les sprites qu'ils ne sont plus sélectionnés
+            foreach (EditorSprite* pSprite, m_pSelectedEditorSprites) {
+            pSprite->setEditSelected(false);
+        }
+
+    // Vide la liste des sprites sélectionnés
+    m_pSelectedEditorSprites.clear();
+}
+
 //! Change la sélection d'un sprite d'éditeur.
 void EditorManager::toggleSelectEditorSprite(EditorSprite* pEditSprite) {
     if (m_pSelectedEditorSprites.contains(pEditSprite)) {
@@ -185,6 +278,13 @@ void EditorManager::toggleSelectEditorSprite(EditorSprite* pEditSprite) {
     } else {
         selectEditorSprite(pEditSprite);
     }
+}
+
+//! Sélectionne plusieurs sprites d'éditeur.
+void EditorManager::selectMultipleEditorSprites(const QList<EditorSprite*> &pEditSprites) {
+            foreach (EditorSprite* pSprite, pEditSprites) {
+            selectEditorSprite(pSprite);
+        }
 }
 
 //! Désélectionne un sprite d'éditeur.
@@ -196,29 +296,9 @@ void EditorManager::unselectEditorSprite(EditorSprite* pEditSprite) {
     pEditSprite->setEditSelected(false);
 }
 
-//! Désélectionne tous les sprites d'éditeur.
-void EditorManager::unselectAllEditorSprites() {
-    // Indique à tous les sprites qu'ils ne sont plus sélectionnés
-    foreach (EditorSprite* pSprite, m_pSelectedEditorSprites) {
-        pSprite->setEditSelected(false);
-    }
-
-    // Vide la liste des sprites sélectionnés
-    m_pSelectedEditorSprites.clear();
-}
-
-/********************************************
-* Gestion de la multi-sélection
- *******************************************/
-
-//! Crée une zone de sélection à une position donnée.
-//! \param startPositon    Position de la souris.
-void EditorManager::createSelectionZone(QPointF startPositon) {
-    if (m_pMultiSelectionZone != nullptr) {
-        m_pMultiSelectionZone->endSelection();
-    }
-
-    m_pMultiSelectionZone = new SelectionZone(m_pScene, startPositon);
+//! Sélectionne tous les sprites d'éditeur.
+void EditorManager::selectAllEditorSprites() {
+    selectMultipleEditorSprites(m_pEditorSprites);
 }
 
 //! Met à jour la multi-sélection.
@@ -227,65 +307,33 @@ void EditorManager::updateMultiSelect(QPointF &newMousePosition) {// On met à j
     selectMultipleEditorSprites(m_pMultiSelectionZone->getCollidingEditorSprites());
 }
 
-//! Sélectionne plusieurs sprites d'éditeur.
-void EditorManager::selectMultipleEditorSprites(const QList<EditorSprite*> &pEditSprites) {
-    foreach (EditorSprite* pSprite, pEditSprites) {
-        selectEditorSprite(pSprite);
-    }
+/********************************************
+ * Gestion de suppression
+ *******************************************/
+
+//! Supprime un sprite d'éditeur.
+void EditorManager::deleteEditorSprite(EditorSprite* pEditSprite) {
+    m_pEditorSprites.removeOne(pEditSprite);
+    m_pSelectedEditorSprites.removeOne(pEditSprite);
+    m_pScene->removeSpriteFromScene(pEditSprite);
+    delete pEditSprite;
 }
 
-//! Sélectionne tous les sprites d'éditeur.
-void EditorManager::selectAllEditorSprites() {
-    selectMultipleEditorSprites(m_pEditorSprites);
+//! Supprime tous les sprites sélectionnés.
+void EditorManager::deleteSelectedEditorSprites() {
+    for (auto* pSprite : m_pSelectedEditorSprites) {
+            deleteEditorSprite(pSprite);
+    }
 }
 
 /********************************************
- * Gestion des sprites d'éditeur
+ * Gestion de modification de sprites
  *******************************************/
 
-//! Crée un sprite d'éditeur.
-//! \param imageFileName    Nom du fichier image à utiliser pour le sprite.
-//! \param position         Position du sprite. Défaut : QPointF(0, 0)
-void EditorManager::addNewEditorSprite(QString imageFileName, QPointF position) {
-    if (imageFileName.isEmpty()) { // Si le nom du fichier image est vide
-        // On demande à l'utilisateur de choisir un fichier image
-        imageFileName = loadImageToEditor();
-    }
-
-    // On crée le sprite d'éditeur
-    auto* pEditorSprite = new EditorSprite(imageFileName);
-
-    // On ajoute le sprite à la liste des sprites d'éditeur
-    m_pEditorSprites.append(pEditorSprite);
-
-    // On centre le point d'origine du sprite
-    pEditorSprite->setTransformOriginPoint(pEditorSprite->boundingRect().center());
-
-    // On place le sprite à la position donnée
-    pEditorSprite->setPos(position);
-
-    // On ajoute le sprite à la scène
-    m_pScene->addSpriteToScene(pEditorSprite);
-
-    // Connecte le signal de click du sprite à la fonction de traitement du click
-    connect(pEditorSprite, &EditorSprite::editorSpriteLeftClicked, this, &EditorManager::editorSpriteClicked);
-}
-
-//! Traite le click d'un sprite d'editeur.
-//! \param pEditSprite    Sprite d'éditeur cliqué.
-void EditorManager::editorSpriteClicked(EditorSprite* pEditSprite) {
-    if (m_isShiftHeld) { // Si la touche shift est enfoncée
-        // On change la sélection du sprite
-        toggleSelectEditorSprite(pEditSprite);
-    } else {
-        // On sélectionne ce sprite uniquement
-        selectSingleEditorSprite(pEditSprite);
-    }
-}
-
 //! Déplace tous les sprites sélectionnés d'un vecteur donné.
+//! \param moveVector    Vecteur de déplacement.
 void EditorManager::moveSelectedEditorSprites(QPointF moveVector) {
-    foreach (EditorSprite* pSprite, m_pSelectedEditorSprites) {
+   for (auto* pSprite : m_pSelectedEditorSprites) {
         // Calcule la nouvelle position du sprite
         QRectF currentSpriteBounds = pSprite->sceneBoundingRect();
         QRectF newSpriteBounds = currentSpriteBounds;
@@ -310,20 +358,5 @@ void EditorManager::moveSelectedEditorSprites(QPointF moveVector) {
         // Déplace le sprite
         pSprite->moveBy(moveVector.x(), moveVector.y());
 
-    }
-}
-
-//! Supprime un sprite d'éditeur.
-void EditorManager::deleteEditorSprite(EditorSprite* pEditSprite) {
-    m_pEditorSprites.removeOne(pEditSprite);
-    m_pSelectedEditorSprites.removeOne(pEditSprite);
-    m_pScene->removeSpriteFromScene(pEditSprite);
-    delete pEditSprite;
-}
-
-//! Supprime tous les sprites sélectionnés.
-void EditorManager::deleteSelectedEditorSprites() {
-    foreach (EditorSprite* pSprite, m_pSelectedEditorSprites) {
-            deleteEditorSprite(pSprite);
     }
 }

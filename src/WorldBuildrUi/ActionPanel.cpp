@@ -56,7 +56,7 @@ void ActionPanel::initUI(EditorManager *editorManager) {
 
 //! Slot appelé lors du clic sur le bouton d'ajout de sprite
 void ActionPanel::addButtonClicked() {
-    m_pEditorManager->addNewEditorSprite();
+    m_pEditorManager->createNewEditorSprite();
 }
 
 //! Slot appelé lors du clic sur le bouton de suppression de sprite

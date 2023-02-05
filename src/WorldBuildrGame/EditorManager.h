@@ -19,7 +19,7 @@ class GameScene;
 //! Elle gère le drag and drop des sprites d'éditeur.
 //! Elle gère la création de zones de sélection.
 //!
-//! addNewEditorSprite() : Crée un sprite d'éditeur à la position donnée avec l'image donnée.
+//! createNewEditorSprite() : Crée un sprite d'éditeur à la position donnée avec l'image donnée.
 class EditorManager : public QWidget {
     Q_OBJECT
 
@@ -27,8 +27,11 @@ public:
     explicit EditorManager(GameCore* core);
 
     // Gestion de création
-    void addNewEditorSprite(QString imageFileName = QString(), QPointF position = QPointF(0, 0));
     void createSelectionZone(QPointF startPositon);
+    void createNewEditorSprite(QString imageFileName = QString(), QPointF position = QPointF(0, 0));
+    void addEditorSprite(EditorSprite *pEditorSprite, const QPointF &position = QPointF(0, 0));
+    void duplicateEditorSprite(EditorSprite* pEditSprite);
+    void duplicateSelectedEditorSprites();
 
     // Gestion de la sélection
     void selectEditorSprite(EditorSprite* pEditSprite);
@@ -43,7 +46,7 @@ public:
     void deleteEditorSprite(EditorSprite* pEditSprite);
     void deleteSelectedEditorSprites();
 
-    // Gestion du drag and drop
+    // Gestion de modification de sprites
     void moveSelectedEditorSprites(QPointF moveVector);
 
 private:
@@ -79,7 +82,6 @@ private slots:
     void onMouseButtonReleased(QPointF mousePosition, Qt::MouseButtons buttons);
 
     void updateMultiSelect(QPointF &newMousePosition);
-
 };
 
 

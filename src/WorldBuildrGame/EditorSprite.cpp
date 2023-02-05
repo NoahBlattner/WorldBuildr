@@ -9,6 +9,8 @@
 #include <QPainter>
 
 EditorSprite::EditorSprite(const QString &imageFileName, QGraphicsItem *pParent) : Sprite(imageFileName, pParent) {
+    // On centre le point d'origine du sprite
+    setTransformOriginPoint(globalBoundingRect().center());
 }
 
 //! \brief Dessine le sprite.
