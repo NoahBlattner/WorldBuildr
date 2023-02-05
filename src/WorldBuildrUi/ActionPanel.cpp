@@ -29,7 +29,6 @@ void ActionPanel::initUI(EditorManager *editorManager) {
     addButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
     layout->addWidget(addButton);
 
-
     // Création d'un bouton de suppression de sprite
     removeButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/deleteIcon.png"), "Supprimer les sprites sélectionnés");
     removeButton->setToolTip("Supprimer les sprites sélectionnés");
@@ -42,10 +41,24 @@ void ActionPanel::initUI(EditorManager *editorManager) {
     selectAllButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
     layout->addWidget(selectAllButton);
 
+    // Création d'un bouton de déselection de tous les sprites
+    deselectAllButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/deselectAllIcon.png"), "Désélectionner tous les sprites");
+    deselectAllButton->setToolTip("Désélectionner tous les sprites");
+    deselectAllButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
+    layout->addWidget(deselectAllButton);
+
+    // Création d'un bouton de duplication de sprite
+    duplicateButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/duplicateIcon.png"), "Dupliquer les sprites sélectionnés");
+    duplicateButton->setToolTip("Dupliquer les sprites sélectionnés");
+    duplicateButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
+    layout->addWidget(duplicateButton);
+
     // Connexion des signaux
     connect(addButton, &QPushButton::clicked, this, &ActionPanel::addButtonClicked);
     connect(removeButton, &QPushButton::clicked, this, &ActionPanel::deleteButtonClicked);
     connect(selectAllButton, &QPushButton::clicked, this, &ActionPanel::selectAllButtonClicked);
+    connect(deselectAllButton, &QPushButton::clicked, this, &ActionPanel::deselectAllSprites);
+    connect(duplicateButton, &QPushButton::clicked, this, &ActionPanel::duplicateButtonClicked);
 
     // TODO Autres boutons
 }
@@ -69,5 +82,16 @@ void ActionPanel::deleteButtonClicked() {
 void ActionPanel::selectAllButtonClicked() {
     // Sélectionner tous les sprites
     m_pEditorManager->selectAllEditorSprites();
+}
+
+//! Slot appelé lors du clic sur le bouton de déselection de tous les sprites
+void ActionPanel::deselectAllSprites() {
+    m_pEditorManager->unselectAllEditorSprites();
+}
+
+//! Slot appelé lors du clic sur le bouton de duplication de sprite
+void ActionPanel::duplicateButtonClicked() {
+    // Dupliquer les sprites sélectionnés
+    m_pEditorManager->duplicateSelectedEditorSprites();
 }
 

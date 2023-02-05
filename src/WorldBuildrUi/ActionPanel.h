@@ -23,8 +23,10 @@ private:
     QVBoxLayout* layout = nullptr;
 
     QPushButton* addButton = nullptr;
-    QPushButton *removeButton = nullptr;
+    QPushButton* removeButton = nullptr;
     QPushButton* selectAllButton = nullptr;
+    QPushButton* deselectAllButton;
+    QPushButton* duplicateButton = nullptr;
 
     QString loadImageToEditor();
 
@@ -32,6 +34,8 @@ private slots:
     void addButtonClicked();
     void deleteButtonClicked();
     void selectAllButtonClicked();
+    void deselectAllSprites();
+    void duplicateButtonClicked();
 };
 
 
