@@ -25,10 +25,9 @@ private:
     QPushButton* addButton = nullptr;
     QPushButton* removeButton = nullptr;
     QPushButton* selectAllButton = nullptr;
-    QPushButton* deselectAllButton;
+    QPushButton* deselectAllButton = nullptr;
     QPushButton* duplicateButton = nullptr;
-
-    QString loadImageToEditor();
+    QPushButton* addBackgroundButton = nullptr;
 
 private slots:
     void addButtonClicked();
@@ -36,6 +35,8 @@ private slots:
     void selectAllButtonClicked();
     void deselectAllSprites();
     void duplicateButtonClicked();
+    void addBackgroundButtonClicked();
+
 };
 
 

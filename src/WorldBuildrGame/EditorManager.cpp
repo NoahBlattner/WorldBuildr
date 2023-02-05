@@ -46,6 +46,22 @@ void EditorManager::editorSpriteClicked(EditorSprite* pEditSprite) {
     }
 }
 
+//! Set l'image de fond de l'éditeur.
+//! \param imageFileName    Chemin de l'image de fond. Si vide, on demande à l'utilisateur de choisir une image.
+void EditorManager::setBackGroundImage(QString imageFileName) {
+    if (imageFileName.isEmpty()) {
+        imageFileName = loadImageToEditor();
+    }
+
+    // Création de l'image et redimensionnement à la taille de la scène
+    QImage image(imageFileName);
+    image = image.scaled(m_pScene->width(), m_pScene->height());
+
+    // On charge l'image de fond dans la scène
+    m_pScene->setBackgroundImage(image);
+}
+
+
 /********************************************
  * Gestion des touche et boutons de la souris
  *******************************************/

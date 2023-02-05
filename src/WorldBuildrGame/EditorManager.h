@@ -26,6 +26,8 @@ class EditorManager : public QWidget {
 public:
     explicit EditorManager(GameCore* core);
 
+    void setBackGroundImage(QString imageFileName = QString());
+
     // Gestion de création
     void createSelectionZone(QPointF startPositon);
     void createNewEditorSprite(QString imageFileName = QString(), QPointF position = QPointF(0, 0));

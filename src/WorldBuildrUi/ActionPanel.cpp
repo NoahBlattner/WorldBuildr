@@ -42,7 +42,7 @@ void ActionPanel::initUI(EditorManager *editorManager) {
     layout->addWidget(selectAllButton);
 
     // Création d'un bouton de déselection de tous les sprites
-    deselectAllButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/deselectAllIcon.png"), "Désélectionner tous les sprites");
+    deselectAllButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/deselectIcon.png"), "Désélectionner tous les sprites");
     deselectAllButton->setToolTip("Désélectionner tous les sprites");
     deselectAllButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
     layout->addWidget(deselectAllButton);
@@ -53,12 +53,19 @@ void ActionPanel::initUI(EditorManager *editorManager) {
     duplicateButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
     layout->addWidget(duplicateButton);
 
+    // Création d'un bouton de ajout d'arrière-plan
+    addBackgroundButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/backgroundIcon.png"), "Ajouter un arrière-plan");
+    addBackgroundButton->setToolTip("Ajouter un arrière-plan");
+    addBackgroundButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
+    layout->addWidget(addBackgroundButton);
+
     // Connexion des signaux
     connect(addButton, &QPushButton::clicked, this, &ActionPanel::addButtonClicked);
     connect(removeButton, &QPushButton::clicked, this, &ActionPanel::deleteButtonClicked);
     connect(selectAllButton, &QPushButton::clicked, this, &ActionPanel::selectAllButtonClicked);
     connect(deselectAllButton, &QPushButton::clicked, this, &ActionPanel::deselectAllSprites);
     connect(duplicateButton, &QPushButton::clicked, this, &ActionPanel::duplicateButtonClicked);
+    connect(addBackgroundButton, &QPushButton::clicked, this, &ActionPanel::addBackgroundButtonClicked);
 
     // TODO Autres boutons
 }
@@ -93,5 +100,10 @@ void ActionPanel::deselectAllSprites() {
 void ActionPanel::duplicateButtonClicked() {
     // Dupliquer les sprites sélectionnés
     m_pEditorManager->duplicateSelectedEditorSprites();
+}
+
+//! Slot appelé lors du clic sur le bouton d'ajout d'arrière-plan
+void ActionPanel::addBackgroundButtonClicked() {
+    m_pEditorManager->setBackGroundImage();
 }
 
