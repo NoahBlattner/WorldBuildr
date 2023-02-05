@@ -3,6 +3,7 @@
 //
 
 #include <QFileDialog>
+#include <QMessageBox>
 #include "EditorManager.h"
 
 #include "GameCore.h"
@@ -28,6 +29,13 @@ EditorManager::EditorManager(GameCore* core) {
 QString EditorManager::loadImageToEditor() {
     // Ouverture d'une boîte de dialogue pour charger une image
     QString imagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), GameFramework::imagesPath(), tr("Image Files (*.png *.jpg *.bmp)"));
+
+    // Si l'utilisateur a annulé, on retourne une chaîne vide
+    if (imagePath.isEmpty()) {
+        return QString();
+    }
+
+    // Copie de l'image dans le dossier d'images de l'éditeur
     QString newImagePath = GameFramework::imagesPath() + "editorImages/" + imagePath.split("/").last();
     QFile::copy(imagePath, newImagePath);
 
@@ -49,18 +57,25 @@ void EditorManager::editorSpriteClicked(EditorSprite* pEditSprite) {
 //! Set l'image de fond de l'éditeur.
 //! \param imageFileName    Chemin de l'image de fond. Si vide, on demande à l'utilisateur de choisir une image.
 void EditorManager::setBackGroundImage(QString imageFileName) {
-    if (imageFileName.isEmpty()) {
+    if (!QFile::exists(imageFileName)) { // Si le fichier n'existe pas
+        // On demande à l'utilisateur de choisir une image
         imageFileName = loadImageToEditor();
     }
 
     // Création de l'image et redimensionnement à la taille de la scène
     QImage image(imageFileName);
+
+    if (image.isNull()) { // Si l'image n'a pas pu être chargée
+        // On affiche un message d'erreur
+        QMessageBox::warning(this, tr("Error"), tr("Unable to load image"));
+        return;
+    }
+
     image = image.scaled(m_pScene->width(), m_pScene->height());
 
     // On charge l'image de fond dans la scène
     m_pScene->setBackgroundImage(image);
 }
-
 
 /********************************************
  * Gestion des touche et boutons de la souris

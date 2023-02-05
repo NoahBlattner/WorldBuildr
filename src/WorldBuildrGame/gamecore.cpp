@@ -43,6 +43,7 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
 
     // Créé le gestionnaire d'éditeur
     m_pEditorManager = new EditorManager(this);
+
     // Instancier et initialiser les sprites ici :
     m_pEditorManager->createNewEditorSprite(GameFramework::imagesPath() + "demo/ufo1.png", QPointF(100, 100));
     m_pEditorManager->createNewEditorSprite(GameFramework::imagesPath() + "demo/ball.png", QPointF(200, 200));
