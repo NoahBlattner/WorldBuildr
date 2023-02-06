@@ -35,7 +35,7 @@ add_executable(WorldBuildr
         src/WorldBuildrGame/SelectionZone.cpp src/WorldBuildrGame/SelectionZone.h
         src/WorldBuildrGame/EditorManager.cpp src/WorldBuildrGame/EditorManager.h
         src/WorldBuildrUi/ActionPanel.cpp src/WorldBuildrUi/ActionPanel.h
-        )
+        src/WorldBuildrGame/EditorHistory.cpp src/WorldBuildrGame/EditorHistory.h src/WorldBuildrGame/EditorHistory.h)
 target_link_libraries(WorldBuildr
         Qt::Core
         Qt::Gui
