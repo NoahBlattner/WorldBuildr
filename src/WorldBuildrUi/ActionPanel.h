@@ -6,28 +6,39 @@
 #define WORLDBUILDR_ACTIONPANEL_H
 
 #include <QWidget>
+#include <QGroupBox>
+#include <QVBoxLayout>
 
 class EditorManager;
-class QVBoxLayout;
 class QPushButton;
 
 class ActionPanel : public QWidget {
 public:
     explicit ActionPanel(QWidget* pParent = nullptr);
 
-    void initUI(EditorManager* editorManager);
+    void bindEditorManager(EditorManager* editorManager);
 
 private:
     EditorManager* m_pEditorManager = nullptr;
 
-    QVBoxLayout* layout = nullptr;
+    QVBoxLayout* mainLayout = nullptr;
 
-    QPushButton* addButton = nullptr;
-    QPushButton* removeButton = nullptr;
-    QPushButton* selectAllButton = nullptr;
-    QPushButton* deselectAllButton = nullptr;
-    QPushButton* duplicateButton = nullptr;
-    QPushButton* addBackgroundButton = nullptr;
+    QGroupBox* groupeActionsCreation = new QGroupBox("Création et suppression");
+    QVBoxLayout* layoutActionsCreation = new QVBoxLayout();
+    QPushButton* addButton;
+    QPushButton* duplicateButton;
+    QPushButton* removeButton;
+
+    QGroupBox* groupeActionsSelection = new QGroupBox("Sélection");
+    QVBoxLayout* layoutActionsSelection = new QVBoxLayout();
+    QPushButton* selectAllButton;
+    QPushButton* deselectAllButton;
+
+    QGroupBox* groupeActionsAutre = new QGroupBox("Autres actions");
+    QVBoxLayout* layoutActionsAutre = new QVBoxLayout();
+    QPushButton* addBackgroundButton;
+
+    void initButtons();
 
 private slots:
     void addButtonClicked();
@@ -37,6 +48,9 @@ private slots:
     void duplicateButtonClicked();
     void addBackgroundButtonClicked();
 
+    void initLayout();
+
+    void connectSignals() const;
 };
 
 

@@ -51,7 +51,7 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     m_pEditorManager->createNewEditorSprite(GameFramework::imagesPath() + "demo/plane_cartoon.png", QPointF(400, 400));
 
     // Initialise le UI
-    m_pEditorHud->initUI(m_pEditorManager);
+    m_pEditorHud->bindEditorManager(m_pEditorManager);
 
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,

@@ -10,64 +10,98 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QFileDialog>
+#include <QGroupBox>
 
 ActionPanel::ActionPanel(QWidget* pParent) : QWidget(pParent){
+    // Création du layout
+    mainLayout = new QVBoxLayout(this);
+    mainLayout->setAlignment(Qt::AlignCenter);
+
+    // Initialisation des boutons
+    initButtons();
+
+    // Initialisation du layout
+    initLayout();
+
+    // Connexion des signaux
+    connectSignals();
 }
 
 //! Initialise le UI avec le manager d'éditeur
 //! \param editorManager Le manager d'éditeur à lier à l'UI
-void ActionPanel::initUI(EditorManager *editorManager) {
+void ActionPanel::bindEditorManager(EditorManager *editorManager) {
     m_pEditorManager = editorManager;
+}
 
-    // Création du layout
-    layout = new QVBoxLayout(this);
-    layout->setAlignment(Qt::AlignCenter);
+/*********************
+ * Initialisation
+ ********************/
 
+//! Initialise le layout
+void ActionPanel::initLayout() {
+    // Grouper les boutons
+    layoutActionsCreation->addWidget(addButton);
+    layoutActionsCreation->addWidget(duplicateButton);
+    layoutActionsCreation->addWidget(removeButton);
+
+    layoutActionsSelection->addWidget(selectAllButton);
+    layoutActionsSelection->addWidget(deselectAllButton);
+
+    layoutActionsAutre->addWidget(addBackgroundButton);
+
+    // Ajout des layouts dans les groupes de boutons
+    groupeActionsCreation->setLayout(layoutActionsCreation);
+    groupeActionsSelection->setLayout(layoutActionsSelection);
+    groupeActionsAutre->setLayout(layoutActionsAutre);
+
+    // Ajout des groupes de boutons dans le layout principal
+    mainLayout->addWidget(groupeActionsCreation);
+    mainLayout->addWidget(groupeActionsSelection);
+    mainLayout->addWidget(groupeActionsAutre);
+}
+
+//! Initialise les boutons
+void ActionPanel::initButtons() {
     // Création du bouton d'ajout de sprite
     addButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/addIcon.png"), "Ajouter un sprite");
     addButton->setToolTip("Ajouter un sprite");
     addButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
-    layout->addWidget(addButton);
-
-    // Création d'un bouton de suppression de sprite
-    removeButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/deleteIcon.png"), "Supprimer les sprites sélectionnés");
-    removeButton->setToolTip("Supprimer les sprites sélectionnés");
-    removeButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
-    layout->addWidget(removeButton);
-
-    // Création d'un bouton de sélection de tous les sprites
-    selectAllButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/selectAllIcon.png"), "Sélectionner tous les sprites");
-    selectAllButton->setToolTip("Sélectionner tous les sprites");
-    selectAllButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
-    layout->addWidget(selectAllButton);
-
-    // Création d'un bouton de déselection de tous les sprites
-    deselectAllButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/deselectIcon.png"), "Désélectionner tous les sprites");
-    deselectAllButton->setToolTip("Désélectionner tous les sprites");
-    deselectAllButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
-    layout->addWidget(deselectAllButton);
 
     // Création d'un bouton de duplication de sprite
     duplicateButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/duplicateIcon.png"), "Dupliquer les sprites sélectionnés");
     duplicateButton->setToolTip("Dupliquer les sprites sélectionnés");
     duplicateButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
-    layout->addWidget(duplicateButton);
+
+    // Création d'un bouton de suppression de sprite
+    removeButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/deleteIcon.png"), "Supprimer les sprites sélectionnés");
+    removeButton->setToolTip("Supprimer les sprites sélectionnés");
+    removeButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
+
+    // Création d'un bouton de sélection de tous les sprites
+    selectAllButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/selectAllIcon.png"), "Sélectionner tous les sprites");
+    selectAllButton->setToolTip("Sélectionner tous les sprites");
+    selectAllButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
+
+    // Création d'un bouton de déselection de tous les sprites
+    deselectAllButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/deselectIcon.png"), "Désélectionner tous les sprites");
+    deselectAllButton->setToolTip("Désélectionner tous les sprites");
+    deselectAllButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
 
     // Création d'un bouton de ajout d'arrière-plan
     addBackgroundButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/backgroundIcon.png"), "Ajouter un arrière-plan");
     addBackgroundButton->setToolTip("Ajouter un arrière-plan");
     addBackgroundButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
-    layout->addWidget(addBackgroundButton);
+}
 
-    // Connexion des signaux
+//! Connexion des signaux des boutons avec les slots correspondants
+void ActionPanel::connectSignals() const {
+    // Connexion les signaux des boutons
     connect(addButton, &QPushButton::clicked, this, &ActionPanel::addButtonClicked);
     connect(removeButton, &QPushButton::clicked, this, &ActionPanel::deleteButtonClicked);
     connect(selectAllButton, &QPushButton::clicked, this, &ActionPanel::selectAllButtonClicked);
     connect(deselectAllButton, &QPushButton::clicked, this, &ActionPanel::deselectAllSprites);
     connect(duplicateButton, &QPushButton::clicked, this, &ActionPanel::duplicateButtonClicked);
     connect(addBackgroundButton, &QPushButton::clicked, this, &ActionPanel::addBackgroundButtonClicked);
-
-    // TODO Autres boutons
 }
 
 /*********************
@@ -106,4 +140,3 @@ void ActionPanel::duplicateButtonClicked() {
 void ActionPanel::addBackgroundButtonClicked() {
     m_pEditorManager->setBackGroundImage();
 }
-
