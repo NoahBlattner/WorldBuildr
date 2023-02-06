@@ -19,6 +19,7 @@ class EditorSprite;
 class EditorHistory {
 public:
     explicit EditorHistory(EditorManager* editorManager);
+    ~EditorHistory();
 
     enum Action {
         AddSprite,
@@ -26,27 +27,33 @@ public:
         MoveSprite,
         DuplicateSprite,
         AddBackground,
-        DuplicateBackground,
         SelectAll,
         DeselectAll,
         SelectSprite,
         DeselectSprite
     };
 
-    void addAction(Action action, QList<EditorSprite*> sprites);
+    void addState(Action action, QList<EditorSprite*> sprites);
+    void addState(Action action, EditorSprite* sprite);
+    void addState(Action action, QList<EditorSprite*> sprites, QString additionalData);
+    void addState(Action action, EditorSprite* sprite, QString additionalData);
+
     void undo();
     void redo();
 
+    void removeState(int index);
+    void removeLastState();
     void clearHistory();
 
 private:
-    const int MAX_HISTORY_SIZE = 100;
+    int const MAX_HISTORY_SIZE = 100;
 
     EditorManager* m_pEditorManager = nullptr;
 
     struct State {
         Action action;
         QList<EditorSprite*> sprites;
+        QString additionalData;
     };
 
     QList<State> m_states;

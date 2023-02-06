@@ -19,10 +19,16 @@ public:
 
     virtual void paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget = nullptr) override;
 
+    EditorSprite* clone() const;
+
     void setEditSelected(bool selected);
     bool getEditSelected() const;
 
+    QString getImgPath() const { return m_imagePath; }
+
 private:
+    QString m_imagePath = "";
+
     bool m_isEditSelected = false;
 
 signals:

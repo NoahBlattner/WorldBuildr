@@ -137,8 +137,6 @@ public:
     Sprite(const QString& rImagePath, QGraphicsItem* pParent = nullptr);
     virtual ~Sprite() override;
 
-    QString getImgPath() const { return m_imagePath; }
-
     void addAnimationFrame(const QPixmap& rPixmap);
     void setCurrentAnimationFrame(int frameIndex);
     int currentAnimationFrame() const;
@@ -219,7 +217,6 @@ private:
     bool m_emitSignalEOA;
     bool m_animationStopLater = false;
 
-    QString m_imagePath = "";
     QList<QList <QPixmap>> m_animationList;
     int m_frameDuration;
     int m_currentAnimationFrame;

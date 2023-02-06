@@ -14,6 +14,7 @@
 
 EditorManager::EditorManager(GameCore* core) {
     m_pScene = core->getScene();
+    m_editorHistory = new EditorHistory(this);
 
     // Connecte les signaux d'input aux fonctions de traitement
     connect(core, &GameCore::notifyKeyPressed, this, &EditorManager::onKeyPressed);
@@ -91,6 +92,12 @@ void EditorManager::setBackGroundImage(QString imageFileName) {
     m_pScene->setBackgroundImage(image);
 }
 
+//! Supprime l'image de fond de l'éditeur.
+void EditorManager::removeBackGroundImage() {
+    // On charge une image vide dans la scène
+    m_pScene->setBackgroundImage(QImage());
+}
+
 /********************************************
  * Gestion des touche et boutons de la souris
  *******************************************/
@@ -124,6 +131,18 @@ void EditorManager::onKeyPressed(int key) {
             if (m_isCtrlHeld) {
                 // On colle les sprites copiés
                 duplicateSelectedEditorSprites();
+            }
+            break;
+        case Qt::Key_Z:
+            if (m_isCtrlHeld) {
+                // On annule la dernière action
+                m_editorHistory->undo();
+            }
+            break;
+        case Qt::Key_Y:
+            if (m_isCtrlHeld) {
+                // On rétablit la dernière action annulée
+                m_editorHistory->redo();
             }
             break;
     }
@@ -220,6 +239,16 @@ void EditorManager::onMouseButtonReleased(QPointF mousePosition, Qt::MouseButton
  * Gestion de le création
  *******************************************/
 
+//! Crée une zone de sélection à une position donnée.
+//! \param startPositon    Position de la souris.
+void EditorManager::createSelectionZone(QPointF startPositon) {
+    if (m_pMultiSelectionZone != nullptr) {
+        m_pMultiSelectionZone->endSelection();
+    }
+
+    m_pMultiSelectionZone = new SelectionZone(m_pScene, startPositon);
+}
+
 //! Crée un sprite d'éditeur.
 //! \param imageFileName    Nom du fichier image à utiliser pour le sprite.
 //! \param position         Position du sprite. Défaut : QPointF(0, 0)
@@ -250,16 +279,9 @@ void EditorManager::addEditorSprite(EditorSprite *pEditorSprite, const QPointF &
 
     // Connecte le signal de click du sprite à la fonction de traitement du click
     connect(pEditorSprite, &EditorSprite::editorSpriteLeftClicked, this, &EditorManager::editorSpriteClicked);
-}
 
-//! Crée une zone de sélection à une position donnée.
-//! \param startPositon    Position de la souris.
-void EditorManager::createSelectionZone(QPointF startPositon) {
-    if (m_pMultiSelectionZone != nullptr) {
-        m_pMultiSelectionZone->endSelection();
-    }
-
-    m_pMultiSelectionZone = new SelectionZone(m_pScene, startPositon);
+    // Historique
+    m_editorHistory->addState(EditorHistory::Action::AddSprite, pEditorSprite);
 }
 
 //! Duplique un sprite d'éditeur.
@@ -272,6 +294,10 @@ void EditorManager::duplicateEditorSprite(EditorSprite* pEditSprite) {
 
     // On sélectionne le nouveau sprite
     selectEditorSprite(newSprite);
+
+    // Historique
+    m_editorHistory->removeLastState();
+    m_editorHistory->addState(EditorHistory::Action::DuplicateSprite, pEditSprite);
 }
 
 //! Duplique tous les sprites d'éditeur sélectionnés.
@@ -384,33 +410,39 @@ void EditorManager::deleteSelectedEditorSprites() {
  * Gestion de modification de sprites
  *******************************************/
 
+//! Déplace un sprite d'éditeur d'un vecteur donné.
+//! \param pEditSprite    Sprite d'éditeur à déplacer.
+//! \param moveVector    Vecteur de déplacement.
+void EditorManager::moveEditorSprite(EditorSprite *pEditSprite, QPointF moveVector) {
+    // Calcule la nouvelle position du sprite
+    QRectF currentSpriteBounds = pEditSprite->sceneBoundingRect();
+    QRectF newSpriteBounds = currentSpriteBounds;
+    newSpriteBounds.translate(moveVector);
+
+    // Si le sprite sort de la scène sur l'axe X,
+    // on le déplace pour qu'il soit à la limite de la scène
+    if (newSpriteBounds.left() < 0) {
+        moveVector.setX(-currentSpriteBounds.left());
+    } else if (newSpriteBounds.right() > m_pScene->sceneRect().right()) {
+        moveVector.setX(m_pScene->sceneRect().right() - currentSpriteBounds.right());
+    }
+
+    // Si le sprite sort de la scène sur l'axe Y,
+    // on le déplace pour qu'il soit à la limite de la scène
+    if (newSpriteBounds.top() < 0) {
+        moveVector.setY(-currentSpriteBounds.top());
+    } else if (newSpriteBounds.bottom() > m_pScene->sceneRect().bottom()) {
+        moveVector.setY(m_pScene->sceneRect().bottom() - currentSpriteBounds.bottom());
+    }
+
+    // Déplace le sprite
+    pEditSprite->moveBy(moveVector.x(), moveVector.y());
+}
+
 //! Déplace tous les sprites sélectionnés d'un vecteur donné.
 //! \param moveVector    Vecteur de déplacement.
 void EditorManager::moveSelectedEditorSprites(QPointF moveVector) {
-   for (auto* pSprite : m_pSelectedEditorSprites) {
-        // Calcule la nouvelle position du sprite
-        QRectF currentSpriteBounds = pSprite->sceneBoundingRect();
-        QRectF newSpriteBounds = currentSpriteBounds;
-        newSpriteBounds.translate(moveVector);
-
-        // Si le sprite sort de la scène sur l'axe X,
-        // on le déplace pour qu'il soit à la limite de la scène
-        if (newSpriteBounds.left() < 0) {
-            moveVector.setX(-currentSpriteBounds.left());
-        } else if (newSpriteBounds.right() > m_pScene->sceneRect().right()) {
-            moveVector.setX(m_pScene->sceneRect().right() - currentSpriteBounds.right());
-        }
-
-        // Si le sprite sort de la scène sur l'axe Y,
-        // on le déplace pour qu'il soit à la limite de la scène
-        if (newSpriteBounds.top() < 0) {
-            moveVector.setY(-currentSpriteBounds.top());
-        } else if (newSpriteBounds.bottom() > m_pScene->sceneRect().bottom()) {
-            moveVector.setY(m_pScene->sceneRect().bottom() - currentSpriteBounds.bottom());
-        }
-
-        // Déplace le sprite
-        pSprite->moveBy(moveVector.x(), moveVector.y());
-
+    for (auto *pSprite: m_pSelectedEditorSprites) {
+        moveEditorSprite(pSprite, moveVector);
     }
 }

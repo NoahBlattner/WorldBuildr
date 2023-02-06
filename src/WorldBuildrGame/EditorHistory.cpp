@@ -3,16 +3,50 @@
 //
 
 #include "EditorHistory.h"
+
+#include <utility>
+#include "EditorManager.h"
 #include "EditorSprite.h"
 
 EditorHistory::EditorHistory(EditorManager *editorManager) {
     m_pEditorManager = editorManager;
 }
 
-void EditorHistory::addAction(EditorHistory::Action action, QList<EditorSprite*> sprites) {
+//! Ajoute un état à l'historique
+//! \param action L'action effectuée
+//! \param sprites Les sprites concernées
+void EditorHistory::addState(EditorHistory::Action action, QList<EditorSprite*> sprites) {
+    addState(action, std::move(sprites), "");
+}
+
+//! Ajoute un état à l'historique qui contient une seule sprite
+//! \param action L'action effectuée
+//! \param sprite La sprite concernée
+void EditorHistory::addState(EditorHistory::Action action, EditorSprite* sprite) {
+    QList<EditorSprite*> sprites;
+    sprites.append(sprite);
+    addState(action, sprites);
+}
+
+//! Ajoute un état à l'historique concernant un seul sprite avec des données supplémentaires
+//! \param action L'action effectuée
+//! \param sprite La sprite concernée
+//! \param additionalData Les données supplémentaires
+void EditorHistory::addState(EditorHistory::Action action, EditorSprite *sprite, QString additionalData) {
+    QList<EditorSprite*> sprites;
+    sprites.append(sprite);
+    addState(action, sprites, std::move(additionalData));
+}
+
+//! Ajoute un état à l'historique avec des données supplémentaires
+//! \param action L'action effectuée
+//! \param sprites Les sprites concernées
+//! \param additionalData Les données supplémentaires
+void EditorHistory::addState(EditorHistory::Action action, QList<EditorSprite *> sprites, QString additionalData) {
     State state;
     state.action = action;
-    state.sprites = sprites;
+    state.sprites = std::move(sprites);
+    state.additionalData = std::move(additionalData);
 
     // On avance dans l'historique
     m_currentStateIndex++;
@@ -31,6 +65,7 @@ void EditorHistory::addAction(EditorHistory::Action action, QList<EditorSprite*>
     }
 }
 
+//! Rétablit la dernière action annulée
 void EditorHistory::undo() {
     if (m_currentStateIndex > 0) {
         m_currentStateIndex--;
@@ -38,57 +73,63 @@ void EditorHistory::undo() {
 
         switch (state.action) {
             case AddSprite:
+            case DuplicateSprite:
                 for (EditorSprite* sprite : state.sprites) {
-                    m_pEditorManager->removeSprite(sprite);
+                    m_pEditorManager->deleteEditorSprite(sprite);
                 }
                 break;
             case RemoveSprite:
                 for (EditorSprite* sprite : state.sprites) {
-                    m_pEditorManager->addSprite(sprite);
+                    m_pEditorManager->addEditorSprite(sprite);
                 }
                 break;
             case MoveSprite:
                 for (EditorSprite* sprite : state.sprites) {
-                    m_pEditorManager->moveSprite(sprite, sprite.getPreviousPosition());
-                }
-                break;
-            case DuplicateSprite:
-                for (EditorSprite* sprite : state.sprites) {
-                    m_pEditorManager->removeSprite(sprite);
+                    QList<QString> data = state.additionalData.split(";");
+                    QPointF moveVector(data[0].toDouble(), data[1].toDouble());
+                    m_pEditorManager->moveEditorSprite(sprite, moveVector);
                 }
                 break;
             case AddBackground:
                 for (EditorSprite* sprite : state.sprites) {
-                    m_pEditorManager->removeBackground(sprite);
-                }
-                break;
-            case DuplicateBackground:
-                for (EditorSprite* sprite : state.sprites) {
-                    m_pEditorManager->removeBackground(sprite);
+                    m_pEditorManager->removeBackGroundImage();
                 }
                 break;
             case SelectAll:
-                for (EditorSprite* sprite : state.sprites) {
-                    m_pEditorManager->deselectSprite(sprite);
-                }
+                m_pEditorManager->unselectAllEditorSprites();
                 break;
             case DeselectAll:
-                for (EditorSprite* sprite : state.sprites) {
-                    m_pEditorManager->selectSprite(sprite);
-                }
+                m_pEditorManager->selectAllEditorSprites();
                 break;
             case SelectSprite:
                 for (EditorSprite* sprite : state.sprites) {
-                    m_pEditorManager->deselectSprite(sprite);
+                    m_pEditorManager->unselectEditorSprite(sprite);
                 }
                 break;
             case DeselectSprite:
                 for (EditorSprite* sprite : state.sprites) {
-                    m_pEditorManager->selectSprite(sprite);
+                    m_pEditorManager->selectEditorSprite(sprite);
                 }
                 break;
         }
     }
 }
 
+//! Supprime un état de l'historique
+void EditorHistory::removeState(int index) {
+    // On supprime l'état
+    m_states.removeAt(index);
 
+    if (m_currentStateIndex > index) { // Si l'état supprimé est avant l'état courant
+        m_currentStateIndex--;
+    }
+}
+
+//! Supprime le dernier état de l'historique
+void EditorHistory::removeLastState() {
+    removeState(m_states.size() - 1);
+}
+
+void EditorHistory::redo() {
+    // TODO
+}
