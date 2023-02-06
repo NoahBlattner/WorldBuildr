@@ -28,15 +28,25 @@ EditorManager::EditorManager(GameCore* core) {
 //! \return Le chemin de l'image6
 QString EditorManager::loadImageToEditor() {
     // Ouverture d'une boîte de dialogue pour charger une image
-    QString imagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), GameFramework::imagesPath(), tr("Image Files (*.png *.jpg *.bmp)"));
+    QString imagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), GameFramework::imagesPath(),
+                                                     tr("Image Files (*.png *.jpg *.bmp)"));
 
     // Si l'utilisateur a annulé, on retourne une chaîne vide
     if (imagePath.isEmpty()) {
         return QString();
     }
 
+    // Chemin du dossier d'images de l'éditeur
+    QString editorImagePath = GameFramework::imagesPath() + "editorImages/";
+
+    // Si le dossier d'image n'existe pas
+    if (!QDir(editorImagePath).exists()) {
+        // On le crée
+        QDir().mkdir(editorImagePath);
+    }
+
     // Copie de l'image dans le dossier d'images de l'éditeur
-    QString newImagePath = GameFramework::imagesPath() + "editorImages/" + imagePath.split("/").last();
+    QString newImagePath = editorImagePath + imagePath.split("/").last();
     QFile::copy(imagePath, newImagePath);
 
     return newImagePath;
