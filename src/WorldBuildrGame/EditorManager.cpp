@@ -32,7 +32,8 @@ QString EditorManager::loadImageToEditor() {
                                                      tr("Image Files (*.png *.jpg *.bmp)"));
 
     // Si l'utilisateur a annulé, on retourne une chaîne vide
-    if (imagePath.isEmpty()) {
+    if (imagePath.isEmpty() || QPixmap(imagePath).isNull()) {
+        QMessageBox::warning(this, tr("Error"), tr("Une erreur est survenue lors du chargement de l'image"));
         return QString();
     }
 
@@ -45,8 +46,11 @@ QString EditorManager::loadImageToEditor() {
         QDir().mkdir(editorImagePath);
     }
 
-    // Copie de l'image dans le dossier d'images de l'éditeur
+    // Chemin de la nouvelle image
     QString newImagePath = editorImagePath + imagePath.split("/").last();
+    newImagePath = QDir::toNativeSeparators(newImagePath);
+
+    // Copie de l'image dans le dossier d'images de l'éditeur
     QFile::copy(imagePath, newImagePath);
 
     return newImagePath;
@@ -70,17 +74,17 @@ void EditorManager::setBackGroundImage(QString imageFileName) {
     if (!QFile::exists(imageFileName)) { // Si le fichier n'existe pas
         // On demande à l'utilisateur de choisir une image
         imageFileName = loadImageToEditor();
+
+        if (imageFileName.isEmpty()) { // Si l'utilisateur a annulé
+            // On quitte la fonction
+            return;
+        }
     }
 
-    // Création de l'image et redimensionnement à la taille de la scène
+    // Création de l'image
     QImage image(imageFileName);
 
-    if (image.isNull()) { // Si l'image n'a pas pu être chargée
-        // On affiche un message d'erreur
-        QMessageBox::warning(this, tr("Error"), tr("Unable to load image"));
-        return;
-    }
-
+    // Redimensionnement à la taille de la scène
     image = image.scaled(m_pScene->width(), m_pScene->height());
 
     // On charge l'image de fond dans la scène
