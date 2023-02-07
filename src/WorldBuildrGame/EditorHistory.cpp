@@ -84,7 +84,13 @@ void EditorHistory::addSpriteAction(EditorHistory::Action action, QList<EditorSp
         }
     }
 
-    qDebug() << "action added to history:" << action;
+    QString actionString;
+
+    for (State state1 : m_states) {
+        actionString += QString::number(state1.action) + " ";
+    }
+
+    qDebug() << "actions " << actionString;
 }
 
 //! Mettre en pause l'historique pour qu'il n'accepte plus d'état

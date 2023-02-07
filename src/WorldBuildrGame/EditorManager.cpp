@@ -355,9 +355,6 @@ void EditorManager::selectEditorSprite(EditorSprite *pEditSprite) {
 
 //! Sélectionne un sprite d'éditeur en désélectionnant tout les autres.
 void EditorManager::selectSingleEditorSprite(EditorSprite *pEditSprite) {
-    // Desactive l'historique pour éviter de créer un historique pour chaque sprite désélectionné
-    m_editorHistory->pauseHistory(2);
-
     // Désélectionne tous les sprites
     unselectAllEditorSprites();
 
@@ -365,7 +362,7 @@ void EditorManager::selectSingleEditorSprite(EditorSprite *pEditSprite) {
     selectEditorSprite(pEditSprite);
 
     // Historique
-    m_editorHistory->requestResumeHistory(2);
+    m_editorHistory->addSpriteAction(EditorHistory::Action::SelectSprite, pEditSprite);
 }
 
 //! Désélectionne tous les sprites d'éditeur.
