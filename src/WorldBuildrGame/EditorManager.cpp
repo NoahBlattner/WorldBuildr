@@ -186,7 +186,12 @@ void EditorManager::onMouseMoved(QPointF newMousePosition, QPointF oldMousePosit
             } else if (m_isShiftHeld) {
                 createSelectionZone(newMousePosition);
             } else if (mouseDownEditorSprite != nullptr) { // Sinon si on a précédemment cliqué sur un sprite
-                if (mouseDownEditorSprite->getEditSelected()) {
+                if (mouseDownEditorSprite->getEditSelected()) { // Si le sprite est sélectionné
+                    // On fait du drag and drop
+                    if (!m_isDragging) { // Si c'est le premier mouvement du drag and drop
+                        m_isDragging = true;
+                        m_startDragPosition = oldMousePosition;
+                    }
                     // On déplace le sprite
                     moveSelectedEditorSprites(newMousePosition-oldMousePosition);
                 } else {
@@ -207,7 +212,13 @@ void EditorManager::onMouseButtonReleased(QPointF mousePosition, Qt::MouseButton
         case Qt::LeftButton:
             EditorSprite* mouseUpSprite;
             mouseUpSprite = dynamic_cast<EditorSprite *>(m_pScene->spriteAt(mousePosition));
-            if (mouseUpSprite != nullptr && mouseUpSprite == mouseDownEditorSprite) { // Si le sprite relâché est le même que le sprite cliqué
+
+            if (m_isDragging) { // Si on a fait un drag and drop
+                // On enregistre l'action
+                QPointF delta = mousePosition - m_startDragPosition;
+                m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, m_pSelectedEditorSprites, QString::number(delta.x()) + ";" + QString::number(delta.y()));
+                m_isDragging = false;
+            } else if (mouseUpSprite != nullptr && mouseUpSprite == mouseDownEditorSprite) { // Si le sprite relâché est le même que le sprite cliqué
                 // On sélectionne le sprite
                 editorSpriteClicked(mouseUpSprite);
             } else if (m_pMultiSelectionZone != nullptr) { // Sinon si une zone de sélection est en cours
@@ -222,6 +233,7 @@ void EditorManager::onMouseButtonReleased(QPointF mousePosition, Qt::MouseButton
 
                 m_pMultiSelectionZone = nullptr;
             }
+
             mouseDownEditorSprite = nullptr;
             break;
     }
@@ -480,23 +492,17 @@ void EditorManager::moveEditorSprite(EditorSprite *pEditSprite, QPointF moveVect
     // Déplace le sprite
     pEditSprite->moveBy(moveVector.x(), moveVector.y());
 
-    // Historique
-    m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, pEditSprite, QString::number(moveVector.x()) + ";" + QString::number(moveVector.y()));
+    // L'historique de drag and drop est gérée dans les actions de souris
 }
 
 //! Déplace tous les sprites sélectionnés d'un vecteur donné.
 //! \param moveVector    Vecteur de déplacement.
 void EditorManager::moveSelectedEditorSprites(QPointF moveVector) {
-    // Désactive l'historique pour éviter de créer un historique pour chaque sprite déplacé
-    m_editorHistory->pauseHistory();
-
     for (auto *pSprite: m_pSelectedEditorSprites) {
         moveEditorSprite(pSprite, moveVector);
     }
 
-    // Historique
-    m_editorHistory->requestResumeHistory();
-    m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, m_pSelectedEditorSprites, QString::number(moveVector.x()) + ";" + QString::number(moveVector.y()));
+    // L'historique de drag and drop est gérée dans les actions de souris
 }
 
 /********************************************

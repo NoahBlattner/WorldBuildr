@@ -77,6 +77,8 @@ private:
     SelectionZone* m_pMultiSelectionZone = nullptr;
 
     // Drag and drop
+    QPointF m_startDragPosition;
+    bool m_isDragging = false;
     EditorSprite* mouseDownEditorSprite = nullptr;
 
     // Liste des sprites
