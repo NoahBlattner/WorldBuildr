@@ -5,7 +5,6 @@
 #include "EditorHistory.h"
 
 #include <utility>
-#include <QMessageBox>
 #include "EditorManager.h"
 #include "EditorSprite.h"
 
@@ -84,6 +83,8 @@ void EditorHistory::addSpriteAction(EditorHistory::Action action, QList<EditorSp
             m_states.removeFirst();
         }
     }
+
+    qDebug() << "action added to history:" << action;
 }
 
 //! Mettre en pause l'historique pour qu'il n'accepte plus d'état
@@ -147,14 +148,8 @@ void EditorHistory::undo() {
     if (m_currentStateIndex > 0) {
         State state = m_states[m_currentStateIndex];
 
-        // On met en pause l'historique
-        pauseHistory(MAX_PAUSE_LEVEL);
-
         // On effectue l'action inverse
         performInverseAction(state);
-
-        // On réactive l'historique
-        requestResumeHistory(MAX_PAUSE_LEVEL);
 
         // On décrémente l'index de l'état courant
         m_currentStateIndex--;
@@ -167,21 +162,17 @@ void EditorHistory::redo() {
         m_currentStateIndex++;
         State state = m_states[m_currentStateIndex];
 
-        // On met en pause l'historique
-        pauseHistory(MAX_PAUSE_LEVEL);
-
         // On effectue l'action inverse
         performAction(state);
-
-        // On réactive l'historique
-        requestResumeHistory(MAX_PAUSE_LEVEL);
-
     }
 }
 
 //! Effectue l'action inverse de l'état passé en paramètre
 //! \param state L'état dont on veut effectuer l'action inverse
 void EditorHistory::performInverseAction(EditorHistory::State &state) {
+    // On met en pause l'historique
+    pauseHistory(MAX_PAUSE_LEVEL);
+
     switch (state.action) {
         case AddSprite:
         case DuplicateSprite:
@@ -225,11 +216,17 @@ void EditorHistory::performInverseAction(EditorHistory::State &state) {
             }
             break;
     }
+
+    // On réactive l'historique
+    requestResumeHistory(MAX_PAUSE_LEVEL);
 }
 
 //! Effectue l'action de l'état passé en paramètre
 //! \param state L'état dont on veut effectuer l'action
 void EditorHistory::performAction(EditorHistory::State &state) {
+    // On met en pause l'historique
+    pauseHistory(MAX_PAUSE_LEVEL);
+
     switch (state.action) {
         case AddSprite:
         case DuplicateSprite:
@@ -272,4 +269,7 @@ void EditorHistory::performAction(EditorHistory::State &state) {
             }
             break;
     }
+
+    // On réactive l'historique
+    requestResumeHistory(MAX_PAUSE_LEVEL);
 }

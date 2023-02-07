@@ -225,11 +225,18 @@ void EditorManager::onMouseButtonReleased(QPointF mousePosition, Qt::MouseButton
                 // On récupère tous les sprites qui sont dans la zone de sélection
                 auto sprites = m_pMultiSelectionZone->endSelection();
 
-                // On désélectionne tous les sprites
-                unselectAllEditorSprites();
+                if (!sprites.empty()) {
+                    m_editorHistory->addSpriteAction(EditorHistory::Action::SelectSprite, sprites);
+                    m_editorHistory->pauseHistory(2);
 
-                // On sélectionne tous les sprites qui sont dans la zone de sélection
-                selectMultipleEditorSprites(sprites);
+                    // On désélectionne tous les sprites
+                    unselectAllEditorSprites();
+
+                    // On sélectionne tous les sprites qui sont dans la zone de sélection
+                    selectMultipleEditorSprites(sprites);
+
+                    m_editorHistory->requestResumeHistory(2);
+                }
 
                 m_pMultiSelectionZone = nullptr;
             }
@@ -427,9 +434,15 @@ void EditorManager::selectAllEditorSprites() {
 }
 
 //! Met à jour la multi-sélection.
-void EditorManager::updateMultiSelect(QPointF &newMousePosition) {// On met à jour la zone de sélection
+void EditorManager::updateMultiSelect(QPointF &newMousePosition) {// On met à jour la zone de
+    // Désactive l'historique pour éviter de créer un historique pour chaque sprite sélectionné
+    m_editorHistory->pauseHistory(2);
+
     m_pMultiSelectionZone->updateSelection(newMousePosition);
     selectMultipleEditorSprites(m_pMultiSelectionZone->getCollidingEditorSprites());
+
+    // Historique
+    m_editorHistory->requestResumeHistory(2);
 }
 
 /********************************************
