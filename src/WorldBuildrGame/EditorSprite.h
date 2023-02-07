@@ -15,11 +15,9 @@ class EditorSprite : public Sprite {
     Q_OBJECT
 
 public:
-    explicit EditorSprite(const QString& imageFileName, QGraphicsItem* pParent = nullptr);
+    explicit EditorSprite(const QString& imageFileName, bool selected = false, QGraphicsItem* pParent = nullptr);
 
     virtual void paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget = nullptr) override;
-
-    EditorSprite* clone() const;
 
     void setEditSelected(bool selected);
     bool getEditSelected() const;

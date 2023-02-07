@@ -5,7 +5,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include "EditorManager.h"
-
+#include "EditorHistory.h"
 #include "GameCore.h"
 #include "GameScene.h"
 #include "EditorSprite.h"
@@ -22,6 +22,17 @@ EditorManager::EditorManager(GameCore* core) {
     connect(core, &GameCore::notifyMouseMoved, this, &EditorManager::onMouseMoved);
     connect(core, &GameCore::notifyMouseButtonPressed, this, &EditorManager::onMouseButtonPressed);
     connect(core, &GameCore::notifyMouseButtonReleased, this, &EditorManager::onMouseButtonReleased);
+}
+
+//! Indique si l'éditeur contient le sprite donné.
+//! \param pEditSprite    Sprite d'éditeur à chercher.
+bool EditorManager::containsEditorSprite(EditorSprite *pEditSprite) const {
+    return m_pEditorSprites.contains(pEditSprite);
+}
+
+//! Réinitialise l'historique de l'éditeur
+void EditorManager::resetHistory() {
+    m_editorHistory->clearHistory();
 }
 
 //! Copie une image sélectionnée dans le dossier d'images de l'éditeur
@@ -69,33 +80,14 @@ void EditorManager::editorSpriteClicked(EditorSprite* pEditSprite) {
     }
 }
 
-//! Set l'image de fond de l'éditeur.
-//! \param imageFileName    Chemin de l'image de fond. Si vide, on demande à l'utilisateur de choisir une image.
-void EditorManager::setBackGroundImage(QString imageFileName) {
-    if (!QFile::exists(imageFileName)) { // Si le fichier n'existe pas
-        // On demande à l'utilisateur de choisir une image
-        imageFileName = loadImageToEditor();
-
-        if (imageFileName.isEmpty()) { // Si l'utilisateur a annulé
-            // On quitte la fonction
-            return;
-        }
+//! Crée une zone de sélection à une position donnée.
+//! \param startPositon    Position de la souris.
+void EditorManager::createSelectionZone(QPointF startPositon) {
+    if (m_pMultiSelectionZone != nullptr) {
+        m_pMultiSelectionZone->endSelection();
     }
 
-    // Création de l'image
-    QImage image(imageFileName);
-
-    // Redimensionnement à la taille de la scène
-    image = image.scaled(m_pScene->width(), m_pScene->height());
-
-    // On charge l'image de fond dans la scène
-    m_pScene->setBackgroundImage(image);
-}
-
-//! Supprime l'image de fond de l'éditeur.
-void EditorManager::removeBackGroundImage() {
-    // On charge une image vide dans la scène
-    m_pScene->setBackgroundImage(QImage());
+    m_pMultiSelectionZone = new SelectionZone(m_pScene, startPositon);
 }
 
 /********************************************
@@ -239,16 +231,6 @@ void EditorManager::onMouseButtonReleased(QPointF mousePosition, Qt::MouseButton
  * Gestion de le création
  *******************************************/
 
-//! Crée une zone de sélection à une position donnée.
-//! \param startPositon    Position de la souris.
-void EditorManager::createSelectionZone(QPointF startPositon) {
-    if (m_pMultiSelectionZone != nullptr) {
-        m_pMultiSelectionZone->endSelection();
-    }
-
-    m_pMultiSelectionZone = new SelectionZone(m_pScene, startPositon);
-}
-
 //! Crée un sprite d'éditeur.
 //! \param imageFileName    Nom du fichier image à utiliser pour le sprite.
 //! \param position         Position du sprite. Défaut : QPointF(0, 0)
@@ -274,6 +256,11 @@ void EditorManager::addEditorSprite(EditorSprite *pEditorSprite, const QPointF &
     // On place le sprite à la position donnée
     pEditorSprite->setPos(position);
 
+    if (pEditorSprite->getEditSelected()) {
+        // On ajoute le sprite à la liste des sprites sélectionnés
+        m_pSelectedEditorSprites.append(pEditorSprite);
+    }
+
     // On ajoute le sprite à la scène
     m_pScene->addSpriteToScene(pEditorSprite);
 
@@ -281,11 +268,14 @@ void EditorManager::addEditorSprite(EditorSprite *pEditorSprite, const QPointF &
     connect(pEditorSprite, &EditorSprite::editorSpriteLeftClicked, this, &EditorManager::editorSpriteClicked);
 
     // Historique
-    m_editorHistory->addState(EditorHistory::Action::AddSprite, pEditorSprite);
+    m_editorHistory->addSpriteAction(EditorHistory::Action::AddSprite, pEditorSprite);
 }
 
 //! Duplique un sprite d'éditeur.
 void EditorManager::duplicateEditorSprite(EditorSprite* pEditSprite) {
+    // Désactive l'historique pour éviter de créer un historique pour chaque sprite dupliqué
+    m_editorHistory->pauseHistory();
+
     // On crée un nouveau sprite d'éditeur
     auto* newSprite = new EditorSprite(pEditSprite->getImgPath());
 
@@ -296,12 +286,15 @@ void EditorManager::duplicateEditorSprite(EditorSprite* pEditSprite) {
     selectEditorSprite(newSprite);
 
     // Historique
-    m_editorHistory->removeLastState();
-    m_editorHistory->addState(EditorHistory::Action::DuplicateSprite, pEditSprite);
+    m_editorHistory->requestResumeHistory();
+    m_editorHistory->addSpriteAction(EditorHistory::Action::DuplicateSprite, pEditSprite);
 }
 
 //! Duplique tous les sprites d'éditeur sélectionnés.
 void EditorManager::duplicateSelectedEditorSprites() {
+    // Désactive l'historique pour éviter de créer un historique pour chaque sprite dupliqué
+    m_editorHistory->pauseHistory(2);
+
     // Dupliquer la liste des sprites sélectionnés
     auto spritesToDuplicate = m_pSelectedEditorSprites;
 
@@ -313,6 +306,10 @@ void EditorManager::duplicateSelectedEditorSprites() {
         // On le duplique
         duplicateEditorSprite(pEditSprite);
     }
+
+    // Historique
+    m_editorHistory->requestResumeHistory(2);
+    m_editorHistory->addSpriteAction(EditorHistory::Action::DuplicateSprite, spritesToDuplicate);
 }
 
 /********************************************
@@ -328,27 +325,43 @@ void EditorManager::selectEditorSprite(EditorSprite *pEditSprite) {
 
         // Indique au sprite qu'il est sélectionné
         pEditSprite->setEditSelected(true);
+
+        // Historique
+        m_editorHistory->addSpriteAction(EditorHistory::Action::SelectSprite, pEditSprite);
     }
 }
 
 //! Sélectionne un sprite d'éditeur en désélectionnant tout les autres.
 void EditorManager::selectSingleEditorSprite(EditorSprite *pEditSprite) {
+    // Desactive l'historique pour éviter de créer un historique pour chaque sprite désélectionné
+    m_editorHistory->pauseHistory(2);
+
     // Désélectionne tous les sprites
     unselectAllEditorSprites();
 
     // Sélectionne le sprite
     selectEditorSprite(pEditSprite);
+
+    // Historique
+    m_editorHistory->requestResumeHistory(2);
 }
 
 //! Désélectionne tous les sprites d'éditeur.
 void EditorManager::unselectAllEditorSprites() {
+    // Désactive l'historique pour éviter de créer un historique pour chaque sprite désélectionné
+    m_editorHistory->pauseHistory();
+
     // Indique à tous les sprites qu'ils ne sont plus sélectionnés
-            foreach (EditorSprite* pSprite, m_pSelectedEditorSprites) {
-            pSprite->setEditSelected(false);
-        }
+    for (EditorSprite* pSprite : m_pSelectedEditorSprites) {
+        pSprite->setEditSelected(false);
+    }
 
     // Vide la liste des sprites sélectionnés
     m_pSelectedEditorSprites.clear();
+
+    // Historique
+    m_editorHistory->requestResumeHistory();
+    m_editorHistory->addSpriteAction(EditorHistory::Action::DeselectAll, m_pEditorSprites);
 }
 
 //! Change la sélection d'un sprite d'éditeur.
@@ -362,9 +375,16 @@ void EditorManager::toggleSelectEditorSprite(EditorSprite* pEditSprite) {
 
 //! Sélectionne plusieurs sprites d'éditeur.
 void EditorManager::selectMultipleEditorSprites(const QList<EditorSprite*> &pEditSprites) {
-            foreach (EditorSprite* pSprite, pEditSprites) {
-            selectEditorSprite(pSprite);
-        }
+    // Desactive l'historique pour éviter de créer un historique pour chaque sprite sélectionné
+    m_editorHistory->pauseHistory();
+
+    for (EditorSprite* pSprite : pEditSprites) {
+        selectEditorSprite(pSprite);
+    }
+
+    // Historique
+    m_editorHistory->requestResumeHistory();
+    m_editorHistory->addSpriteAction(EditorHistory::Action::SelectSprite, pEditSprites);
 }
 
 //! Désélectionne un sprite d'éditeur.
@@ -374,11 +394,21 @@ void EditorManager::unselectEditorSprite(EditorSprite* pEditSprite) {
 
     // Indique au sprite qu'il n'est plus sélectionné
     pEditSprite->setEditSelected(false);
+
+    // Historique
+    m_editorHistory->addSpriteAction(EditorHistory::Action::DeselectSprite, pEditSprite);
 }
 
 //! Sélectionne tous les sprites d'éditeur.
 void EditorManager::selectAllEditorSprites() {
+    // Désactive l'historique pour éviter de créer un historique pour chaque sprite sélectionné
+    m_editorHistory->pauseHistory(2);
+
     selectMultipleEditorSprites(m_pEditorSprites);
+
+    // Historique
+    m_editorHistory->requestResumeHistory(2);
+    m_editorHistory->addSpriteAction(EditorHistory::Action::SelectAll, m_pEditorSprites);
 }
 
 //! Met à jour la multi-sélection.
@@ -396,14 +426,23 @@ void EditorManager::deleteEditorSprite(EditorSprite* pEditSprite) {
     m_pEditorSprites.removeOne(pEditSprite);
     m_pSelectedEditorSprites.removeOne(pEditSprite);
     m_pScene->removeSpriteFromScene(pEditSprite);
-    delete pEditSprite;
+
+    // Historique
+    m_editorHistory->addSpriteAction(EditorHistory::Action::RemoveSprite, pEditSprite);
 }
 
 //! Supprime tous les sprites sélectionnés.
 void EditorManager::deleteSelectedEditorSprites() {
+    // Désactive l'historique pour éviter de créer un historique pour chaque sprite supprimé
+    m_editorHistory->addSpriteAction(EditorHistory::Action::RemoveSprite, m_pSelectedEditorSprites);
+    m_editorHistory->pauseHistory();
+
     for (auto* pSprite : m_pSelectedEditorSprites) {
-            deleteEditorSprite(pSprite);
+        deleteEditorSprite(pSprite);
     }
+
+    // Historique
+    m_editorHistory->requestResumeHistory();
 }
 
 /********************************************
@@ -437,12 +476,66 @@ void EditorManager::moveEditorSprite(EditorSprite *pEditSprite, QPointF moveVect
 
     // Déplace le sprite
     pEditSprite->moveBy(moveVector.x(), moveVector.y());
+
+    // Historique
+    m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, pEditSprite);
 }
 
 //! Déplace tous les sprites sélectionnés d'un vecteur donné.
 //! \param moveVector    Vecteur de déplacement.
 void EditorManager::moveSelectedEditorSprites(QPointF moveVector) {
+    // Désactive l'historique pour éviter de créer un historique pour chaque sprite déplacé
+    m_editorHistory->pauseHistory();
+
     for (auto *pSprite: m_pSelectedEditorSprites) {
         moveEditorSprite(pSprite, moveVector);
     }
+
+    // Historique
+    m_editorHistory->requestResumeHistory();
+    m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, m_pSelectedEditorSprites);
 }
+
+/********************************************
+ * Gestion de l'image de fond
+ *******************************************/
+
+//! Set l'image de fond de l'éditeur.
+//! \param imageFileName    Chemin de l'image de fond. Si vide, on demande à l'utilisateur de choisir une image.
+void EditorManager::setBackGroundImage(QString imageFileName) {
+    if (!QFile::exists(imageFileName)) { // Si le fichier n'existe pas
+        // On demande à l'utilisateur de choisir une image
+        imageFileName = loadImageToEditor();
+
+        if (imageFileName.isEmpty()) { // Si l'utilisateur a annulé
+            // On quitte la fonction
+            return;
+        }
+    }
+
+    // Création de l'image
+    QImage image(imageFileName);
+
+    // Redimensionnement à la taille de la scène
+    image = image.scaled(m_pScene->width(), m_pScene->height());
+
+    // On charge l'image de fond dans la scène
+    m_pScene->setBackgroundImage(image);
+
+    // On sauvegarde le chemin de l'image
+    m_backgroundImageFileName = imageFileName;
+
+    // Historique
+    m_editorHistory->addAction(EditorHistory::Action::AddBackground, m_backgroundImageFileName);
+}
+
+//! Supprime l'image de fond de l'éditeur.
+void EditorManager::removeBackGroundImage() {
+    // Historique
+    m_editorHistory->addAction(EditorHistory::Action::RemoveBackground, m_backgroundImageFileName);
+    m_backgroundImageFileName = QString();
+
+    // On charge une image vide dans la scène
+    m_pScene->setBackgroundImage(QImage());
+}
+

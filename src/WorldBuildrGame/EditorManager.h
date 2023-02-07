@@ -7,9 +7,9 @@
 
 #include <QWidget>
 #include <QPointF>
-#include "EditorHistory.h"
 
 class EditorSprite;
+class EditorHistory;
 class SelectionZone;
 class GameCore;
 class GameScene;
@@ -27,8 +27,9 @@ class EditorManager : public QWidget {
 public:
     explicit EditorManager(GameCore* core);
 
-    void setBackGroundImage(QString imageFileName = QString());
-    void removeBackGroundImage();
+    bool containsEditorSprite(EditorSprite* pEditSprite) const;
+
+    void resetHistory();
 
     // Gestion de création
     void createSelectionZone(QPointF startPositon);
@@ -54,10 +55,16 @@ public:
     void moveEditorSprite(EditorSprite* pEditSprite, QPointF moveVector);
     void moveSelectedEditorSprites(QPointF moveVector);
 
+    // Gestion de l'image de fond
+    void setBackGroundImage(QString imageFileName = QString());
+    void removeBackGroundImage();
+
 private:
     GameScene* m_pScene = nullptr;
 
     EditorHistory* m_editorHistory = nullptr;
+
+    QString m_backgroundImageFileName = QString();
 
     // Etat de touche
     bool m_isShiftHeld = false;

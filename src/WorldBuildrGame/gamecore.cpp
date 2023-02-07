@@ -53,6 +53,9 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     // Initialise le UI
     m_pEditorHud->bindEditorManager(m_pEditorManager);
 
+    // Réinitialise l'historique
+    m_pEditorManager->resetHistory();
+
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,
     // sinon le temps passé jusqu'au premier tick (ElapsedTime) peut être élevé et provoquer de gros

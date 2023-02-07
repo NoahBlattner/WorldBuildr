@@ -8,8 +8,9 @@
 #include <iostream>
 #include <QPainter>
 
-EditorSprite::EditorSprite(const QString &imageFileName, QGraphicsItem *pParent) : Sprite(imageFileName, pParent) {
+EditorSprite::EditorSprite(const QString &imageFileName, bool selected, QGraphicsItem *pParent) : Sprite(imageFileName, pParent) {
     m_imagePath = imageFileName;
+    m_isEditSelected = selected;
 
     // On centre le point d'origine du sprite
     setTransformOriginPoint(globalBoundingRect().center());
@@ -30,21 +31,11 @@ void EditorSprite::paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOp
 void EditorSprite::setEditSelected(bool selected) {
     m_isEditSelected = selected;
 
-    update();
+    if (scene() != nullptr)
+        update();
 }
 
 //! \brief Retourne si le sprite est sélectionné.
 bool EditorSprite::getEditSelected() const {
     return m_isEditSelected;
-}
-
-//! Clone le sprite et retourne un pointeur vers le clone.
-EditorSprite* EditorSprite::clone() const {
-    auto* pClone = new EditorSprite(m_imagePath);
-    pClone->setPos(pos());
-    pClone->setTransform(transform());
-    pClone->setZValue(zValue());
-    pClone->setEditSelected(m_isEditSelected);
-
-    return pClone;
 }
