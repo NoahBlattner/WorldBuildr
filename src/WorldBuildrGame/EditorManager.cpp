@@ -250,15 +250,18 @@ void EditorManager::createNewEditorSprite(QString imageFileName, QPointF positio
 //! Ajoute un sprite d'éditeur à l'éditeur.
 //! \param pEditorSprite    Pointeur vers le sprite d'éditeur à ajouter.
 //! \param position         Position du sprite. Défaut : QPointF(0, 0)
-void EditorManager::addEditorSprite(EditorSprite *pEditorSprite, const QPointF &position) {// On ajoute le sprite à la liste des sprites d'éditeur
+void EditorManager::addEditorSprite(EditorSprite *pEditorSprite, const QPointF &position) {
+    // On ajoute le sprite à la liste des sprites d'éditeur
     m_pEditorSprites.append(pEditorSprite);
 
-    // On place le sprite à la position donnée
-    pEditorSprite->setPos(position);
-
-    if (pEditorSprite->getEditSelected()) {
+    if (pEditorSprite->getEditSelected()) { // Si le sprite est sélectionné
         // On ajoute le sprite à la liste des sprites sélectionnés
         m_pSelectedEditorSprites.append(pEditorSprite);
+    }
+
+    if (position != QPointF(0, 0)) { // Si la position est différente de 0
+        // On place le sprite à la position donnée
+        pEditorSprite->setPos(position);
     }
 
     // On ajoute le sprite à la scène
