@@ -35,8 +35,9 @@ private:
     QPushButton* deselectAllButton;
 
     QGroupBox* groupeActionsAutre = new QGroupBox("Autres actions");
-    QVBoxLayout* layoutActionsAutre = new QVBoxLayout();
+    QVBoxLayout* layoutActionsFond = new QVBoxLayout();
     QPushButton* addBackgroundButton;
+    QPushButton* removeBackgroundButton;
 
     void initButtons();
 
@@ -47,6 +48,7 @@ private slots:
     void deselectAllSprites();
     void duplicateButtonClicked();
     void addBackgroundButtonClicked();
+    void removeBackgroundButtonClicked();
 
     void initLayout();
 

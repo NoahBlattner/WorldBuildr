@@ -47,12 +47,13 @@ void ActionPanel::initLayout() {
     layoutActionsSelection->addWidget(selectAllButton);
     layoutActionsSelection->addWidget(deselectAllButton);
 
-    layoutActionsAutre->addWidget(addBackgroundButton);
+    layoutActionsFond->addWidget(addBackgroundButton);
+    layoutActionsFond->addWidget(removeBackgroundButton);
 
     // Ajout des layouts dans les groupes de boutons
     groupeActionsCreation->setLayout(layoutActionsCreation);
     groupeActionsSelection->setLayout(layoutActionsSelection);
-    groupeActionsAutre->setLayout(layoutActionsAutre);
+    groupeActionsAutre->setLayout(layoutActionsFond);
 
     // Ajout des groupes de boutons dans le layout principal
     mainLayout->addWidget(groupeActionsCreation);
@@ -87,10 +88,15 @@ void ActionPanel::initButtons() {
     deselectAllButton->setToolTip("Désélectionner tous les sprites");
     deselectAllButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
 
-    // Création d'un bouton de ajout d'arrière-plan
+    // Création d'un bouton d'ajout d'arrière-plan
     addBackgroundButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/backgroundIcon.png"), "Ajouter un arrière-plan");
     addBackgroundButton->setToolTip("Ajouter un arrière-plan");
     addBackgroundButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
+
+    // Création d'un bouton de suppression d'arrière-plan
+    removeBackgroundButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/removeBackgroundIcon.png"), "Supprimer l'arrière-plan");
+    removeBackgroundButton->setToolTip("Supprimer l'arrière-plan");
+    removeBackgroundButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
 }
 
 //! Connexion des signaux des boutons avec les slots correspondants
@@ -102,6 +108,7 @@ void ActionPanel::connectSignals() const {
     connect(deselectAllButton, &QPushButton::clicked, this, &ActionPanel::deselectAllSprites);
     connect(duplicateButton, &QPushButton::clicked, this, &ActionPanel::duplicateButtonClicked);
     connect(addBackgroundButton, &QPushButton::clicked, this, &ActionPanel::addBackgroundButtonClicked);
+    connect(removeBackgroundButton, &QPushButton::clicked, this, &ActionPanel::removeBackgroundButtonClicked);
 }
 
 /*********************
@@ -139,4 +146,9 @@ void ActionPanel::duplicateButtonClicked() {
 //! Slot appelé lors du clic sur le bouton d'ajout d'arrière-plan
 void ActionPanel::addBackgroundButtonClicked() {
     m_pEditorManager->setBackGroundImage();
+}
+
+//! Slot appelé lors du clic sur le bouton de suppression d'arrière-plan
+void ActionPanel::removeBackgroundButtonClicked() {
+    m_pEditorManager->removeBackGroundImage();
 }

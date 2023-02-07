@@ -545,6 +545,6 @@ void EditorManager::removeBackGroundImage() {
     m_backgroundImageFileName = QString();
 
     // On charge une image vide dans la scène
-    m_pScene->setBackgroundImage(QImage());
+    m_pScene->setBackgroundColor(Qt::black);
 }
 
