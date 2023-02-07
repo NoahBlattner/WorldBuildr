@@ -196,6 +196,7 @@ void EditorHistory::performInverseAction(EditorHistory::State &state) {
             break;
         case MoveSprite:
             for (EditorSprite* sprite : state.sprites) {
+                // On récupère le vecteur de déplacement depuis les données additionnelles
                 QList<QString> data = state.additionalData.split(";");
                 QPointF moveVector(data[0].toDouble(), data[1].toDouble());
                 m_pEditorManager->moveEditorSprite(sprite, -moveVector);

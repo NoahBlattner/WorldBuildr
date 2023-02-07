@@ -478,7 +478,7 @@ void EditorManager::moveEditorSprite(EditorSprite *pEditSprite, QPointF moveVect
     pEditSprite->moveBy(moveVector.x(), moveVector.y());
 
     // Historique
-    m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, pEditSprite);
+    m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, pEditSprite, QString::number(moveVector.x()) + ";" + QString::number(moveVector.y()));
 }
 
 //! Déplace tous les sprites sélectionnés d'un vecteur donné.
@@ -493,7 +493,7 @@ void EditorManager::moveSelectedEditorSprites(QPointF moveVector) {
 
     // Historique
     m_editorHistory->requestResumeHistory();
-    m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, m_pSelectedEditorSprites);
+    m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, m_pSelectedEditorSprites, QString::number(moveVector.x()) + ";" + QString::number(moveVector.y()));
 }
 
 /********************************************
