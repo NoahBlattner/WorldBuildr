@@ -29,6 +29,9 @@ public:
 
     bool containsEditorSprite(EditorSprite* pEditSprite) const;
 
+    // Gestion de l'historique
+    void undo();
+    void redo();
     void resetHistory();
 
     // Gestion de création

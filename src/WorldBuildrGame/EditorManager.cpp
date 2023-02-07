@@ -35,6 +35,16 @@ void EditorManager::resetHistory() {
     m_editorHistory->clearHistory();
 }
 
+//! Annule la dernière action de l'historique
+void EditorManager::undo() {
+    m_editorHistory->undo();
+}
+
+//! Rétablit la dernière action annulée de l'historique
+void EditorManager::redo() {
+    m_editorHistory->redo();
+}
+
 //! Copie une image sélectionnée dans le dossier d'images de l'éditeur
 //! et retourne le chemin de la nouvelle image
 //! \return Le chemin de l'image6

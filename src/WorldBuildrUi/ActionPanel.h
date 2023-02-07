@@ -29,12 +29,17 @@ private:
     QPushButton* duplicateButton;
     QPushButton* removeButton;
 
+    QGroupBox* groupeActionsHistorique = new QGroupBox("Historique");
+    QVBoxLayout* layoutActionsHistorique = new QVBoxLayout();
+    QPushButton* undoButton;
+    QPushButton* redoButton;
+
     QGroupBox* groupeActionsSelection = new QGroupBox("Sélection");
     QVBoxLayout* layoutActionsSelection = new QVBoxLayout();
     QPushButton* selectAllButton;
     QPushButton* deselectAllButton;
 
-    QGroupBox* groupeActionsAutre = new QGroupBox("Autres actions");
+    QGroupBox* groupeActionsFond = new QGroupBox("Autres actions");
     QVBoxLayout* layoutActionsFond = new QVBoxLayout();
     QPushButton* addBackgroundButton;
     QPushButton* removeBackgroundButton;
@@ -44,6 +49,8 @@ private:
 private slots:
     void addButtonClicked();
     void deleteButtonClicked();
+    void undoButtonClicked();
+    void redoButtonClicked();
     void selectAllButtonClicked();
     void deselectAllSprites();
     void duplicateButtonClicked();

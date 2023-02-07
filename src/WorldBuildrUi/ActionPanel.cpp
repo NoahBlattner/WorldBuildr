@@ -44,6 +44,9 @@ void ActionPanel::initLayout() {
     layoutActionsCreation->addWidget(duplicateButton);
     layoutActionsCreation->addWidget(removeButton);
 
+    layoutActionsHistorique->addWidget(undoButton);
+    layoutActionsHistorique->addWidget(redoButton);
+
     layoutActionsSelection->addWidget(selectAllButton);
     layoutActionsSelection->addWidget(deselectAllButton);
 
@@ -52,13 +55,15 @@ void ActionPanel::initLayout() {
 
     // Ajout des layouts dans les groupes de boutons
     groupeActionsCreation->setLayout(layoutActionsCreation);
+    groupeActionsHistorique->setLayout(layoutActionsHistorique);
     groupeActionsSelection->setLayout(layoutActionsSelection);
-    groupeActionsAutre->setLayout(layoutActionsFond);
+    groupeActionsFond->setLayout(layoutActionsFond);
 
     // Ajout des groupes de boutons dans le layout principal
     mainLayout->addWidget(groupeActionsCreation);
+    mainLayout->addWidget(groupeActionsHistorique);
     mainLayout->addWidget(groupeActionsSelection);
-    mainLayout->addWidget(groupeActionsAutre);
+    mainLayout->addWidget(groupeActionsFond);
 }
 
 //! Initialise les boutons
@@ -77,6 +82,16 @@ void ActionPanel::initButtons() {
     removeButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/deleteIcon.png"), "Supprimer les sprites sélectionnés");
     removeButton->setToolTip("Supprimer les sprites sélectionnés");
     removeButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
+
+    // Création d'un bouton d'annulation de la dernière action
+    undoButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/undoIcon.png"), "Annuler la dernière action");
+    undoButton->setToolTip("Annuler la dernière action");
+    undoButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
+
+    // Création d'un bouton de rétablissement de la dernière action annulée
+    redoButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/redoIcon.png"), "Rétablir la dernière action annulée");
+    redoButton->setToolTip("Rétablir la dernière action annulée");
+    redoButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
 
     // Création d'un bouton de sélection de tous les sprites
     selectAllButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/selectAllIcon.png"), "Sélectionner tous les sprites");
@@ -104,6 +119,8 @@ void ActionPanel::connectSignals() const {
     // Connexion les signaux des boutons
     connect(addButton, &QPushButton::clicked, this, &ActionPanel::addButtonClicked);
     connect(removeButton, &QPushButton::clicked, this, &ActionPanel::deleteButtonClicked);
+    connect(undoButton, &QPushButton::clicked, this, &ActionPanel::undoButtonClicked);
+    connect(redoButton, &QPushButton::clicked, this, &ActionPanel::redoButtonClicked);
     connect(selectAllButton, &QPushButton::clicked, this, &ActionPanel::selectAllButtonClicked);
     connect(deselectAllButton, &QPushButton::clicked, this, &ActionPanel::deselectAllSprites);
     connect(duplicateButton, &QPushButton::clicked, this, &ActionPanel::duplicateButtonClicked);
@@ -124,6 +141,18 @@ void ActionPanel::addButtonClicked() {
 void ActionPanel::deleteButtonClicked() {
     // Suppression des sprites sélectionnés
     m_pEditorManager->deleteSelectedEditorSprites();
+}
+
+//! Slot appelé lors du clic sur le bouton d'annulation de la dernière action
+void ActionPanel::undoButtonClicked() {
+    // Rétablir la dernière action annulée
+    m_pEditorManager->undo();
+}
+
+//! Slot appelé lors du clic sur le bouton de rétablissement de la dernière action annulée
+void ActionPanel::redoButtonClicked() {
+    // Annuler la dernière action
+    m_pEditorManager->redo();
 }
 
 //! Slot appelé lors du clic sur le bouton de sélection de tous les sprites
