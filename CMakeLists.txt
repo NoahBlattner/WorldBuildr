@@ -16,7 +16,7 @@ find_package(Qt6 COMPONENTS
         Widgets
         REQUIRED)
 
-include_directories(src/GameFramework src/WorldBuildrGame src/WorldBuildrUi src)
+include_directories(src/GameFramework src/WorldBuildrEditor src/WorldBuildrUi src)
 
 add_executable(WorldBuildr
         src/GameFramework/main.cpp
@@ -29,13 +29,13 @@ add_executable(WorldBuildr
         src/GameFramework/resources.cpp src/GameFramework/resources.h
         src/GameFramework/sprite.cpp src/GameFramework/sprite.h
         src/GameFramework/utilities.cpp src/GameFramework/utilities.h
-        src/WorldBuildrGame/gamecore.cpp src/WorldBuildrGame/gamecore.h
+        src/WorldBuildrEditor/gamecore.cpp src/WorldBuildrEditor/gamecore.h
         src/WorldBuildr.pro
-        src/WorldBuildrGame/EditorSprite.cpp src/WorldBuildrGame/EditorSprite.h
-        src/WorldBuildrGame/SelectionZone.cpp src/WorldBuildrGame/SelectionZone.h
-        src/WorldBuildrGame/EditorManager.cpp src/WorldBuildrGame/EditorManager.h
+        src/WorldBuildrEditor/EditorSprite.cpp src/WorldBuildrEditor/EditorSprite.h
+        src/WorldBuildrEditor/SelectionZone.cpp src/WorldBuildrEditor/SelectionZone.h
+        src/WorldBuildrEditor/EditorManager.cpp src/WorldBuildrEditor/EditorManager.h
         src/WorldBuildrUi/ActionPanel.cpp src/WorldBuildrUi/ActionPanel.h
-        src/WorldBuildrGame/EditorHistory.cpp src/WorldBuildrGame/EditorHistory.h src/WorldBuildrGame/EditorHistory.h)
+        src/WorldBuildrEditor/EditorHistory.cpp src/WorldBuildrEditor/EditorHistory.h src/WorldBuildrEditor/EditorHistory.h)
 target_link_libraries(WorldBuildr
         Qt::Core
         Qt::Gui

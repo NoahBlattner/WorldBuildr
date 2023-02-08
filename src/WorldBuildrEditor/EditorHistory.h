@@ -11,11 +11,21 @@ class EditorManager;
 class EditorSprite;
 
 //! Classe permettant de gérer l'historique des actions de l'éditeur
-//! Cette classe peut être utilisée pour annuler et rétablir des actions
+//! Cette classe peut être utilisée pour annuler et rétablir des actions d'un éditeur
 //!
+//! Pour utiliser cette classe, il faut pass
 //! La méthode addAction() doit être appelée à chaque fois qu'une action est effectuée
 //! La méthode undo() permet d'annuler la dernière action
 //! La méthode redo() permet de rétablir la dernière action annulée
+//! La méthode clearHistory() permet de vider l'historique
+//!
+//! Il est parfois nécessaire de mettre en pause l'historique, notamment lorsqu'on effectue une action s'appliquant à plusieurs sprites
+//! Dans ce cas, on ne veut pas sauvegarder une action par sprite, mais une seule action pour tous les sprites concernés
+//! Pour cela, on appelle la méthode pauseHistory() avant d'effectuer l'action, et la méthode requestResumeHistory() après l'action
+//! Si on fait face à plus de 1 niveau de pause, on peut utiliser la méthode pauseHistory(int level) et requestResumeHistory(int level)
+//! Le niveau de pause permet de mettre un pause l'historique à un niveau donné. Pour le réactiver, un niveau de pause égal ou supérieur est nécessaire
+//! La méthode pauseHistory() permet de mettre en pause l'historique
+//! La méthode requestResumeHistory() permet de demander la reprise de l'historique
 class EditorHistory {
 public:
     explicit EditorHistory(EditorManager* editorManager);
