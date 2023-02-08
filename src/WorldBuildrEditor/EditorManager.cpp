@@ -7,6 +7,7 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <utility>
 #include "EditorManager.h"
 #include "EditorHistory.h"
 #include "GameCore.h"
@@ -14,6 +15,7 @@
 #include "EditorSprite.h"
 #include "SelectionZone.h"
 #include "resources.h"
+#include "SaveFileManager.h"
 
 EditorManager::EditorManager(GameCore* core) {
     m_pScene = core->getScene();
@@ -25,6 +27,11 @@ EditorManager::EditorManager(GameCore* core) {
     connect(core, &GameCore::notifyMouseMoved, this, &EditorManager::onMouseMoved);
     connect(core, &GameCore::notifyMouseButtonPressed, this, &EditorManager::onMouseButtonPressed);
     connect(core, &GameCore::notifyMouseButtonReleased, this, &EditorManager::onMouseButtonReleased);
+}
+
+//! Set le nom du niveau
+void EditorManager::setName(QString name) {
+    m_name = std::move(name);
 }
 
 //! Indique si l'éditeur contient le sprite donné.
@@ -150,6 +157,12 @@ void EditorManager::onKeyPressed(int key) {
                 m_editorHistory->redo();
             }
             break;
+            case Qt::Key_S:
+                if (m_isCtrlHeld) {
+                    // On sauvegarde le niveau
+                    SaveFileManager::save(this, "");
+                }
+                break;
     }
 }
 

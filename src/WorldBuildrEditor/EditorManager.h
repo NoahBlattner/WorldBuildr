@@ -60,7 +60,14 @@ class EditorManager : public QWidget {
 public:
     explicit EditorManager(GameCore* core);
 
+    // Gestion des sprites
+    QList<EditorSprite*> getEditorSprites() const { return m_pEditorSprites; }
     bool containsEditorSprite(EditorSprite* pEditSprite) const;
+
+    // Gestion de l'éditeur
+    QString getBackgroundImage() const { return m_backgroundImageFileName; }
+    void setName(QString name);
+    QString getName() const { return m_name; }
 
     // Gestion de l'historique
     void undo();
@@ -97,6 +104,8 @@ public:
 
 private:
     GameScene* m_pScene = nullptr;
+
+    QString m_name = QString();
 
     EditorHistory* m_editorHistory = nullptr;
 
