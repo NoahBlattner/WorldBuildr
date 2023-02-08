@@ -60,9 +60,6 @@ void EditorHistory::addSpriteAction(EditorHistory::Action action, QList<EditorSp
     state.sprites = std::move(sprites);
     state.additionalData = std::move(additionalData);
 
-    // On avance dans l'historique
-    m_currentStateIndex++;
-
     // On supprime les états suivants (si CTRL+Z -> Action -> CTRL+Y n'est plus possible)
     if (m_currentStateIndex < m_states.size() - 1) {
         for (int i = m_states.size()-1; i > m_currentStateIndex; i--) {
@@ -74,6 +71,7 @@ void EditorHistory::addSpriteAction(EditorHistory::Action action, QList<EditorSp
 
     // On ajoute l'état
     m_states.append(state);
+    m_currentStateIndex = m_states.size()-1;
 
     // On supprime les états en trop
     if (m_states.size() > MAX_HISTORY_SIZE) {
