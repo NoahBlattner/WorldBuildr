@@ -1,8 +1,11 @@
-//
-// Created by blatnoa on 01.02.2023.
-//
+/**
+ * @file EditorActionPanel.cpp
+ * @brief Définition de la classe EditorActionPanel.
+ * @author Noah Blattner
+ * @date Janvier 2023
+ */
 
-#include "ActionPanel.h"
+#include "EditorActionPanel.h"
 #include "EditorManager.h"
 #include "resources.h"
 #include "GameScene.h"
@@ -12,7 +15,7 @@
 #include <QFileDialog>
 #include <QGroupBox>
 
-ActionPanel::ActionPanel(QWidget* pParent) : QWidget(pParent){
+EditorActionPanel::EditorActionPanel(QWidget* pParent) : QWidget(pParent){
     // Création du layout
     mainLayout = new QVBoxLayout(this);
     mainLayout->setAlignment(Qt::AlignCenter);
@@ -29,7 +32,7 @@ ActionPanel::ActionPanel(QWidget* pParent) : QWidget(pParent){
 
 //! Initialise le UI avec le manager d'éditeur
 //! \param editorManager Le manager d'éditeur à lier à l'UI
-void ActionPanel::bindEditorManager(EditorManager *editorManager) {
+void EditorActionPanel::bindEditorManager(EditorManager *editorManager) {
     m_pEditorManager = editorManager;
 }
 
@@ -38,7 +41,7 @@ void ActionPanel::bindEditorManager(EditorManager *editorManager) {
  ********************/
 
 //! Initialise le layout
-void ActionPanel::initLayout() {
+void EditorActionPanel::initLayout() {
     // Grouper les boutons
     layoutActionsCreation->addWidget(addButton);
     layoutActionsCreation->addWidget(duplicateButton);
@@ -67,7 +70,7 @@ void ActionPanel::initLayout() {
 }
 
 //! Initialise les boutons
-void ActionPanel::initButtons() {
+void EditorActionPanel::initButtons() {
     // Création du bouton d'ajout de sprite
     addButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/addIcon.png"), "Ajouter un sprite");
     addButton->setToolTip("Ajouter un sprite");
@@ -115,17 +118,17 @@ void ActionPanel::initButtons() {
 }
 
 //! Connexion des signaux des boutons avec les slots correspondants
-void ActionPanel::connectSignals() const {
+void EditorActionPanel::connectSignals() const {
     // Connexion les signaux des boutons
-    connect(addButton, &QPushButton::clicked, this, &ActionPanel::addButtonClicked);
-    connect(removeButton, &QPushButton::clicked, this, &ActionPanel::deleteButtonClicked);
-    connect(undoButton, &QPushButton::clicked, this, &ActionPanel::undoButtonClicked);
-    connect(redoButton, &QPushButton::clicked, this, &ActionPanel::redoButtonClicked);
-    connect(selectAllButton, &QPushButton::clicked, this, &ActionPanel::selectAllButtonClicked);
-    connect(deselectAllButton, &QPushButton::clicked, this, &ActionPanel::deselectAllSprites);
-    connect(duplicateButton, &QPushButton::clicked, this, &ActionPanel::duplicateButtonClicked);
-    connect(addBackgroundButton, &QPushButton::clicked, this, &ActionPanel::addBackgroundButtonClicked);
-    connect(removeBackgroundButton, &QPushButton::clicked, this, &ActionPanel::removeBackgroundButtonClicked);
+    connect(addButton, &QPushButton::clicked, this, &EditorActionPanel::addButtonClicked);
+    connect(removeButton, &QPushButton::clicked, this, &EditorActionPanel::deleteButtonClicked);
+    connect(undoButton, &QPushButton::clicked, this, &EditorActionPanel::undoButtonClicked);
+    connect(redoButton, &QPushButton::clicked, this, &EditorActionPanel::redoButtonClicked);
+    connect(selectAllButton, &QPushButton::clicked, this, &EditorActionPanel::selectAllButtonClicked);
+    connect(deselectAllButton, &QPushButton::clicked, this, &EditorActionPanel::deselectAllSprites);
+    connect(duplicateButton, &QPushButton::clicked, this, &EditorActionPanel::duplicateButtonClicked);
+    connect(addBackgroundButton, &QPushButton::clicked, this, &EditorActionPanel::addBackgroundButtonClicked);
+    connect(removeBackgroundButton, &QPushButton::clicked, this, &EditorActionPanel::removeBackgroundButtonClicked);
 }
 
 /*********************
@@ -133,51 +136,51 @@ void ActionPanel::connectSignals() const {
  ********************/
 
 //! Slot appelé lors du clic sur le bouton d'ajout de sprite
-void ActionPanel::addButtonClicked() {
+void EditorActionPanel::addButtonClicked() {
     m_pEditorManager->createNewEditorSprite();
 }
 
 //! Slot appelé lors du clic sur le bouton de suppression de sprite
-void ActionPanel::deleteButtonClicked() {
+void EditorActionPanel::deleteButtonClicked() {
     // Suppression des sprites sélectionnés
     m_pEditorManager->deleteSelectedEditorSprites();
 }
 
 //! Slot appelé lors du clic sur le bouton d'annulation de la dernière action
-void ActionPanel::undoButtonClicked() {
+void EditorActionPanel::undoButtonClicked() {
     // Rétablir la dernière action annulée
     m_pEditorManager->undo();
 }
 
 //! Slot appelé lors du clic sur le bouton de rétablissement de la dernière action annulée
-void ActionPanel::redoButtonClicked() {
+void EditorActionPanel::redoButtonClicked() {
     // Annuler la dernière action
     m_pEditorManager->redo();
 }
 
 //! Slot appelé lors du clic sur le bouton de sélection de tous les sprites
-void ActionPanel::selectAllButtonClicked() {
+void EditorActionPanel::selectAllButtonClicked() {
     // Sélectionner tous les sprites
     m_pEditorManager->selectAllEditorSprites();
 }
 
 //! Slot appelé lors du clic sur le bouton de déselection de tous les sprites
-void ActionPanel::deselectAllSprites() {
+void EditorActionPanel::deselectAllSprites() {
     m_pEditorManager->unselectAllEditorSprites();
 }
 
 //! Slot appelé lors du clic sur le bouton de duplication de sprite
-void ActionPanel::duplicateButtonClicked() {
+void EditorActionPanel::duplicateButtonClicked() {
     // Dupliquer les sprites sélectionnés
     m_pEditorManager->duplicateSelectedEditorSprites();
 }
 
 //! Slot appelé lors du clic sur le bouton d'ajout d'arrière-plan
-void ActionPanel::addBackgroundButtonClicked() {
+void EditorActionPanel::addBackgroundButtonClicked() {
     m_pEditorManager->setBackGroundImage();
 }
 
 //! Slot appelé lors du clic sur le bouton de suppression d'arrière-plan
-void ActionPanel::removeBackgroundButtonClicked() {
+void EditorActionPanel::removeBackgroundButtonClicked() {
     m_pEditorManager->removeBackGroundImage();
 }

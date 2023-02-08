@@ -1,6 +1,9 @@
-//
-// Created by blatnoa on 31.01.2023.
-//
+/**
+ * @file EditorManager.cpp
+ * @brief Définition de la classe EditorManager.
+ * @author Noah Blattner
+ * @date Janvier 2023
+ */
 
 #include <QFileDialog>
 #include <QMessageBox>

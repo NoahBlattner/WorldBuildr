@@ -20,7 +20,7 @@
 #include "EditorSprite.h"
 #include "SelectionZone.h"
 #include "EditorManager.h"
-#include "ActionPanel.h"
+#include "EditorActionPanel.h"
 #include "GameView.h"
 
 const int SCENE_WIDTH = 1280;

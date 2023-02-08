@@ -1,6 +1,9 @@
-//
-// Created by blatnoa on 31.01.2023.
-//
+/**
+ * @file EditorManager.h
+ * @brief Définition de la classe EditorManager.
+ * @author Noah Blattner
+ * @date Janvier 2023
+ */
 
 #ifndef WORLDBUILDR_EDITORMANAGER_H
 #define WORLDBUILDR_EDITORMANAGER_H
@@ -15,12 +18,42 @@ class GameCore;
 class GameScene;
 
 //! Classe gérant l'éditeur de niveau.
-//! Elle gère la création et la destruction des sprites d'éditeur.
-//! Elle gère la sélection des sprites d'éditeur.
-//! Elle gère le drag and drop des sprites d'éditeur.
-//! Elle gère la création de zones de sélection.
+//! Elle gère la création, la suppression, la sélection et le déplacement des sprites.
+//! Elle est également liée à l'historique des actions.
+//! Elle gère également la création de la zone de sélection.
+//! Elle écoute les évènements de clavier et de souris pour effectuer les actions correspondantes. Elle mets aussi à disposition des raccourcis clavier pour effectuer les actions.
 //!
-//! createNewEditorSprite() : Crée un sprite d'éditeur à la position donnée avec l'image donnée.
+//! Les méthode de gestion des sprites sont :
+//! La méthode createNewEditorSprite() permet de créer un nouveau sprite
+//! La méthode addEditorSprite() permet d'ajouter un sprite existant
+//! La méthode duplicateEditorSprite() permet de dupliquer un sprite
+//! La méthode duplicateSelectedEditorSprites() permet de dupliquer les sprites sélectionnés
+//! La méthode deleteEditorSprite() permet de supprimer un sprite
+//! La méthode deleteSelectedEditorSprites() permet de supprimer les sprites sélectionnés
+//! La méthode selectEditorSprite() permet de sélectionner un sprite
+//! La méthode selectSingleEditorSprite() permet de sélectionner un seul sprite (dé-selection tous les autres)
+//! La méthode selectAllEditorSprites() permet de sélectionner tous les sprites
+//! La méthode toggleSelectEditorSprite() permet de basculer la sélection d'un sprite
+//! La méthode selectMultipleEditorSprites() permet de sélectionner plusieurs sprites
+//! La méthode unselectEditorSprite() permet de dé-sélectionner un sprite
+//! La méthode unselectAllEditorSprites() permet de dé-sélectionner tous les sprites
+//! La méthode moveEditorSprite() permet de déplacer un sprite
+//! La méthode moveSelectedEditorSprites() permet de déplacer les sprites sélectionnés
+//!
+//! Les méthodes de gestion de l'arrière-plan sont :
+//! La méthode setBackGroundImage() permet de définir l'image de fond de la scène
+//! La méthode removeBackGroundImage() permet de supprimer l'image de fond de la scène
+//!
+//! Les méthodes de gestion de l'historique sont :
+//! La méthode undo() permet d'annuler la dernière action
+//! La méthode redo() permet de refaire la dernière action annulée
+//! La méthode resetHistory() permet de réinitialiser l'historique
+//!
+//! Les méthodes utilitaires sont :
+//! La méthode containsEditorSprite() permet de savoir si un sprite est géré par l'éditeur
+//! La méthode createSelectionZone() permet de créer la zone de multi-sélection
+//! La méthode loadImageToEditor() permet de charger une image dans l'éditeur (copie dans le dossier de l'éditeur).
+//!     Elle retourne le chemin de l'image dans l'éditeur.
 class EditorManager : public QWidget {
     Q_OBJECT
 

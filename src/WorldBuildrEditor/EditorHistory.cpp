@@ -1,6 +1,9 @@
-//
-// Created by blatnoa on 06.02.2023.
-//
+/*
+ * @file EditorHistory.cpp
+ * @brief Définition de la classe EditorHistory.
+ * @author Noah Blattner
+ * @date Février 2023
+ */
 
 #include "EditorHistory.h"
 

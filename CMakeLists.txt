@@ -34,7 +34,7 @@ add_executable(WorldBuildr
         src/WorldBuildrEditor/EditorSprite.cpp src/WorldBuildrEditor/EditorSprite.h
         src/WorldBuildrEditor/SelectionZone.cpp src/WorldBuildrEditor/SelectionZone.h
         src/WorldBuildrEditor/EditorManager.cpp src/WorldBuildrEditor/EditorManager.h
-        src/WorldBuildrUi/ActionPanel.cpp src/WorldBuildrUi/ActionPanel.h
+        src/WorldBuildrUi/EditorActionPanel.cpp src/WorldBuildrUi/EditorActionPanel.h
         src/WorldBuildrEditor/EditorHistory.cpp src/WorldBuildrEditor/EditorHistory.h src/WorldBuildrEditor/EditorHistory.h)
 target_link_libraries(WorldBuildr
         Qt::Core

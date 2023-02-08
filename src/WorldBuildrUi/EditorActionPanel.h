@@ -1,9 +1,12 @@
-//
-// Created by blatnoa on 01.02.2023.
-//
+/**
+ * @file EditorActionPanel.h
+ * @brief Définition de la classe EditorActionPanel.
+ * @author Noah Blattner
+ * @date Janvier 2023
+ */
 
-#ifndef WORLDBUILDR_ACTIONPANEL_H
-#define WORLDBUILDR_ACTIONPANEL_H
+#ifndef WORLDBUILDR_EDITORACTIONPANEL_H
+#define WORLDBUILDR_EDITORACTIONPANEL_H
 
 #include <QWidget>
 #include <QGroupBox>
@@ -12,9 +15,13 @@
 class EditorManager;
 class QPushButton;
 
-class ActionPanel : public QWidget {
+//! Classe représentant le panneau d'actions de l'éditeur.
+//! Elle permet d'interagir avec l'éditeur par une interface graphique.
+//!
+//! Après la création, il faut lier un éditeur avec la méthode bindEditorManager().
+class EditorActionPanel : public QWidget {
 public:
-    explicit ActionPanel(QWidget* pParent = nullptr);
+    explicit EditorActionPanel(QWidget* pParent = nullptr);
 
     void bindEditorManager(EditorManager* editorManager);
 
@@ -45,6 +52,8 @@ private:
     QPushButton* removeBackgroundButton;
 
     void initButtons();
+    void initLayout();
+    void connectSignals() const;
 
 private slots:
     void addButtonClicked();
@@ -56,11 +65,7 @@ private slots:
     void duplicateButtonClicked();
     void addBackgroundButtonClicked();
     void removeBackgroundButtonClicked();
-
-    void initLayout();
-
-    void connectSignals() const;
 };
 
 
-#endif //WORLDBUILDR_ACTIONPANEL_H
+#endif //WORLDBUILDR_EDITORACTIONPANEL_H

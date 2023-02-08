@@ -1,6 +1,9 @@
-//
-// Created by Noah on 29.01.2023.
-//
+/**
+ * @file EditorSprite.cpp
+ * @brief Définition de la classe EditorSprite.
+ * @author Noah Blattner
+ * @date Janvier 2023
+ */
 
 #include "EditorSprite.h"
 #include <QGraphicsSceneMouseEvent>

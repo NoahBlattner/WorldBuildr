@@ -1,6 +1,9 @@
-//
-// Created by blatnoa on 06.02.2023.
-//
+/**
+ * @file EditorHistory.h
+ * @brief Déclaration de la classe EditorHistory.
+ * @author Noah Blattner
+ * @date Février 2023
+ */
 
 #ifndef WORLDBUILDR_EDITORHISTORY_H
 #define WORLDBUILDR_EDITORHISTORY_H
@@ -13,19 +16,32 @@ class EditorSprite;
 //! Classe permettant de gérer l'historique des actions de l'éditeur
 //! Cette classe peut être utilisée pour annuler et rétablir des actions d'un éditeur
 //!
-//! Pour utiliser cette classe, il faut pass
-//! La méthode addAction() doit être appelée à chaque fois qu'une action est effectuée
-//! La méthode undo() permet d'annuler la dernière action
-//! La méthode redo() permet de rétablir la dernière action annulée
-//! La méthode clearHistory() permet de vider l'historique
+//! Pour utiliser cette classe, il faut passer les actions de l'éditeur à la méthode addSpriteAction()
+//! Cette méthode permet de sauvegarder l'action effectuée, ainsi que les données nécessaires à son annulation et rétablissement
+//! Ces données sont : l'action effectué, les sprites concernés par l'action, ainsi que des données supplémentaires en format QString
+//! Il est possible d'omettre les 2 paramètres derniers, mais il ne faut faire cela que si l'action ne nécessite pas de données supplémentaires
+//! Par exemple, l'action AddBackground ne nécessite pas de sprite, et l'action SelectAll ne nécessite pas de données supplémentaires
+//! Lorsque aucun sprite n'est passé en paramètre, la méthode addAction() peut être utilisée pour simplifier l'appel
+//!
+//! Pour annuler une action, il faut appeler la méthode undo()
+//! Pour rétablir une action précédemment annulé, il faut appeler la méthode redo()
+//! Pour vider l'historique, il faut appeler la méthode clearHistory()
+//! Ceci est utile lorsque on initialise un nouveau projet, ou lorsque l'on ouvre un projet existant
 //!
 //! Il est parfois nécessaire de mettre en pause l'historique, notamment lorsqu'on effectue une action s'appliquant à plusieurs sprites
 //! Dans ce cas, on ne veut pas sauvegarder une action par sprite, mais une seule action pour tous les sprites concernés
 //! Pour cela, on appelle la méthode pauseHistory() avant d'effectuer l'action, et la méthode requestResumeHistory() après l'action
 //! Si on fait face à plus de 1 niveau de pause, on peut utiliser la méthode pauseHistory(int level) et requestResumeHistory(int level)
 //! Le niveau de pause permet de mettre un pause l'historique à un niveau donné. Pour le réactiver, un niveau de pause égal ou supérieur est nécessaire
-//! La méthode pauseHistory() permet de mettre en pause l'historique
-//! La méthode requestResumeHistory() permet de demander la reprise de l'historique
+//! La méthode pauseHistory(int level = 1) permet de mettre en pause l'historique
+//! La méthode requestResumeHistory(int level = 1) permet de demander la reprise de l'historique
+//!
+//! L'historique se limite à 100 actions, et les actions sont sauvegardées dans une liste
+//! Lorsqu'on annule une action, et qu'on effectue une nouvelle action, toutes les actions suivantes sont supprimées
+//! Par exemple, si on effectue la séquence suivante : "Action -> Action 2 -> Undo -> Action 3", l'historique sera : Action -> Action 3
+//!
+//! L'historique gardera une référence sur les sprites concernés par les actions pour pouvoir les annuler et les rétablir
+//! L'historique se chargera de supprimer les sprites qui ne sont plus référencés par aucune action et ne se trouvent plus dans l'éditeur
 class EditorHistory {
 public:
     explicit EditorHistory(EditorManager* editorManager);

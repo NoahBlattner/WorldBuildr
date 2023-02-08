@@ -1,6 +1,9 @@
-//
-// Created by Noah on 29.01.2023.
-//
+/**
+ * @file EditorSprite.h
+ * @brief Définition de la classe EditorSprite.
+ * @author Noah Blattner
+ * @date Janvier 2023
+ */
 
 #ifndef WORLDBUILDR_EDITORSPRITE_H
 #define WORLDBUILDR_EDITORSPRITE_H
@@ -8,9 +11,17 @@
 
 #include "sprite.h"
 
-//! Classe représentant un sprite dans l'éditeur.
-//! Elle peut être sélectionnée avec un clique de souris.
-//! Si elle est sélectionnée, elle est entourée d'une bordure.
+//! Classe représentant une sprite dans l'éditeur.
+//! Une fois ajoutée à une scène, elle écoute le clic gauche de la souris pour envoyer un signal.
+//! Elle gère également l'affichage de la sélection.
+//! Elle gère le contour donnant l'information de sélection.
+//!
+//! Les méthodes de gestion de la sélection sont :
+//! La méthode setEditSelected() permet de définir si la sprite est sélectionnée ou non. Elle met à jour l'affichage.
+//! La méthode getEditSelected() permet de savoir si la sprite est sélectionnée ou non.
+//!
+//! Les méthodes de gestion de l'image sont :
+//! La méthode getImgPath() permet de récupérer le chemin de l'image utilisée par le sprite.
 class EditorSprite : public Sprite {
     Q_OBJECT
 

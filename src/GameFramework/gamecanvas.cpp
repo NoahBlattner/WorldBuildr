@@ -6,7 +6,7 @@
 */
 #include "gamecanvas.h"
 
-#include "WorldBuildrGame/gamecore.h"
+#include "gamecore.h"
 #include "gamescene.h"
 #include "gameview.h"
 
@@ -28,7 +28,7 @@ const int STAT_TRIGGER_INTERVAL = 1000;
 //! Construit le canvas de jeu, qui se charge de faire l'interface entre GameView, GameScene et GameCore.
 //! \param pView    La vue qui affiche les scènes du jeu.
 //! \param pParent  Objet parent.
-GameCanvas::GameCanvas(GameView* pView, ActionPanel* editHud, QObject* pParent) : QObject(pParent) {
+GameCanvas::GameCanvas(GameView* pView, EditorActionPanel* editHud, QObject* pParent) : QObject(pParent) {
     m_pView = pView;
     m_pEditHud = editHud;
     m_pGameCore = nullptr;
@@ -350,7 +350,7 @@ void GameCanvas::resetStatistics() {
     m_statsTrigger = STAT_TRIGGER_INTERVAL;
 }
 
-ActionPanel* GameCanvas::getEditorHud() {
+EditorActionPanel* GameCanvas::getEditorHud() {
     return m_pEditHud;
 }
 

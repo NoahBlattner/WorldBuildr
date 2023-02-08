@@ -1,6 +1,9 @@
-//
-// Created by Noah on 30.01.2023.
-//
+/**
+ * @file SelectionZone.cpp
+ * @brief Définition de la classe SelectionZone.
+ * @author Noah Blattner
+ * @date Janvier 2023
+ */
 
 #include "SelectionZone.h"
 #include "GameScene.h"
@@ -9,11 +12,10 @@
 
 //! \brief Crée un nouveau sprite de sélection à Z-index 1000.
 SelectionZone::SelectionZone(GameScene* scene, QPointF startPosition) : QRectF(startPosition, QSizeF(0, 0)) {
-    m_pScene = scene;
     m_startPoint = startPosition;
 
     // On ajoute le sprite à la scène
-    m_pScene->addSpriteToScene(this);
+    scene->addSpriteToScene(this);
     setZValue(1000);
 }
 
@@ -22,7 +24,7 @@ QList<EditorSprite *> SelectionZone::getCollidingEditorSprites() const {
     QList<EditorSprite*> collidingEditorSprites;
 
     // Garde seulement les sprites qui sont des EditorSprite
-    for (auto & i : m_pScene->collidingSprites(*this)) {
+    for (auto & i : m_pParentScene->collidingSprites(*this)) {
         auto* editorSprite = dynamic_cast<EditorSprite*>(i);
         if (editorSprite != nullptr)
             collidingEditorSprites.append(editorSprite);
@@ -44,7 +46,7 @@ QList<EditorSprite*> SelectionZone::endSelection() {
     auto collidingEditorSprites = getCollidingEditorSprites();
 
     // On supprime la zone de sélection
-    m_pScene->removeSpriteFromScene(this);
+    m_pParentScene->removeSpriteFromScene(this);
     delete this;
 
     return collidingEditorSprites;
