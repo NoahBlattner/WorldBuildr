@@ -71,7 +71,6 @@ void EditorHistory::addSpriteAction(EditorHistory::Action action, QList<EditorSp
 
     // On ajoute l'état
     m_states.append(state);
-    m_currentStateIndex = m_states.size()-1;
 
     // On supprime les états en trop
     if (m_states.size() > MAX_HISTORY_SIZE) {
@@ -82,13 +81,8 @@ void EditorHistory::addSpriteAction(EditorHistory::Action action, QList<EditorSp
         }
     }
 
-    QString actionString;
-
-    for (State state1 : m_states) {
-        actionString += QString::number(state1.action) + " ";
-    }
-
-    qDebug() << "actions " << actionString;
+    // On met à jour l'index de l'état courant
+    m_currentStateIndex = m_states.size()-1;
 }
 
 //! Mettre en pause l'historique pour qu'il n'accepte plus d'état
