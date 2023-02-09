@@ -14,8 +14,8 @@ class QJsonObject;
 
 class SaveFileManager {
 public:
-    static void save(EditorManager *editorManager, QString path);
-    static void load(EditorManager *editorManager, QString path);
+    static void save(EditorManager *editorManager, QString savePath);
+    static void load(EditorManager *editorManager, QString saveFilePath);
 
 private:
     static const QString DEFAULT_SAVE_DIR;

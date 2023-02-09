@@ -16,34 +16,34 @@
 #include "EditorManager.h"
 #include "SaveFileManager.h"
 
-const QString SaveFileManager::DEFAULT_SAVE_DIR = GameFramework::resourcesPath() + "/saves";
+const QString SaveFileManager::DEFAULT_SAVE_DIR = GameFramework::resourcesPath() + "saves";
 
 //! Sauvegarde l'état actuel de l'éditeur dans un fichier JSON
 //! \param editorManager L'éditeur à sauvegarder
-//! \param path Le chemin du fichier de sauvegarde
-void SaveFileManager::save(EditorManager *editorManager, QString path) {
+//! \param savePath Le chemin du fichier de sauvegarde
+void SaveFileManager::save(EditorManager *editorManager, QString savePath) {
     // Création du dossier de sauvegarde s'il n'existe pas
     QDir dir(DEFAULT_SAVE_DIR);
     if (!dir.exists()) {
         dir.mkpath(".");
     }
 
-    if (path.isEmpty()) { // Si le chemin est vide
+    if (savePath.isEmpty()) { // Si le chemin est vide
         // On demande à l'utilisateur de choisir un chemin de sauvegarde (avec un nom de fichier par défaut)
-        path = QFileDialog::getSaveFileName(nullptr, "Sauvegarder sous", DEFAULT_SAVE_DIR, "JSON file (*.json)");
-        if (path.isEmpty()) { // Si le chemin est toujours vide, on annule
+        savePath = QFileDialog::getSaveFileName(nullptr, "Sauvegarder sous", DEFAULT_SAVE_DIR, "JSON file (*.json)");
+        if (savePath.isEmpty()) { // Si le chemin est toujours vide, on annule
             return;
         }
     }
 
-    if (!path.endsWith(".json")) { // Si le chemin ne finit pas par .json on l'ajoute
-        path += ".json";
+    if (!savePath.endsWith(".json")) { // Si le chemin ne finit pas par .json on l'ajoute
+        savePath += ".json";
     }
 
     // On sauvegarde le fichier (on remplace le fichier s'il existe déjà)
-    QFile file(path);
+    QFile file(savePath);
     if (!file.open(QIODevice::WriteOnly)) {
-        QMessageBox::critical(nullptr, "Erreur", "Impossible d'ouvrir le fichier " + path);
+        QMessageBox::critical(nullptr, "Erreur", "Impossible d'ouvrir le fichier " + savePath);
         return;
     }
 
@@ -53,19 +53,22 @@ void SaveFileManager::save(EditorManager *editorManager, QString path) {
     file.close();
 }
 
-void SaveFileManager::load(EditorManager *editorManager, QString path) {
-    if (path.isEmpty() || !QFile::exists(path)) { // Si le chemin est vide ou que le fichier n'existe pas
+//! Charge un fichier JSON dans l'éditeur
+//! \param editorManager L'éditeur dans lequel charger le fichier
+//! \param saveFilePath Le chemin du fichier à charger
+void SaveFileManager::load(EditorManager *editorManager, QString saveFilePath) {
+    if (saveFilePath.isEmpty() || !QFile::exists(saveFilePath)) { // Si le chemin est vide ou que le fichier n'existe pas
         // On demande à l'utilisateur de choisir un chemin de sauvegarde (avec un nom de fichier par défaut)
-        path = QFileDialog::getOpenFileName(nullptr, "Ouvrir", DEFAULT_SAVE_DIR, "JSON file (*.json)");
-        if (path.isEmpty()) { // Si le chemin est toujours vide, on annule
+        saveFilePath = QFileDialog::getOpenFileName(nullptr, "Ouvrir", DEFAULT_SAVE_DIR, "JSON file (*.json)");
+        if (saveFilePath.isEmpty()) { // Si le chemin est toujours vide, on annule
             return;
         }
     }
 
     // On ouvre le fichier
-    QFile file(path);
+    QFile file(saveFilePath);
     if (!file.open(QIODevice::ReadOnly)) {
-        QMessageBox::critical(nullptr, "Erreur", "Impossible d'ouvrir le fichier " + path);
+        QMessageBox::critical(nullptr, "Erreur", "Impossible d'ouvrir le fichier " + saveFilePath);
         return;
     }
 
@@ -86,7 +89,7 @@ void SaveFileManager::load(EditorManager *editorManager, QString path) {
 //! \param editorManager L'éditeur à convertir
 QJsonObject SaveFileManager::convertEditorToJsonObject(EditorManager* editorManager) {
     QJsonObject json;
-    json["background"] = editorManager->getBackgroundImagePath();
+    json["background"] = QDir::toNativeSeparators(editorManager->getBackgroundImagePath()).remove(QDir::toNativeSeparators(GameFramework::resourcesPath()));
     json["sprites"] = convertSpritesToJsonObject(editorManager->getEditorSprites());
     return json;
 }
@@ -95,13 +98,14 @@ QJsonObject SaveFileManager::convertEditorToJsonObject(EditorManager* editorMana
 //! \param sprites La liste de sprites à convertir
 QJsonArray SaveFileManager::convertSpritesToJsonObject(const QList<EditorSprite *>& sprites) {
     QJsonArray json;
+    qDebug() << QDir::toNativeSeparators(DEFAULT_SAVE_DIR);
     for (EditorSprite *sprite : sprites) { // Pour chaque sprite
         QJsonObject spriteJson;
         spriteJson["x"] = sprite->x();
         spriteJson["y"] = sprite->y();
         spriteJson["width"] = sprite->width();
         spriteJson["height"] = sprite->height();
-        spriteJson["texturePath"] = sprite->getImgPath();
+        spriteJson["texturePath"] = QDir::toNativeSeparators(sprite->getImgPath()).remove(QDir::toNativeSeparators(GameFramework::resourcesPath()));
         spriteJson["rotation"] = sprite->rotation();
         json.append(spriteJson);
     }
@@ -113,7 +117,10 @@ QJsonArray SaveFileManager::convertSpritesToJsonObject(const QList<EditorSprite 
 //! \param path Le chemin du fichier à charger
 void SaveFileManager::loadJsonIntoEditor(EditorManager *editorManager, QJsonObject jsonObject) {
     // On charge le fond
-    editorManager->setBackGroundImage(jsonObject["background"].toString());
+    QString backgroundPath = GameFramework::resourcesPath() + jsonObject["background"].toString();
+    if (!backgroundPath.isEmpty()) {
+        editorManager->setBackGroundImage(DEFAULT_SAVE_DIR + backgroundPath);
+    }
 
     // On charge les sprites
     QList<EditorSprite *> sprites = generateSpritesFromJson(jsonObject["sprites"].toArray());
@@ -125,13 +132,13 @@ void SaveFileManager::loadJsonIntoEditor(EditorManager *editorManager, QJsonObje
 //! Convertit un tableau JSON en liste de sprites d'éditeur
 //! \param jsonArray Le tableau JSON à convertir
 QList<EditorSprite *> SaveFileManager::generateSpritesFromJson(const QJsonArray& jsonArray) {
-    QList<EditorSprite *> sprites;
+    QList<EditorSprite*> sprites;
     for (QJsonValue jsonValue : jsonArray) { // Pour chaque sprite
         QJsonObject spriteJson = jsonValue.toObject();
-        auto* sprite = new EditorSprite(spriteJson["texturePath"].toString());
-        sprite->setPos(spriteJson["x"].toInt(), spriteJson["y"].toInt());
+        auto* sprite = new EditorSprite(GameFramework::resourcesPath() + jsonValue["texturePath"].toString());
+        sprite->setPos(spriteJson["x"].toDouble(), spriteJson["y"].toDouble());
         sprite->setRotation(spriteJson["rotation"].toInt());
-        sprite->setTransform(QTransform::fromScale(spriteJson["width"].toInt() / sprite->width(), spriteJson["height"].toInt() / sprite->height()));
+        sprite->setTransform(QTransform::fromScale(spriteJson["width"].toDouble() / sprite->width(), spriteJson["height"].toDouble() / sprite->height()));
         sprites.append(sprite);
     }
     return sprites;
