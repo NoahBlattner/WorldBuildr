@@ -18,8 +18,13 @@ public:
     static void load(EditorManager *editorManager, QString path);
 
 private:
-    static QJsonObject convertEditorToJsonObject(EditorManager *editorManager);
+    static const QString DEFAULT_SAVE_DIR;
+
+    static QJsonObject convertEditorToJsonObject(EditorManager* editorManager);
     static QJsonArray convertSpritesToJsonObject(const QList<EditorSprite*>& sprites);
+
+    static void loadJsonIntoEditor(EditorManager* editorManager, QJsonObject jsonObject);
+    static QList<EditorSprite*> generateSpritesFromJson(const QJsonArray& jsonArray);
 };
 
 

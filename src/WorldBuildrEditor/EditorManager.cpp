@@ -29,9 +29,17 @@ EditorManager::EditorManager(GameCore* core) {
     connect(core, &GameCore::notifyMouseButtonReleased, this, &EditorManager::onMouseButtonReleased);
 }
 
-//! Set le nom du niveau
-void EditorManager::setName(QString name) {
-    m_name = std::move(name);
+//! Réinitialise l'éditeur. Supprime tous les sprites d'éditeur.
+void EditorManager::resetEditor() {
+    // Supprime l'image de fond
+    removeBackGroundImage();
+
+    // Supprime tous les sprites d'éditeur
+    selectAllEditorSprites();
+    deleteSelectedEditorSprites();
+
+    // Réinitialise l'historique
+    m_editorHistory->clearHistory();
 }
 
 //! Indique si l'éditeur contient le sprite donné.
@@ -161,6 +169,12 @@ void EditorManager::onKeyPressed(int key) {
                 if (m_isCtrlHeld) {
                     // On sauvegarde le niveau
                     SaveFileManager::save(this, "");
+                }
+                break;
+            case Qt::Key_O:
+                if (m_isCtrlHeld) {
+                    // On ouvre un niveau
+                    SaveFileManager::load(this, "");
                 }
                 break;
     }
