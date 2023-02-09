@@ -35,6 +35,8 @@ public:
 
     QString getImgPath() const { return m_imagePath; }
 
+    EditorSprite* clone() const;
+
 private:
     QString m_imagePath = "";
 

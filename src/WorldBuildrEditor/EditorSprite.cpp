@@ -42,3 +42,12 @@ void EditorSprite::setEditSelected(bool selected) {
 bool EditorSprite::getEditSelected() const {
     return m_isEditSelected;
 }
+
+//! Crée un clone du sprite d'éditeur.
+EditorSprite *EditorSprite::clone() const {
+    auto* clone = new EditorSprite(m_imagePath, m_isEditSelected);
+    clone->setPos(pos());
+    clone->setRotation(rotation());
+    clone->setScale(scale());
+    return clone;
+}

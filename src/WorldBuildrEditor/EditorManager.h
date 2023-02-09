@@ -38,7 +38,6 @@ class GameScene;
 //! La méthode unselectEditorSprite() permet de dé-sélectionner un sprite
 //! La méthode unselectAllEditorSprites() permet de dé-sélectionner tous les sprites
 //! La méthode moveEditorSprite() permet de déplacer un sprite
-//! La méthode moveSelectedEditorSprites() permet de déplacer les sprites sélectionnés
 //!
 //! Les méthodes de gestion de l'arrière-plan sont :
 //! La méthode setBackGroundImage() permet de définir l'image de fond de la scène
@@ -48,12 +47,15 @@ class GameScene;
 //! La méthode undo() permet d'annuler la dernière action
 //! La méthode redo() permet de refaire la dernière action annulée
 //! La méthode resetHistory() permet de réinitialiser l'historique
+//! Pour l'historique, il faut parfois utiliser les méthodes de pause et de reprise de l'historique.
+//! Cette approche à été préférée à un approche où l'on passe un booléen en paramètre à chaque méthode d'action de sprite
+//! Pour plus d'information, voir la classe EditorHistory
 //!
 //! Les méthodes utilitaires sont :
 //! La méthode containsEditorSprite() permet de savoir si un sprite est géré par l'éditeur
 //! La méthode createSelectionZone() permet de créer la zone de multi-sélection
 //! La méthode loadImageToEditor() permet de charger une image dans l'éditeur (copie dans le dossier de l'éditeur).
-//!     Elle retourne le chemin de l'image dans l'éditeur.
+//! Elle retourne le chemin de l'image dans l'éditeur.
 class EditorManager : public QWidget {
     Q_OBJECT
 
@@ -78,7 +80,7 @@ public:
     void createSelectionZone(QPointF startPositon);
     void createNewEditorSprite(QString imageFileName = QString(), QPointF position = QPointF(0, 0));
     void addEditorSprite(EditorSprite *pEditorSprite, const QPointF &position = QPointF(0, 0));
-    void duplicateEditorSprite(EditorSprite* pEditSprite);
+    EditorSprite* duplicateEditorSprite(EditorSprite* pEditSprite);
     void duplicateSelectedEditorSprites();
 
     // Gestion de la sélection

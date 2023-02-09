@@ -36,7 +36,7 @@ class EditorSprite;
 //! La méthode pauseHistory(int level = 1) permet de mettre en pause l'historique
 //! La méthode requestResumeHistory(int level = 1) permet de demander la reprise de l'historique
 //!
-//! L'historique se limite à 100 actions, et les actions sont sauvegardées dans une liste
+//! L'historique sauvegarde les actions dans une liste. Cette liste est limitée à MAX_HISTORY_SIZE actions
 //! Lorsqu'on annule une action, et qu'on effectue une nouvelle action, toutes les actions suivantes sont supprimées
 //! Par exemple, si on effectue la séquence suivante : "Action -> Action 2 -> Undo -> Action 3", l'historique sera : Action -> Action 3
 //!

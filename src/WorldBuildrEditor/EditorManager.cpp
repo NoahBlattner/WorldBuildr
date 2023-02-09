@@ -215,6 +215,10 @@ void EditorManager::onMouseMoved(QPointF newMousePosition, QPointF oldMousePosit
                 if (mouseDownEditorSprite->getEditSelected()) { // Si le sprite est sélectionné
                     // On fait du drag and drop
                     if (!m_isDragging) { // Si c'est le premier mouvement du drag and drop
+                        // On met en pause l'historique
+                        m_editorHistory->pauseHistory(2);
+
+                        // On commence le drag and drop
                         m_isDragging = true;
                         m_startDragPosition = oldMousePosition;
                     }
@@ -240,6 +244,8 @@ void EditorManager::onMouseButtonReleased(QPointF mousePosition, Qt::MouseButton
             mouseUpSprite = dynamic_cast<EditorSprite *>(m_pScene->spriteAt(mousePosition));
 
             if (m_isDragging) { // Si on a fait un drag and drop
+                // On reprend l'historique
+                m_editorHistory->requestResumeHistory(2);
                 // On enregistre l'action
                 QPointF delta = mousePosition - m_startDragPosition;
                 m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, m_pSelectedEditorSprites, QString::number(delta.x()) + ";" + QString::number(delta.y()));
@@ -320,22 +326,24 @@ void EditorManager::addEditorSprite(EditorSprite *pEditorSprite, const QPointF &
 }
 
 //! Duplique un sprite d'éditeur.
-void EditorManager::duplicateEditorSprite(EditorSprite* pEditSprite) {
+EditorSprite* EditorManager::duplicateEditorSprite(EditorSprite* pEditSprite) {
     // Désactive l'historique pour éviter de créer un historique pour chaque sprite dupliqué
     m_editorHistory->pauseHistory();
 
     // On crée un nouveau sprite d'éditeur
-    auto* newSprite = new EditorSprite(pEditSprite->getImgPath());
+    auto* duplicatedSprite = pEditSprite->clone();
 
-    // On ajoute le sprite à l'éditeur
-    addEditorSprite(newSprite, pEditSprite->pos() + QPointF(10, 10));
+    // On ajoute le sprite à l'éditeur décalé de 10 pixels
+    addEditorSprite(duplicatedSprite, pEditSprite->pos() + QPointF(10, 10));
 
     // On sélectionne le nouveau sprite
-    selectEditorSprite(newSprite);
+    selectEditorSprite(duplicatedSprite);
 
     // Historique
     m_editorHistory->requestResumeHistory();
     m_editorHistory->addSpriteAction(EditorHistory::Action::DuplicateSprite, pEditSprite);
+
+    return duplicatedSprite;
 }
 
 //! Duplique tous les sprites d'éditeur sélectionnés.
@@ -349,15 +357,17 @@ void EditorManager::duplicateSelectedEditorSprites() {
     // On désélectionne tous les sprites
     unselectAllEditorSprites();
 
+    QList<EditorSprite*> duplicatedSprites;
+
     // Pour chaque sprite sélectionné
     for (auto* pEditSprite : spritesToDuplicate) {
         // On le duplique
-        duplicateEditorSprite(pEditSprite);
+        duplicatedSprites << duplicateEditorSprite(pEditSprite);
     }
 
     // Historique
     m_editorHistory->requestResumeHistory(2);
-    m_editorHistory->addSpriteAction(EditorHistory::Action::DuplicateSprite, spritesToDuplicate);
+    m_editorHistory->addSpriteAction(EditorHistory::Action::DuplicateSprite, duplicatedSprites);
 }
 
 /********************************************
@@ -528,17 +538,23 @@ void EditorManager::moveEditorSprite(EditorSprite *pEditSprite, QPointF moveVect
     // Déplace le sprite
     pEditSprite->moveBy(moveVector.x(), moveVector.y());
 
-    // L'historique de drag and drop est gérée dans les actions de souris
+    // Historique
+    m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, pEditSprite, QString::number(moveVector.x()) + ";" + QString::number(moveVector.y()));
 }
 
 //! Déplace tous les sprites sélectionnés d'un vecteur donné.
 //! \param moveVector    Vecteur de déplacement.
 void EditorManager::moveSelectedEditorSprites(QPointF moveVector) {
+    // Désactive l'historique pour éviter de créer un historique pour chaque sprite déplacé
+    m_editorHistory->pauseHistory();
+
     for (auto *pSprite: m_pSelectedEditorSprites) {
         moveEditorSprite(pSprite, moveVector);
     }
 
-    // L'historique de drag and drop est gérée dans les actions de souris
+    // Historique
+    m_editorHistory->requestResumeHistory();
+    m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, m_pSelectedEditorSprites, QString::number(moveVector.x()) + ";" + QString::number(moveVector.y()));
 }
 
 /********************************************
