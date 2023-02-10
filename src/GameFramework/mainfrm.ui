@@ -15,7 +15,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="ActionPanel" name="actionPanel"/>
+    <widget class="EditorActionPanel" name="editorActionPanel"/>
    </item>
    <item>
     <widget class="GameView" name="grvGame"/>
@@ -33,11 +33,6 @@
    <class>GameView</class>
    <extends>QGraphicsView</extends>
    <header>gameview.h</header>
-  </customwidget>
-  <customwidget>
-   <class>EditorHud</class>
-   <extends>QGraphicsScene</extends>
-   <header>EditorHud.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
