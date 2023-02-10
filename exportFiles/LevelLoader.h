@@ -11,6 +11,7 @@
 #include <QString>
 #include <QList>
 
+class QJsonArray;
 class Sprite;
 class GameScene;
 
