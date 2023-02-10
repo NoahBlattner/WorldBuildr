@@ -15,7 +15,8 @@
 #include "sprite.h"
 #include "resources.h"
 
-LevelLoader::LevelLoader(QString levelsPath) {
+LevelLoader::LevelLoader(GameScene* scene, QString levelsPath) {
+    m_pScene = scene;
     m_levelsPath = std::move(levelsPath);
 }
 
@@ -23,7 +24,7 @@ LevelLoader::LevelLoader(QString levelsPath) {
 //! \param scene La scène dans laquelle charger le niveau
 //! \param levelName Le nom du niveau
 //! \return La liste des sprites chargés
-QList<Sprite *> LevelLoader::loadLevel(GameScene* scene, const QString& levelName) {
+QList<Sprite *> LevelLoader::loadLevel(const QString& levelName) {
     // Concaténation du chemin du niveau avec le nom du niveau
     QString levelPath = m_levelsPath + "/" + levelName + ".json";
     levelPath = QDir::toNativeSeparators(levelPath);
@@ -49,30 +50,43 @@ QList<Sprite *> LevelLoader::loadLevel(GameScene* scene, const QString& levelNam
     QJsonObject levelObject = jsonDocument.object();
 
     // On charge l'arrière-plan
-    scene->setBackgroundImage(QImage(GameFramework::imagesPath() + levelObject["background"].toString()));
+    m_pScene->setBackgroundImage(QImage(GameFramework::imagesPath() + levelObject["background"].toString()));
 
     // On charge les sprites
-    loadSprites(scene, levelObject["sprites"].toArray());
+    return loadSprites(levelObject["sprites"].toArray());
 }
 
 //! Charge les sprites dans la scène
 //! \param scene La scène dans laquelle charger les sprites
 //! \param spritesArray Le tableau JSON des sprites
-void LevelLoader::loadSprites(GameScene* scene, const QJsonArray& spritesArray) {
-        // Pour chaque sprite
+QList<Sprite*> LevelLoader::loadSprites(const QJsonArray& spritesArray) {
+    QList<Sprite*> sprites;
+
+    // Pour chaque sprite
     for (QJsonValue spriteValue : spritesArray) {
         // On récupère l'objet JSON
         QJsonObject spriteJson = spriteValue.toObject();
 
         // On crée la sprite avec son image
-        auto* sprite = new Sprite(GameFramework::imagesPath() + spriteJson["image"].toString());
+        auto* sprite = new Sprite(QDir::toNativeSeparators(GameFramework::imagesPath() + spriteJson["texturePath"].toString()));
+        sprites.append(sprite); // On ajoute la sprite à la liste
 
         // On applique les transformations
         sprite->setPos(spriteJson["x"].toDouble(), spriteJson["y"].toDouble());
         sprite->setRotation(spriteJson["rotation"].toInt());
         sprite->setTransform(QTransform::fromScale(spriteJson["width"].toDouble() / sprite->width(), spriteJson["height"].toDouble() / sprite->height()));
 
-        scene->addSpriteToScene(sprite); // On ajoute la sprite à la scène
+        m_pScene->addSpriteToScene(sprite); // On ajoute la sprite à la scène
+    }
+
+    return sprites;
+}
+
+//! Décharge un niveau de la scène
+void LevelLoader::unloadLevel() {
+    for (Sprite* sprite : m_pScene->sprites()) {
+        m_pScene->removeSpriteFromScene(sprite);
+        delete sprite;
     }
 }
 

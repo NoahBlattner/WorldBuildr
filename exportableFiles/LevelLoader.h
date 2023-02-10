@@ -9,22 +9,23 @@
 #define WORLDBUILDR_LEVELLOADER_H
 
 #include <QString>
+#include <QList>
 
-class QList;
 class Sprite;
 class GameScene;
 
 class LevelLoader {
 public:
-    explicit LevelLoader(QString levelsPath);
+    explicit LevelLoader(GameScene* scene, QString levelsPath);
 
-    QList<Sprite*> loadLevel(GameScene* scene, const QString& levelName);
-    void unloadLevel(GameScene* scene);
+    QList<Sprite*> loadLevel(const QString& levelName);
+    void unloadLevel();
 
 private:
+    GameScene* m_pScene;
     QString m_levelsPath;
 
-    static void loadSprites(GameScene* scene, const QJsonArray& spritesArray);
+    QList<Sprite*> loadSprites(const QJsonArray& spritesArray);
 };
 
 

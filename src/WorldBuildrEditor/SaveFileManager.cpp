@@ -89,7 +89,7 @@ void SaveFileManager::load(EditorManager *editorManager, QString saveFilePath) {
 //! \param editorManager L'éditeur à convertir
 QJsonObject SaveFileManager::convertEditorToJsonObject(EditorManager* editorManager) {
     QJsonObject json;
-    json["background"] = QDir::toNativeSeparators(editorManager->getBackgroundImagePath()).remove(QDir::toNativeSeparators(GameFramework::resourcesPath()));
+    json["background"] = QDir::toNativeSeparators(editorManager->getBackgroundImagePath()).remove(QDir::toNativeSeparators(GameFramework::imagesPath()));
     json["sprites"] = convertSpritesToJsonObject(editorManager->getEditorSprites());
     return json;
 }
@@ -105,7 +105,7 @@ QJsonArray SaveFileManager::convertSpritesToJsonObject(const QList<EditorSprite 
         spriteJson["y"] = sprite->y();
         spriteJson["width"] = sprite->width();
         spriteJson["height"] = sprite->height();
-        spriteJson["texturePath"] = QDir::toNativeSeparators(sprite->getImgPath()).remove(QDir::toNativeSeparators(GameFramework::resourcesPath()));
+        spriteJson["texturePath"] = QDir::toNativeSeparators(sprite->getImgPath()).remove(QDir::toNativeSeparators(GameFramework::imagesPath()));
         spriteJson["rotation"] = sprite->rotation();
         json.append(spriteJson);
     }
