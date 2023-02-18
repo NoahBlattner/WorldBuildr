@@ -18,14 +18,16 @@
     <widget class="EditorActionPanel" name="editorActionPanel"/>
    </item>
    <item>
-    <widget class="GameView" name="grvGame"/>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="GameView" name="grvGame"/>
+     </item>
+     <item>
+      <widget class="SpriteDetailsPanel" name="detailsPanel"/>
+     </item>
+    </layout>
    </item>
-   <!--
-    <item>
-     <widget class="TodoDetailsPanel" name="DetailsHud"/>
-    </item>
-   -->
-   </layout>
+  </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

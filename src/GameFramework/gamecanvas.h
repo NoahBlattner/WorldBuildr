@@ -13,6 +13,7 @@
 #include <QTimer>
 #include <QElapsedTimer>
 #include <QPointF>
+#include "ui_mainfrm.h"
 
 class GameCore;
 class GameScene;
@@ -56,7 +57,7 @@ class GameCanvas : public QObject
 public:
     enum { KEEP_PREVIOUS_TICK_INTERVAL = -1  };
 
-    explicit GameCanvas(GameView* pView, EditorActionPanel* editHud, QObject* pParent = nullptr);
+    explicit GameCanvas(Ui::MainFrm* ui, QObject* pParent = nullptr);
     ~GameCanvas() override;
 
     EditorActionPanel* getEditorHud();
@@ -99,6 +100,8 @@ private:
 
     GameView* m_pView;
     EditorActionPanel* m_pEditHud;
+    SpriteDetailsPanel* m_pDetailsPanel;
+
     GameCore* m_pGameCore;
     QPointer<QGraphicsTextItem> m_pDetailedInfosItem; // Smart Pointer pour qu'il soit mis à zéro au cas où l'item est effacé par GameScene::clear()
 

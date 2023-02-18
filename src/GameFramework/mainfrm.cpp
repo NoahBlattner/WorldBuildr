@@ -14,7 +14,7 @@
 MainFrm::MainFrm(QWidget *pParent) : QWidget(pParent), ui(new Ui::MainFrm) {
     ui->setupUi(this);
 
-    m_pGameCanvas = new GameCanvas(ui->grvGame, ui->editorActionPanel);
+    m_pGameCanvas = new GameCanvas(ui);
 
     // Pour fermer l'application si demandé par GameCanvas.
     connect(m_pGameCanvas, &GameCanvas::requestToCloseApp, this, &QWidget::close);
