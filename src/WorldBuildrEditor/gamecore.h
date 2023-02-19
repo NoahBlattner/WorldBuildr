@@ -53,7 +53,7 @@ private:
     GameScene* m_pScene = nullptr;
 
     EditorManager* m_pEditorManager = nullptr;
-    EditorActionPanel* m_pEditorHud = nullptr;
+    EditorActionPanel* m_pActionPanel = nullptr;
 
 };
 

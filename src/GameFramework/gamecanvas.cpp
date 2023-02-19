@@ -31,6 +31,7 @@ const int STAT_TRIGGER_INTERVAL = 1000;
 GameCanvas::GameCanvas(Ui::MainFrm* ui, QObject* pParent) : QObject(pParent) {
     m_pView = ui->grvGame;
     m_pEditHud = ui->editorActionPanel;
+    m_pDetailsPanel = ui->detailsPanel;
     m_pGameCore = nullptr;
     m_pDetailedInfosItem = nullptr;
 
@@ -352,6 +353,10 @@ void GameCanvas::resetStatistics() {
 
 EditorActionPanel* GameCanvas::getEditorHud() {
     return m_pEditHud;
+}
+
+SpriteDetailsPanel* GameCanvas::getDetailsPanel() {
+    return m_pDetailsPanel;
 }
 
 #endif

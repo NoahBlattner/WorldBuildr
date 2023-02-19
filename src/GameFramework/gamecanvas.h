@@ -61,6 +61,7 @@ public:
     ~GameCanvas() override;
 
     EditorActionPanel* getEditorHud();
+    SpriteDetailsPanel* getDetailsPanel();
 
     GameScene* createScene();
     GameScene* createScene(const QRectF& rSceneRect);

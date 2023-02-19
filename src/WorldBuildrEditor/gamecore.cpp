@@ -32,7 +32,7 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     
     // Mémorise l'accès au canvas (qui gère le tick et l'affichage d'une scène)
     m_pGameCanvas = pGameCanvas;
-    m_pEditorHud = pGameCanvas->getEditorHud();
+    m_pActionPanel = pGameCanvas->getEditorHud();
     
     // Créé la scène de base et indique au canvas qu'il faut l'afficher.
     m_pScene = pGameCanvas->createScene(0, 0, SCENE_WIDTH, SCENE_WIDTH / GameFramework::screenRatio());
@@ -51,7 +51,7 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     m_pEditorManager->createNewEditorSprite(GameFramework::imagesPath() + "demo/plane_cartoon.png", QPointF(400, 400));
 
     // Initialise le UI
-    m_pEditorHud->bindEditorManager(m_pEditorManager);
+    m_pActionPanel->bindEditorManager(m_pEditorManager);
 
     // Réinitialise l'historique
     m_pEditorManager->resetHistory();
@@ -59,7 +59,7 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,
     // sinon le temps passé jusqu'au premier tick (ElapsedTime) peut être élevé et provoquer de gros
-    // déplacements, surtout si le déboggueur est démarré.
+    // déplacements, surtout si le débogueur est démarré.
     m_pGameCanvas->startTick();
 }
 

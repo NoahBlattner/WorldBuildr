@@ -7,10 +7,44 @@
 
 
 #include <QWidget>
+#include <QGroupBox>
 
+class QVBoxLayout;
+class QHBoxLayout;
+class QSpinBox;
+class EditorSprite;
+
+//! Classe de panneau de détails d'un sprite.
 class SpriteDetailsPanel : public QWidget {
 public:
     explicit SpriteDetailsPanel(QWidget* pParent = nullptr);
+
+    void bindSprite(EditorSprite* sprite);
+    void unbindSprite();
+
+private:
+    EditorSprite *m_pSprite = nullptr;
+
+    QHBoxLayout* mainLayout = nullptr;
+
+    QGroupBox* positionGroup = new QGroupBox("Position");
+    QGroupBox* sizeGroup = new QGroupBox("Taille");
+
+    QVBoxLayout* positionLayout = nullptr;
+    QVBoxLayout* sizeLayout = nullptr;
+
+    QSpinBox* xPositionEdit;
+    QSpinBox* yPositionEdit;
+
+    QSpinBox* widthEdit;
+    QSpinBox* heightEdit;
+
+    QSpinBox* rotationEdit;
+
+    void initLayout();
+    void initInputs();
+
+    void updatePanel();
 };
 
 
