@@ -37,6 +37,9 @@ public:
 
     EditorSprite* clone() const;
 
+    void setPos(const QPointF &pos);
+    void setPos(qreal x, qreal y);
+
 private:
     QString m_imagePath = "";
 
@@ -44,6 +47,8 @@ private:
 
 signals:
     void editorSpriteLeftClicked(EditorSprite* pSprite);
+
+    void editorSpriteModified();
 };
 
 

@@ -143,6 +143,10 @@ private slots:
     void onMouseButtonReleased(QPointF mousePosition, Qt::MouseButtons buttons);
 
     void updateMultiSelect(QPointF &newMousePosition);
+
+signals:
+    void editorSpriteSelected(EditorSprite* pEditSprite);
+    void editorSpriteUnselected();
 };
 
 

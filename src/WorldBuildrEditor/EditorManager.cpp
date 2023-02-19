@@ -393,6 +393,7 @@ void EditorManager::duplicateSelectedEditorSprites() {
 void EditorManager::selectEditorSprite(EditorSprite *pEditSprite) {
     // Ajoute le sprite cliqué à la liste des sprites sélectionnés
     if (!m_pSelectedEditorSprites.contains(pEditSprite)) {
+        emit editorSpriteSelected(pEditSprite);
         m_pSelectedEditorSprites.append(pEditSprite);
 
         // Indique au sprite qu'il est sélectionné
@@ -498,6 +499,8 @@ void EditorManager::updateMultiSelect(QPointF &newMousePosition) {// On met à j
 
 //! Supprime un sprite d'éditeur.
 void EditorManager::deleteEditorSprite(EditorSprite* pEditSprite) {
+    emit editorSpriteUnselected();
+
     m_pEditorSprites.removeOne(pEditSprite);
     m_pSelectedEditorSprites.removeOne(pEditSprite);
     m_pScene->removeSpriteFromScene(pEditSprite);

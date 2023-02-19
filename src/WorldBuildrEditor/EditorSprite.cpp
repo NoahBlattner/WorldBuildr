@@ -51,3 +51,14 @@ EditorSprite *EditorSprite::clone() const {
     clone->setScale(scale());
     return clone;
 }
+
+//! Override de la méthode setPos() pour envoyer un signal lorsqu'elle est appelée.
+void EditorSprite::setPos(const QPointF &pos) {
+    QGraphicsItem::setPos(pos);
+    emit editorSpriteModified();
+}
+
+//! Override de la méthode setPos() pour envoyer un signal lorsqu'elle est appelée.
+void EditorSprite::setPos(qreal x, qreal y) {
+    setPos(QPointF(x, y));
+}

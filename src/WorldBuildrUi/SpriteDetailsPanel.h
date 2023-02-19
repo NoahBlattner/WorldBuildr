@@ -16,11 +16,17 @@ class EditorSprite;
 
 //! Classe de panneau de détails d'un sprite.
 class SpriteDetailsPanel : public QWidget {
+
+    Q_OBJECT
+
+public slots:
+    void onBindSprite(EditorSprite* sprite);
+    void onUnbindSprite();
+
+    void onSpriteModified();
+
 public:
     explicit SpriteDetailsPanel(QWidget* pParent = nullptr);
-
-    void bindSprite(EditorSprite* sprite);
-    void unbindSprite();
 
 private:
     EditorSprite* m_pSprite = nullptr;

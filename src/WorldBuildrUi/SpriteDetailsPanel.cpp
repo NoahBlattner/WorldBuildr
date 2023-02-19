@@ -21,20 +21,27 @@ SpriteDetailsPanel::SpriteDetailsPanel(QWidget *pParent) : QWidget(pParent) {
 }
 
 //! Lie un sprite au panneau de détails.
-void SpriteDetailsPanel::bindSprite(EditorSprite *sprite) {
+void SpriteDetailsPanel::onBindSprite(EditorSprite *sprite) {
     if (sprite == nullptr) { // Si le sprite est nul, on délie le sprite actuel
-        unbindSprite();
+        onUnbindSprite();
         return;
     }
     m_pSprite = sprite;
+    connect(m_pSprite, &EditorSprite::editorSpriteModified, this, &SpriteDetailsPanel::onSpriteModified);
 
     // Mettre à jour le panneau
     updatePanel();
 }
 
 //! Délie le sprite du panneau de détails.
-void SpriteDetailsPanel::unbindSprite() {
+void SpriteDetailsPanel::onUnbindSprite() {
+    disconnect(m_pSprite, &EditorSprite::editorSpriteModified, this, &SpriteDetailsPanel::onSpriteModified);
     m_pSprite = nullptr;
+    updatePanel();
+}
+
+//! Appelé lorsque le sprite est modifié.
+void SpriteDetailsPanel::onSpriteModified() {
     updatePanel();
 }
 
