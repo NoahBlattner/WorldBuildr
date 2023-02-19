@@ -60,7 +60,7 @@ public:
     explicit GameCanvas(Ui::MainFrm* ui, QObject* pParent = nullptr);
     ~GameCanvas() override;
 
-    EditorActionPanel* getEditorHud();
+    EditorActionPanel* getActionPanel();
     SpriteDetailsPanel* getDetailsPanel();
 
     GameScene* createScene();

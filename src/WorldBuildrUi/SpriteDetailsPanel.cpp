@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QSpinBox>
+#include "EditorSprite.h"
 #include "SpriteDetailsPanel.h"
 
 SpriteDetailsPanel::SpriteDetailsPanel(QWidget *pParent) : QWidget(pParent) {
@@ -42,6 +43,17 @@ void SpriteDetailsPanel::updatePanel() {
     if (m_pSprite == nullptr) { // Si le sprite est nul, on ne fait rien
         return;
     }
+
+    // Mettre à jour les champs de position
+    xPositionEdit->setValue(m_pSprite->x());
+    yPositionEdit->setValue(m_pSprite->y());
+
+    // Mettre à jour les champs de taille
+    widthEdit->setValue(m_pSprite->width());
+    heightEdit->setValue(m_pSprite->height());
+
+    // Mettre à jour le champ de rotation
+    rotationEdit->setValue(m_pSprite->rotation());
 }
 
 //! Initialise le layout du panneau.

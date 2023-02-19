@@ -351,10 +351,12 @@ void GameCanvas::resetStatistics() {
     m_statsTrigger = STAT_TRIGGER_INTERVAL;
 }
 
-EditorActionPanel* GameCanvas::getEditorHud() {
+//! Retourne le panneau d'édition.
+EditorActionPanel* GameCanvas::getActionPanel() {
     return m_pEditHud;
 }
 
+//! Retourne le panneau de détails.
 SpriteDetailsPanel* GameCanvas::getDetailsPanel() {
     return m_pDetailsPanel;
 }

@@ -23,7 +23,7 @@ public:
     void unbindSprite();
 
 private:
-    EditorSprite *m_pSprite = nullptr;
+    EditorSprite* m_pSprite = nullptr;
 
     QHBoxLayout* mainLayout = nullptr;
 
