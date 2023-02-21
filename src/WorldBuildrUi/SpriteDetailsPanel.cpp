@@ -18,6 +18,9 @@ SpriteDetailsPanel::SpriteDetailsPanel(QWidget *pParent) : QWidget(pParent) {
 
     // Initialisation du layout
     initLayout();
+
+    // Initialisation des signaux
+    connectSignals();
 }
 
 //! Lie un sprite au panneau de détails.
@@ -121,4 +124,69 @@ void SpriteDetailsPanel::initInputs() {
     rotationEdit->setRange(0, 360);
     rotationEdit->setSingleStep(10);
     rotationEdit->setSuffix("°");
+}
+
+//! Connecte les signaux aux slots.
+void SpriteDetailsPanel::connectSignals() {
+    // Connecter les signaux de modification des champs de position
+    connect(xPositionEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::xPositionFieldChanged);
+    connect(yPositionEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::yPositionFieldChanged);
+
+    // Connecter les signaux de modification des champs de taille
+    connect(widthEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::widthFieldChanged);
+    connect(heightEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::heightFieldChanged);
+
+    // Connecter le signal de modification du champ de rotation
+    connect(rotationEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::rotationFieldChanged);
+}
+
+/*******************************
+ * Slots
+ *******************************/
+
+//! Appelé lorsque la largeur du sprite est modifiée.
+//! \param value La nouvelle valeur de la largeur.
+void SpriteDetailsPanel::xPositionFieldChanged(int value) {
+    if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
+        return;
+
+    m_pSprite->setX(value);
+}
+
+//! Appelé lorsque la hauteur du sprite est modifiée.
+//! \param value La nouvelle valeur de la hauteur.
+void SpriteDetailsPanel::yPositionFieldChanged(int value) {
+    if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
+        return;
+
+    m_pSprite->setY(value);
+}
+
+//! Appelé lorsque la rotation du sprite est modifiée.
+//! \param value La nouvelle valeur de largeur.
+void SpriteDetailsPanel::widthFieldChanged(int value) {
+    if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
+        return;
+
+    // TODO
+    // m_pSprite->setWidth(value);
+}
+
+//! Appelé lorsque la rotation du sprite est modifiée.
+//! \param value La nouvelle valeur de rotation.
+void SpriteDetailsPanel::heightFieldChanged(int value) {
+    if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
+        return;
+
+    // TODO
+    // m_pSprite->setHeight(value);
+}
+
+//! Appelé lorsque la rotation du sprite est modifiée.
+//! \param value La nouvelle valeur de rotation.
+void SpriteDetailsPanel::rotationFieldChanged(int value) {
+    if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
+        return;
+
+    m_pSprite->setRotation(value);
 }

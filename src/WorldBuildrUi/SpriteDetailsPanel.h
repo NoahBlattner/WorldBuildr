@@ -25,6 +25,14 @@ public slots:
 
     void onSpriteModified();
 
+    void xPositionFieldChanged(int value);
+    void yPositionFieldChanged(int value);
+
+    void widthFieldChanged(int value);
+    void heightFieldChanged(int value);
+
+    void rotationFieldChanged(int value);
+
 public:
     explicit SpriteDetailsPanel(QWidget* pParent = nullptr);
 
@@ -49,6 +57,7 @@ private:
 
     void initLayout();
     void initInputs();
+    void connectSignals();
 
     void updatePanel();
 };
