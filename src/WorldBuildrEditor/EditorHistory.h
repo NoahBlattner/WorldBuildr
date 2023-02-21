@@ -61,6 +61,8 @@ public:
         RemoveBackground
     };
 
+    static Action inverseAction(Action action);
+
     void addAction(Action action, QString additionalData);
     void addSpriteAction(Action action, QList<EditorSprite*> sprites);
     void addSpriteAction(Action action, EditorSprite* sprite);
@@ -96,8 +98,7 @@ private:
 
     void deleteUnreferencedSpritesInState(int i);
 
-    void performAction(State &state);
-    void performInverseAction(State &state);
+    void performAction(State &state, bool inverse = false);
 };
 
 

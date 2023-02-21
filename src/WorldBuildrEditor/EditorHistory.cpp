@@ -150,7 +150,7 @@ void EditorHistory::undo() {
         State state = m_states[m_currentStateIndex];
 
         // On effectue l'action inverse
-        performInverseAction(state);
+        performAction(state, true);
 
         // On décrémente l'index de l'état courant
         m_currentStateIndex--;
@@ -168,22 +168,27 @@ void EditorHistory::redo() {
     }
 }
 
-//! Effectue l'action inverse de l'état passé en paramètre
-//! \param state L'état dont on veut effectuer l'action inverse
-void EditorHistory::performInverseAction(EditorHistory::State &state) {
+//! Effectue l'action de l'état passé en paramètre
+//! \param state L'état dont on veut effectuer l'action
+void EditorHistory::performAction(EditorHistory::State &state, bool inverse) {
     // On met en pause l'historique
     pauseHistory(MAX_PAUSE_LEVEL);
 
+    if (inverse) { // Si on veut effectuer l'action inverse
+        // On inverse l'action
+        state.action = inverseAction(state.action);
+    }
+
     switch (state.action) {
         case AddSprite:
-        case DuplicateSprite:
+        case DuplicateSprite: // On fait la même chose pour les deux actions
             for (EditorSprite* sprite : state.sprites) {
-                m_pEditorManager->deleteEditorSprite(sprite);
+                m_pEditorManager->addEditorSprite(sprite);
             }
             break;
         case RemoveSprite:
             for (EditorSprite* sprite : state.sprites) {
-                m_pEditorManager->addEditorSprite(sprite);
+                m_pEditorManager->deleteEditorSprite(sprite);
             }
             break;
         case MoveSprite:
@@ -191,36 +196,38 @@ void EditorHistory::performInverseAction(EditorHistory::State &state) {
                 // On récupère le vecteur de déplacement depuis les données additionnelles
                 QList<QString> data = state.additionalData.split(";");
                 QPointF moveVector(data[0].toDouble(), data[1].toDouble());
-                m_pEditorManager->moveEditorSprite(sprite, -moveVector);
+                // Si on veut effectuer l'action inverse, on inverse le vecteur de déplacement
+                m_pEditorManager->moveEditorSprite(sprite, (inverse) ? -moveVector : moveVector);
             }
             break;
         case RotateSprite:
             for (EditorSprite* sprite : state.sprites) {
                 // On récupère l'angle de rotation depuis les données additionnelles
                 qreal angle = state.additionalData.toDouble();
-                m_pEditorManager->setEditorSpriteRotation(sprite, sprite->rotation()-angle);
+                // Si on veut effectuer l'action inverse, on inverse l'angle de rotation
+                m_pEditorManager->setEditorSpriteRotation(sprite, sprite->rotation()+(inverse ? -angle : angle));
             }
             break;
         case AddBackground:
-            m_pEditorManager->removeBackGroundImage();
-            break;
-        case RemoveBackground:
             m_pEditorManager->setBackGroundImage(state.additionalData);
             break;
+        case RemoveBackground:
+            m_pEditorManager->removeBackGroundImage();
+            break;
         case SelectAll:
-            m_pEditorManager->unselectAllEditorSprites();
+            m_pEditorManager->selectAllEditorSprites();
             break;
         case DeselectAll:
-            m_pEditorManager->selectAllEditorSprites();
+            m_pEditorManager->unselectAllEditorSprites();
             break;
         case SelectSprite:
             for (EditorSprite* sprite : state.sprites) {
-                m_pEditorManager->unselectEditorSprite(sprite);
+                m_pEditorManager->selectEditorSprite(sprite);
             }
             break;
         case DeselectSprite:
             for (EditorSprite* sprite : state.sprites) {
-                m_pEditorManager->selectEditorSprite(sprite);
+                m_pEditorManager->unselectEditorSprite(sprite);
             }
             break;
     }
@@ -229,62 +236,32 @@ void EditorHistory::performInverseAction(EditorHistory::State &state) {
     requestResumeHistory(MAX_PAUSE_LEVEL);
 }
 
-//! Effectue l'action de l'état passé en paramètre
-//! \param state L'état dont on veut effectuer l'action
-void EditorHistory::performAction(EditorHistory::State &state) {
-    // On met en pause l'historique
-    pauseHistory(MAX_PAUSE_LEVEL);
-
-    switch (state.action) {
+//! Retourne l'action inverse de l'action passée en paramètre
+//! Dans certains cas, l'action inverse est la même que l'action (move, rotate)
+//! \param action L'action dont on veut l'action inverse
+EditorHistory::Action EditorHistory::inverseAction(EditorHistory::Action action) {
+    switch (action) {
         case AddSprite:
-        case DuplicateSprite:
-            for (EditorSprite* sprite : state.sprites) {
-                m_pEditorManager->addEditorSprite(sprite);
-            }
-            break;
+            return RemoveSprite;
         case RemoveSprite:
-            for (EditorSprite* sprite : state.sprites) {
-                m_pEditorManager->deleteEditorSprite(sprite);
-            }
-            break;
+            return AddSprite;
         case MoveSprite:
-            for (EditorSprite* sprite : state.sprites) {
-                QList<QString> data = state.additionalData.split(";");
-                QPointF moveVector(data[0].toDouble(), data[1].toDouble());
-                m_pEditorManager->moveEditorSprite(sprite, moveVector);
-            }
-            break;
+            return MoveSprite;
         case RotateSprite:
-            for (EditorSprite* sprite : state.sprites) {
-                // On récupère l'angle de rotation depuis les données additionnelles
-                qreal angle = state.additionalData.toDouble();
-                m_pEditorManager->setEditorSpriteRotation(sprite, sprite->rotation()+angle);
-            }
-            break;
+            return RotateSprite;
         case AddBackground:
-            m_pEditorManager->setBackGroundImage(state.additionalData);
-            break;
+            return RemoveBackground;
         case RemoveBackground:
-            m_pEditorManager->removeBackGroundImage();
-            break;
+            return AddBackground;
         case SelectAll:
-            m_pEditorManager->selectAllEditorSprites();
-            break;
+            return DeselectAll;
         case DeselectAll:
-            m_pEditorManager->unselectAllEditorSprites();
-            break;
+            return SelectAll;
         case SelectSprite:
-            for (EditorSprite* sprite : state.sprites) {
-                m_pEditorManager->selectEditorSprite(sprite);
-            }
-            break;
+            return DeselectSprite;
         case DeselectSprite:
-            for (EditorSprite* sprite : state.sprites) {
-                m_pEditorManager->unselectEditorSprite(sprite);
-            }
-            break;
+            return SelectSprite;
+        case DuplicateSprite:
+            return RemoveSprite;
     }
-
-    // On réactive l'historique
-    requestResumeHistory(MAX_PAUSE_LEVEL);
 }
