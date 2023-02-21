@@ -14,6 +14,7 @@ class QVBoxLayout;
 class QHBoxLayout;
 class QSpinBox;
 class QComboBox;
+class EditorManager;
 class EditorSprite;
 
 //! Classe de panneau de détails d'un sprite.
@@ -42,10 +43,13 @@ public slots:
 public:
     explicit SpriteDetailsPanel(QWidget* pParent = nullptr);
 
+    void bindEditorManager(EditorManager* pEditorManager);
+
 private:
     const QStringList PIXEL_STEPS = {"1 px", "5 px", "10 px", "25 px", "50 px", "100 px"};
     const QStringList ROTATION_STEPS = {"1°", "5°", "10°", "15°", "30°", "45°", "90°"};
 
+    EditorManager* m_pEditorManager = nullptr;
     EditorSprite* m_pSprite = nullptr;
 
     QHBoxLayout* mainLayout = nullptr;

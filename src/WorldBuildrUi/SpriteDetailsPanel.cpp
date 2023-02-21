@@ -8,6 +8,7 @@
 #include <QComboBox>
 #include <QLabel>
 #include "EditorSprite.h"
+#include "EditorManager.h"
 #include "SpriteDetailsPanel.h"
 
 SpriteDetailsPanel::SpriteDetailsPanel(QWidget *pParent) : QWidget(pParent) {
@@ -23,6 +24,11 @@ SpriteDetailsPanel::SpriteDetailsPanel(QWidget *pParent) : QWidget(pParent) {
 
     // Initialisation des signaux
     connectSignals();
+}
+
+//! Lie le gestionnaire d'éditeur au panneau de détails.
+void SpriteDetailsPanel::bindEditorManager(EditorManager *pEditorManager) {
+    m_pEditorManager = pEditorManager;
 }
 
 //! Lie un sprite au panneau de détails.
@@ -227,7 +233,7 @@ void SpriteDetailsPanel::onXPosFieldEdited(int value) {
     if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
         return;
 
-    m_pSprite->setX(value);
+    m_pEditorManager->moveEditorSprite(m_pSprite,QPointF(value, 0));
 }
 
 //! Appelé lorsque la hauteur du sprite est modifiée.
@@ -236,7 +242,7 @@ void SpriteDetailsPanel::onYPosFieldEdited(int value) {
     if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
         return;
 
-    m_pSprite->setY(value);
+    m_pEditorManager->moveEditorSprite(m_pSprite,QPointF(0, value));
 }
 
 //! Appelé lorsque la rotation du sprite est modifiée.
@@ -274,5 +280,6 @@ void SpriteDetailsPanel::onRotationFieldEdited(int value) {
         rotationEdit->setValue(value);
     }
 
-    m_pSprite->setRotation(value % 360);
+    // TODO
+    // m_pEditorManager->rotateEditorSprite(m_pSprite, value);
 }

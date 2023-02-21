@@ -54,8 +54,9 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     // Réinitialise l'historique pour supprimer les actions de création de sprites
     m_pEditorManager->resetHistory();
 
-    // Lie le gestionnaire d'éditeur au panneau d'actions
+    // Lie le gestionnaire d'éditeur au panneaux
     m_pActionPanel->bindEditorManager(m_pEditorManager);
+    m_pSpriteDetailsPanel->bindEditorManager(m_pEditorManager);
 
     // Connecte les signaux du gestionnaire d'éditeur aux slots du panneau de détails
     connect(m_pEditorManager, &EditorManager::editorSpriteSelected, m_pSpriteDetailsPanel,
