@@ -40,6 +40,7 @@ public:
     void setX(qreal x);
     void setY(qreal y);
     void moveBy(qreal dx, qreal dy);
+    void setRotation(qreal angle);
 
 private:
     QString m_imagePath = "";

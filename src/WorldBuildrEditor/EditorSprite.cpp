@@ -74,3 +74,11 @@ void EditorSprite::moveBy(qreal dx, qreal dy) {
 
     emit editorSpriteModified();
 }
+
+//! \brief Change l'angle de rotation du sprite et émet un signal de modification.
+//! \param angle    Angle de rotation.
+void EditorSprite::setRotation(qreal angle) {
+    QGraphicsItem::setRotation(angle);
+
+    emit editorSpriteModified();
+}
