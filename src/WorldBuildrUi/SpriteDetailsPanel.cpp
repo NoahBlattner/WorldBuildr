@@ -5,6 +5,8 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QSpinBox>
+#include <QComboBox>
+#include <QLabel>
 #include "EditorSprite.h"
 #include "SpriteDetailsPanel.h"
 
@@ -75,21 +77,63 @@ void SpriteDetailsPanel::updatePanel() {
 //! Initialise le layout du panneau.
 void SpriteDetailsPanel::initLayout() {
     // Création des layouts
+    optionsLayout = new QHBoxLayout();
+    optionsLayout->setAlignment(Qt::AlignCenter);
     positionLayout = new QVBoxLayout();
+    positionLayout->setAlignment(Qt::AlignCenter);
     sizeLayout = new QVBoxLayout();
+    sizeLayout->setAlignment(Qt::AlignCenter);
 
-    // Ajout des champs de texte
-    positionLayout->addWidget(xPositionEdit);
-    positionLayout->addWidget(yPositionEdit);
+    // Ajout des champs de texte et leur label
+    // Options
+    auto* option1VBox = new QVBoxLayout();
+    option1VBox->setAlignment(Qt::AlignCenter);
+    option1VBox->addWidget(new QLabel("Position"));
+    option1VBox->addWidget(posStepEdit);
+    optionsLayout->addLayout(option1VBox);
+    auto* option2VBox = new QVBoxLayout();
+    option2VBox->addWidget(new QLabel("Taille"));
+    option2VBox->addWidget(sizeStepEdit);
+    optionsLayout->addLayout(option2VBox);
+    auto* option3VBox = new QVBoxLayout();
+    option3VBox->addWidget(new QLabel("Rotation"));
+    option3VBox->addWidget(rotationStepEdit);
+    optionsLayout->addLayout(option3VBox);
 
-    sizeLayout->addWidget(widthEdit);
-    sizeLayout->addWidget(heightEdit);
+    // Position
+    auto* xPosHBox = new QHBoxLayout();
+    xPosHBox->setAlignment(Qt::AlignCenter);
+    xPosHBox->addWidget(new QLabel("X"));
+    xPosHBox->addWidget(xPositionEdit);
+    positionLayout->addLayout(xPosHBox);
+    auto* yPosHBox = new QHBoxLayout();
+    yPosHBox->setAlignment(Qt::AlignCenter);
+    yPosHBox->addWidget(new QLabel("Y"));
+    yPosHBox->addWidget(yPositionEdit);
+    positionLayout->addLayout(yPosHBox);
+
+    // Taille
+    auto* widthHBox = new QHBoxLayout();
+    widthHBox->setAlignment(Qt::AlignCenter);
+    widthHBox->addWidget(new QLabel("Largeur"));
+    widthHBox->addWidget(widthEdit);
+    sizeLayout->addLayout(widthHBox);
+    auto* heightHBox = new QHBoxLayout();
+    heightHBox->setAlignment(Qt::AlignCenter);
+    heightHBox->addWidget(new QLabel("Hauteur"));
+    heightHBox->addWidget(heightEdit);
+    sizeLayout->addLayout(heightHBox);
 
     // Ajout des layouts dans les groupes
+    auto* optionsGroup = new QGroupBox("Options d'intervalles");
+    optionsGroup->setLayout(optionsLayout);
+    auto* positionGroup = new QGroupBox("Position");
     positionGroup->setLayout(positionLayout);
+    auto* sizeGroup = new QGroupBox("Taille");
     sizeGroup->setLayout(sizeLayout);
 
     // Ajout des groupes dans le layout principal
+    mainLayout->addWidget(optionsGroup);
     mainLayout->addWidget(positionGroup);
     mainLayout->addWidget(sizeGroup);
     mainLayout->addWidget(rotationEdit);
@@ -98,6 +142,14 @@ void SpriteDetailsPanel::initLayout() {
 //! Initialise les champs du panneau.
 void SpriteDetailsPanel::initInputs() {
     // Création des champs de texte
+
+    // Création et setup des champs d'options
+    posStepEdit = new QComboBox();
+    posStepEdit->addItems(PIXEL_STEPS);
+    sizeStepEdit = new QComboBox();
+    sizeStepEdit->addItems(PIXEL_STEPS);
+    rotationStepEdit = new QComboBox();
+    rotationStepEdit->addItems(ROTATION_STEPS);
 
     // Creation et setup des champs de position
     xPositionEdit = new QSpinBox();
@@ -121,32 +173,57 @@ void SpriteDetailsPanel::initInputs() {
 
     // Creation et setup du champ de rotation
     rotationEdit = new QSpinBox();
-    rotationEdit->setRange(0, 360);
+    rotationEdit->setRange(-1000, 1000);
     rotationEdit->setSingleStep(10);
     rotationEdit->setSuffix("°");
 }
 
 //! Connecte les signaux aux slots.
 void SpriteDetailsPanel::connectSignals() {
+    // Connecter les signaux de modification des champs d'options
+    connect(posStepEdit, &QComboBox::currentIndexChanged, this, &SpriteDetailsPanel::onPosStepChanged);
+    connect(sizeStepEdit,&QComboBox::currentIndexChanged, this, &SpriteDetailsPanel::onSizeStepChanged);
+    connect(rotationStepEdit, &QComboBox::currentIndexChanged   , this, &SpriteDetailsPanel::onRotationStepChanged);
+
     // Connecter les signaux de modification des champs de position
-    connect(xPositionEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::xPositionFieldChanged);
-    connect(yPositionEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::yPositionFieldChanged);
+    connect(xPositionEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onXPosFieldEdited);
+    connect(yPositionEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onYPosFieldEdited);
 
     // Connecter les signaux de modification des champs de taille
-    connect(widthEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::widthFieldChanged);
-    connect(heightEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::heightFieldChanged);
+    connect(widthEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onWidthFieldEdited);
+    connect(heightEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onHeightFieldEdited);
 
     // Connecter le signal de modification du champ de rotation
-    connect(rotationEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::rotationFieldChanged);
+    connect(rotationEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onRotationFieldEdited);
 }
 
 /*******************************
  * Slots
  *******************************/
 
+//! Appelé lorsque la valeur d'intervalle de position est modifiée.
+void SpriteDetailsPanel::onPosStepChanged(int newStepIndex) {
+    // Mettre à jour l'intervalle du champs de position
+    xPositionEdit->setSingleStep(PIXEL_STEPS[newStepIndex].toInt());
+    yPositionEdit->setSingleStep(PIXEL_STEPS[newStepIndex].toInt());
+}
+
+//! Appelé lorsque la valeur d'intervalle de taille est modifiée.
+void SpriteDetailsPanel::onSizeStepChanged(int newStepIndex) {
+    // Mettre à jour l'intervalle du champs de taille
+    widthEdit->setSingleStep(PIXEL_STEPS[newStepIndex].toInt());
+    heightEdit->setSingleStep(PIXEL_STEPS[newStepIndex].toInt());
+}
+
+//! Appelé lorsque la valeur d'intervalle de rotation est modifiée.
+void SpriteDetailsPanel::onRotationStepChanged(int newStepIndex) {
+    // Mettre à jour l'intervalle du champs de rotation
+    rotationEdit->setSingleStep(ROTATION_STEPS[newStepIndex].toInt());
+}
+
 //! Appelé lorsque la largeur du sprite est modifiée.
 //! \param value La nouvelle valeur de la largeur.
-void SpriteDetailsPanel::xPositionFieldChanged(int value) {
+void SpriteDetailsPanel::onXPosFieldEdited(int value) {
     if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
         return;
 
@@ -155,7 +232,7 @@ void SpriteDetailsPanel::xPositionFieldChanged(int value) {
 
 //! Appelé lorsque la hauteur du sprite est modifiée.
 //! \param value La nouvelle valeur de la hauteur.
-void SpriteDetailsPanel::yPositionFieldChanged(int value) {
+void SpriteDetailsPanel::onYPosFieldEdited(int value) {
     if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
         return;
 
@@ -164,7 +241,7 @@ void SpriteDetailsPanel::yPositionFieldChanged(int value) {
 
 //! Appelé lorsque la rotation du sprite est modifiée.
 //! \param value La nouvelle valeur de largeur.
-void SpriteDetailsPanel::widthFieldChanged(int value) {
+void SpriteDetailsPanel::onWidthFieldEdited(int value) {
     if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
         return;
 
@@ -174,7 +251,7 @@ void SpriteDetailsPanel::widthFieldChanged(int value) {
 
 //! Appelé lorsque la rotation du sprite est modifiée.
 //! \param value La nouvelle valeur de rotation.
-void SpriteDetailsPanel::heightFieldChanged(int value) {
+void SpriteDetailsPanel::onHeightFieldEdited(int value) {
     if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
         return;
 
@@ -184,9 +261,18 @@ void SpriteDetailsPanel::heightFieldChanged(int value) {
 
 //! Appelé lorsque la rotation du sprite est modifiée.
 //! \param value La nouvelle valeur de rotation.
-void SpriteDetailsPanel::rotationFieldChanged(int value) {
+void SpriteDetailsPanel::onRotationFieldEdited(int value) {
     if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
         return;
 
-    m_pSprite->setRotation(value);
+    // On transforme la valeur pour qu'elle soit comprise entre 0 et 360
+    if (value < 0) {
+        value = 360 + value;
+        rotationEdit->setValue(value);
+    } else if (value >= 360) {
+        value = value - 360;
+        rotationEdit->setValue(value);
+    }
+
+    m_pSprite->setRotation(value % 360);
 }

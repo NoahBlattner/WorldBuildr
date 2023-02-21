@@ -8,10 +8,12 @@
 
 #include <QWidget>
 #include <QGroupBox>
+#include <QStringList>
 
 class QVBoxLayout;
 class QHBoxLayout;
 class QSpinBox;
+class QComboBox;
 class EditorSprite;
 
 //! Classe de panneau de détails d'un sprite.
@@ -25,27 +27,36 @@ public slots:
 
     void onSpriteModified();
 
-    void xPositionFieldChanged(int value);
-    void yPositionFieldChanged(int value);
+    void onPosStepChanged(int newStepIndex);
+    void onSizeStepChanged(int newStepIndex);
+    void onRotationStepChanged(int newStepIndex);
 
-    void widthFieldChanged(int value);
-    void heightFieldChanged(int value);
+    void onXPosFieldEdited(int value);
+    void onYPosFieldEdited(int value);
 
-    void rotationFieldChanged(int value);
+    void onWidthFieldEdited(int value);
+    void onHeightFieldEdited(int value);
+
+    void onRotationFieldEdited(int value);
 
 public:
     explicit SpriteDetailsPanel(QWidget* pParent = nullptr);
 
 private:
+    const QStringList PIXEL_STEPS = {"1 px", "5 px", "10 px", "25 px", "50 px", "100 px"};
+    const QStringList ROTATION_STEPS = {"1°", "5°", "10°", "15°", "30°", "45°", "90°"};
+
     EditorSprite* m_pSprite = nullptr;
 
     QHBoxLayout* mainLayout = nullptr;
 
-    QGroupBox* positionGroup = new QGroupBox("Position");
-    QGroupBox* sizeGroup = new QGroupBox("Taille");
+    QHBoxLayout* optionsLayout;
+    QVBoxLayout* positionLayout;
+    QVBoxLayout* sizeLayout;
 
-    QVBoxLayout* positionLayout = nullptr;
-    QVBoxLayout* sizeLayout = nullptr;
+    QComboBox* posStepEdit;
+    QComboBox* sizeStepEdit;
+    QComboBox* rotationStepEdit;
 
     QSpinBox* xPositionEdit;
     QSpinBox* yPositionEdit;
