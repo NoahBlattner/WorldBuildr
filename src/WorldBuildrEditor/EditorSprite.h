@@ -37,8 +37,9 @@ public:
 
     EditorSprite* clone() const;
 
-    void setPos(const QPointF &pos);
-    void setPos(qreal x, qreal y);
+    void setX(qreal x);
+    void setY(qreal y);
+    void moveBy(qreal dx, qreal dy);
 
 private:
     QString m_imagePath = "";

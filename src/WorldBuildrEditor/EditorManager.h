@@ -146,7 +146,7 @@ private slots:
 
 signals:
     void editorSpriteSelected(EditorSprite* pEditSprite);
-    void editorSpriteUnselected();
+    void editorSpriteUnselected(EditorSprite* pEditSprite);
 };
 
 

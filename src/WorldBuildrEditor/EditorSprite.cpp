@@ -52,13 +52,25 @@ EditorSprite *EditorSprite::clone() const {
     return clone;
 }
 
-//! Override de la méthode setPos() pour envoyer un signal lorsqu'elle est appelée.
-void EditorSprite::setPos(const QPointF &pos) {
-    QGraphicsItem::setPos(pos);
+//! \brief Change la position en x du sprite et émet un signal de modification.
+void EditorSprite::setX(qreal x) {
+    QGraphicsItem::setX(x);
+
     emit editorSpriteModified();
 }
 
-//! Override de la méthode setPos() pour envoyer un signal lorsqu'elle est appelée.
-void EditorSprite::setPos(qreal x, qreal y) {
-    setPos(QPointF(x, y));
+//! \brief Change la position en y du sprite et émet un signal de modification.
+void EditorSprite::setY(qreal y) {
+    QGraphicsItem::setY(y);
+
+    emit editorSpriteModified();
+}
+
+//! \brief Déplace le sprite et émet un signal de modification.
+//! \param dx   Déplacement en x.
+//! \param dy   Déplacement en y.
+void EditorSprite::moveBy(qreal dx, qreal dy) {
+    Sprite::moveBy(dx, dy);
+
+    emit editorSpriteModified();
 }
