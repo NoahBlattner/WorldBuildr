@@ -577,6 +577,17 @@ void EditorManager::moveSelectedEditorSprites(QPointF moveVector) {
     m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, m_pSelectedEditorSprites, QString::number(moveVector.x()) + ";" + QString::number(moveVector.y()));
 }
 
+//! Tourne un sprite d'éditeur d'un angle donné.
+//! \param pEditSprite    Sprite d'éditeur à tourner.
+//! \param angle    Angle de rotation à appliquer.
+void EditorManager::setEditorSpriteRotation(EditorSprite *pEditSprite, qreal angle) {
+    pEditSprite->setRotation(angle);
+
+    // Historique
+    m_editorHistory->addSpriteAction(EditorHistory::Action::RotateSprite, pEditSprite, QString::number(angle));
+}
+
+
 /********************************************
  * Gestion de l'image de fond
  *******************************************/

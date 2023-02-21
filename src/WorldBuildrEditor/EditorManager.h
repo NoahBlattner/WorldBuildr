@@ -96,6 +96,7 @@ public:
     // Gestion de modification de sprites
     void moveEditorSprite(EditorSprite* pEditSprite, QPointF moveVector);
     void moveSelectedEditorSprites(QPointF moveVector);
+    void setEditorSpriteRotation(EditorSprite* pEditSprite, qreal angle);
 
     // Gestion de l'image de fond
     void setBackGroundImage(QString imageFileName = QString());

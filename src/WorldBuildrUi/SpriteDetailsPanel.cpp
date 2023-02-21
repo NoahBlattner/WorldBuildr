@@ -233,7 +233,7 @@ void SpriteDetailsPanel::onXPosFieldEdited(int value) {
     if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
         return;
 
-    m_pEditorManager->moveEditorSprite(m_pSprite,QPointF(value, 0));
+    m_pEditorManager->moveEditorSprite(m_pSprite,QPointF(value-m_pSprite->x(), 0));
 }
 
 //! Appelé lorsque la hauteur du sprite est modifiée.
@@ -242,7 +242,7 @@ void SpriteDetailsPanel::onYPosFieldEdited(int value) {
     if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
         return;
 
-    m_pEditorManager->moveEditorSprite(m_pSprite,QPointF(0, value));
+    m_pEditorManager->moveEditorSprite(m_pSprite,QPointF(0, value-m_pSprite->y()));
 }
 
 //! Appelé lorsque la rotation du sprite est modifiée.
@@ -280,6 +280,5 @@ void SpriteDetailsPanel::onRotationFieldEdited(int value) {
         rotationEdit->setValue(value);
     }
 
-    // TODO
-    // m_pEditorManager->rotateEditorSprite(m_pSprite, value);
+    m_pEditorManager->setEditorSpriteRotation(m_pSprite, value);
 }

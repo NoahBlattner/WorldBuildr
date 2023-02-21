@@ -194,6 +194,13 @@ void EditorHistory::performInverseAction(EditorHistory::State &state) {
                 m_pEditorManager->moveEditorSprite(sprite, -moveVector);
             }
             break;
+        case RotateSprite:
+            for (EditorSprite* sprite : state.sprites) {
+                // On récupère l'angle de rotation depuis les données additionnelles
+                qreal angle = state.additionalData.toDouble();
+                m_pEditorManager->setEditorSpriteRotation(sprite, sprite->rotation()-angle);
+            }
+            break;
         case AddBackground:
             m_pEditorManager->removeBackGroundImage();
             break;
@@ -245,6 +252,13 @@ void EditorHistory::performAction(EditorHistory::State &state) {
                 QList<QString> data = state.additionalData.split(";");
                 QPointF moveVector(data[0].toDouble(), data[1].toDouble());
                 m_pEditorManager->moveEditorSprite(sprite, moveVector);
+            }
+            break;
+        case RotateSprite:
+            for (EditorSprite* sprite : state.sprites) {
+                // On récupère l'angle de rotation depuis les données additionnelles
+                qreal angle = state.additionalData.toDouble();
+                m_pEditorManager->setEditorSpriteRotation(sprite, sprite->rotation()+angle);
             }
             break;
         case AddBackground:
