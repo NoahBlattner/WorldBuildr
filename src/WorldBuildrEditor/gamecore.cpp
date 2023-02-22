@@ -58,12 +58,6 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     m_pActionPanel->bindEditorManager(m_pEditorManager);
     m_pSpriteDetailsPanel->bindEditorManager(m_pEditorManager);
 
-    // Connecte les signaux du gestionnaire d'éditeur aux slots du panneau de détails
-    connect(m_pEditorManager, &EditorManager::editorSpriteSelected, m_pSpriteDetailsPanel,
-            &SpriteDetailsPanel::onBindSprite);
-    connect(m_pEditorManager, &EditorManager::editorSpriteUnselected, m_pSpriteDetailsPanel,
-            &SpriteDetailsPanel::onUnbindSprite);
-
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,
     // sinon le temps passé jusqu'au premier tick (ElapsedTime) peut être élevé et provoquer de gros

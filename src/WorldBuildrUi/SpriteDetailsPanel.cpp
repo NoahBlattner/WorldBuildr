@@ -24,19 +24,28 @@ SpriteDetailsPanel::SpriteDetailsPanel(QWidget *pParent) : QWidget(pParent) {
 
     // Initialisation des signaux
     connectSignals();
+
+    // Met à jour le panneau de détails
+    updatePanel();
 }
 
 //! Lie le gestionnaire d'éditeur au panneau de détails.
 void SpriteDetailsPanel::bindEditorManager(EditorManager *pEditorManager) {
     m_pEditorManager = pEditorManager;
+    // Connecte les signaux du gestionnaire d'éditeur aux slots du panneau de détails
+    connect(m_pEditorManager, &EditorManager::editorSpriteSelected, this,
+            &SpriteDetailsPanel::onBindSprite);
+    connect(m_pEditorManager, &EditorManager::editorSpriteUnselected, this,
+            &SpriteDetailsPanel::onUnbindSprite);
+
 }
 
 //! Lie un sprite au panneau de détails.
 void SpriteDetailsPanel::onBindSprite(EditorSprite *sprite) {
-    onUnbindSprite(); // On délie le sprite actuel
-
     if (sprite == nullptr) // Si le sprite est nul, on ne fait rien
         return;
+
+    onUnbindSprite();
 
     m_pSprite = sprite;
 
@@ -52,7 +61,11 @@ void SpriteDetailsPanel::onBindSprite(EditorSprite *sprite) {
 
 //! Délie le sprite du panneau de détails.
 void SpriteDetailsPanel::onUnbindSprite() {
-    disconnect(this); // Déconnecter tous les signaux
+    if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
+        return;
+
+    disconnect(m_pSprite, &EditorSprite::editorSpriteModified, this, &SpriteDetailsPanel::onSpriteModified);
+    disconnect(m_pSprite, &EditorSprite::spriteDestroyed, this, &SpriteDetailsPanel::onUnbindSprite);
     m_pSprite = nullptr;
     updatePanel();
 }
@@ -65,8 +78,11 @@ void SpriteDetailsPanel::onSpriteModified() {
 //! Met à jour les données du sprite dans le panneau.
 void SpriteDetailsPanel::updatePanel() {
     if (m_pSprite == nullptr) { // Si le sprite est nul, on ne fait rien
+        setEnabled(false);
         return;
     }
+
+    setEnabled(true);
 
     // Mettre à jour les champs de position
     xPositionEdit->setValue(m_pSprite->x());
