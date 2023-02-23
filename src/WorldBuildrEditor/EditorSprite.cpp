@@ -34,7 +34,13 @@ void EditorSprite::paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOp
 void EditorSprite::setEditSelected(bool selected) {
     m_isEditSelected = selected;
 
-    if (scene() != nullptr)
+    if (!selected) { // Si le sprite est désélectionné
+        // On envoie un signal
+        emit editorSpriteUnselected();
+    }
+
+    if (scene() != nullptr) // Si la sprite est dans une scène
+        // On met à jour la scène
         update();
 }
 

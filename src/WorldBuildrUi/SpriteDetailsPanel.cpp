@@ -35,9 +35,6 @@ void SpriteDetailsPanel::bindEditorManager(EditorManager *pEditorManager) {
     // Connecte les signaux du gestionnaire d'éditeur aux slots du panneau de détails
     connect(m_pEditorManager, &EditorManager::editorSpriteSelected, this,
             &SpriteDetailsPanel::onBindSprite);
-    connect(m_pEditorManager, &EditorManager::editorSpriteUnselected, this,
-            &SpriteDetailsPanel::onUnbindSprite);
-
 }
 
 //! Lie un sprite au panneau de détails.
@@ -45,18 +42,37 @@ void SpriteDetailsPanel::onBindSprite(EditorSprite *sprite) {
     if (sprite == nullptr) // Si le sprite est nul, on ne fait rien
         return;
 
-    onUnbindSprite();
+    // Déconnecter les signaux du sprite précédent
+    disconnectSpriteSignals();
 
+    // Mettre à jour le sprite
     m_pSprite = sprite;
 
-    // Connecter les signaux de modification du sprite
-    connect(m_pSprite, &EditorSprite::editorSpriteModified, this, &SpriteDetailsPanel::onSpriteModified);
-
-    // Connecter le signal de suppression du sprite
-    connect(m_pSprite, &EditorSprite::spriteDestroyed, this, &SpriteDetailsPanel::onUnbindSprite);
+    // Connecter les signaux du nouveau sprite
+    connectSpriteSignals();
 
     // Mettre à jour le panneau
     updatePanel();
+}
+
+//! Connecte les signaux du sprite au panneau de détails.
+void SpriteDetailsPanel::connectSpriteSignals() const {// Connecter les signaux de modification du sprite
+    connect(m_pSprite, &EditorSprite::editorSpriteModified, this, &SpriteDetailsPanel::onSpriteModified);
+
+    // Connecter le signal de désélection du sprite
+    connect(m_pSprite, &EditorSprite::editorSpriteUnselected, this, &SpriteDetailsPanel::onUnbindSprite);
+
+    // Connecter le signal de suppression du sprite
+    connect(m_pSprite, &EditorSprite::spriteDestroyed, this, &SpriteDetailsPanel::onUnbindSprite);
+}
+
+//! Déconnecte les signaux du sprite.
+void SpriteDetailsPanel::disconnectSpriteSignals() const {// Déconnecter les signaux du sprite
+    if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
+        return;
+    disconnect(m_pSprite, &EditorSprite::editorSpriteModified, this, &SpriteDetailsPanel::onSpriteModified);
+    disconnect(m_pSprite, &EditorSprite::editorSpriteUnselected, this, &SpriteDetailsPanel::onUnbindSprite);
+    disconnect(m_pSprite, &EditorSprite::spriteDestroyed, this, &SpriteDetailsPanel::onUnbindSprite);
 }
 
 //! Délie le sprite du panneau de détails.
@@ -64,9 +80,11 @@ void SpriteDetailsPanel::onUnbindSprite() {
     if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
         return;
 
-    disconnect(m_pSprite, &EditorSprite::editorSpriteModified, this, &SpriteDetailsPanel::onSpriteModified);
-    disconnect(m_pSprite, &EditorSprite::spriteDestroyed, this, &SpriteDetailsPanel::onUnbindSprite);
+    disconnectSpriteSignals();
+
     m_pSprite = nullptr;
+
+    // Mettre à jour le panneau
     updatePanel();
 }
 
@@ -84,6 +102,8 @@ void SpriteDetailsPanel::updatePanel() {
 
     setEnabled(true);
 
+    m_ignoreFieldEdited = true;
+
     // Mettre à jour les champs de position
     xPositionEdit->setValue(m_pSprite->x());
     yPositionEdit->setValue(m_pSprite->y());
@@ -94,6 +114,8 @@ void SpriteDetailsPanel::updatePanel() {
 
     // Mettre à jour le champ de rotation
     rotationEdit->setValue(m_pSprite->rotation());
+
+    m_ignoreFieldEdited = false;
 }
 
 //! Initialise le layout du panneau.
@@ -246,7 +268,7 @@ void SpriteDetailsPanel::onRotationStepChanged(int newStepIndex) {
 //! Appelé lorsque la largeur du sprite est modifiée.
 //! \param value La nouvelle valeur de la largeur.
 void SpriteDetailsPanel::onXPosFieldEdited(int value) {
-    if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
+    if (m_pSprite == nullptr || m_ignoreFieldEdited) // Si le sprite est nul, on ne fait rien
         return;
 
     m_pEditorManager->moveEditorSprite(m_pSprite,QPointF(value-m_pSprite->x(), 0));
@@ -255,7 +277,7 @@ void SpriteDetailsPanel::onXPosFieldEdited(int value) {
 //! Appelé lorsque la hauteur du sprite est modifiée.
 //! \param value La nouvelle valeur de la hauteur.
 void SpriteDetailsPanel::onYPosFieldEdited(int value) {
-    if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
+    if (m_pSprite == nullptr || m_ignoreFieldEdited) // Si le sprite est nul, on ne fait rien
         return;
 
     m_pEditorManager->moveEditorSprite(m_pSprite,QPointF(0, value-m_pSprite->y()));
@@ -264,7 +286,7 @@ void SpriteDetailsPanel::onYPosFieldEdited(int value) {
 //! Appelé lorsque la rotation du sprite est modifiée.
 //! \param value La nouvelle valeur de largeur.
 void SpriteDetailsPanel::onWidthFieldEdited(int value) {
-    if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
+    if (m_pSprite == nullptr || m_ignoreFieldEdited) // Si le sprite est nul, on ne fait rien
         return;
 
     // TODO
@@ -274,7 +296,7 @@ void SpriteDetailsPanel::onWidthFieldEdited(int value) {
 //! Appelé lorsque la rotation du sprite est modifiée.
 //! \param value La nouvelle valeur de rotation.
 void SpriteDetailsPanel::onHeightFieldEdited(int value) {
-    if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
+    if (m_pSprite == nullptr || m_ignoreFieldEdited) // Si le sprite est nul, on ne fait rien
         return;
 
     // TODO
@@ -284,7 +306,7 @@ void SpriteDetailsPanel::onHeightFieldEdited(int value) {
 //! Appelé lorsque la rotation du sprite est modifiée.
 //! \param value La nouvelle valeur de rotation.
 void SpriteDetailsPanel::onRotationFieldEdited(int value) {
-    if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
+    if (m_pSprite == nullptr || m_ignoreFieldEdited) // Si le sprite est nul, on ne fait rien
         return;
 
     // On transforme la valeur pour qu'elle soit comprise entre 0 et 360

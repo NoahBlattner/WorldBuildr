@@ -460,8 +460,6 @@ void EditorManager::selectMultipleEditorSprites(const QList<EditorSprite*> &pEdi
 
 //! Désélectionne un sprite d'éditeur.
 void EditorManager::unselectEditorSprite(EditorSprite* pEditSprite) {
-    emit editorSpriteUnselected(pEditSprite);
-
     // Enlève le sprite de la liste des sprites sélectionnés
     m_pSelectedEditorSprites.removeOne(pEditSprite);
 
@@ -502,8 +500,6 @@ void EditorManager::updateMultiSelect(QPointF &newMousePosition) {// On met à j
 
 //! Supprime un sprite d'éditeur.
 void EditorManager::deleteEditorSprite(EditorSprite* pEditSprite) {
-    emit editorSpriteUnselected(pEditSprite);
-
     m_pEditorSprites.removeOne(pEditSprite);
     m_pSelectedEditorSprites.removeOne(pEditSprite);
     m_pScene->removeSpriteFromScene(pEditSprite);

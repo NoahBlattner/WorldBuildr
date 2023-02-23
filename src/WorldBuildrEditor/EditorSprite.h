@@ -50,6 +50,8 @@ private:
 signals:
     void editorSpriteLeftClicked(EditorSprite* pSprite);
 
+    void editorSpriteUnselected();
+
     void editorSpriteModified();
 };
 

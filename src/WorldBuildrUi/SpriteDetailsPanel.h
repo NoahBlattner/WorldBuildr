@@ -70,11 +70,17 @@ private:
 
     QSpinBox* rotationEdit;
 
+    bool m_ignoreFieldEdited = false;
+
     void initLayout();
     void initInputs();
     void connectSignals();
 
     void updatePanel();
+
+    void disconnectSpriteSignals() const;
+
+    void connectSpriteSignals() const;
 };
 
 
