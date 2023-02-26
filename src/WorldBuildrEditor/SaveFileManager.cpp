@@ -72,8 +72,6 @@ void SaveFileManager::load(EditorManager *editorManager, QString saveFilePath) {
         return;
     }
 
-    editorManager->resetEditor(); // On vide l'éditeur
-
     // On lit le JSON depuis le fichier
     QJsonDocument json = QJsonDocument::fromJson(file.readAll());
 
@@ -82,14 +80,13 @@ void SaveFileManager::load(EditorManager *editorManager, QString saveFilePath) {
 
     // On charge le JSON dans l'éditeur
     loadJsonIntoEditor(editorManager, json.object());
-
 }
 
 //! Convertit l'éditeur en objet JSON
 //! \param editorManager L'éditeur à convertir
 QJsonObject SaveFileManager::convertEditorToJsonObject(EditorManager* editorManager) {
     QJsonObject json;
-    json["background"] = QDir::toNativeSeparators(editorManager->getBackgroundImagePath()).remove(QDir::toNativeSeparators(GameFramework::imagesPath()));
+    json["background"] = QDir::toNativeSeparators(editorManager->getBackgroundImagePath()).remove(QDir::toNativeSeparators(GameFramework::resourcesPath()));
     json["sprites"] = convertSpritesToJsonObject(editorManager->getEditorSprites());
     return json;
 }
@@ -103,9 +100,8 @@ QJsonArray SaveFileManager::convertSpritesToJsonObject(const QList<EditorSprite 
         QJsonObject spriteJson;
         spriteJson["x"] = sprite->x();
         spriteJson["y"] = sprite->y();
-        spriteJson["width"] = sprite->width();
-        spriteJson["height"] = sprite->height();
-        spriteJson["texturePath"] = QDir::toNativeSeparators(sprite->getImgPath()).remove(QDir::toNativeSeparators(GameFramework::imagesPath()));
+        spriteJson["scale"] = sprite->scale();
+        spriteJson["texturePath"] = QDir::toNativeSeparators(sprite->getImgPath()).remove(QDir::toNativeSeparators(GameFramework::resourcesPath()));
         spriteJson["rotation"] = sprite->rotation();
         json.append(spriteJson);
     }
@@ -116,29 +112,35 @@ QJsonArray SaveFileManager::convertSpritesToJsonObject(const QList<EditorSprite 
 //! \param editorManager L'éditeur dans lequel charger le fichier
 //! \param path Le chemin du fichier à charger
 void SaveFileManager::loadJsonIntoEditor(EditorManager *editorManager, QJsonObject jsonObject) {
+    editorManager->resetEditor(); // On vide l'éditeur
+
     // On charge le fond
-    QString backgroundPath = GameFramework::resourcesPath() + jsonObject["background"].toString();
+    QString backgroundPath = QDir::toNativeSeparators(jsonObject["background"].toString());
     if (!backgroundPath.isEmpty()) {
-        editorManager->setBackGroundImage(DEFAULT_SAVE_DIR + backgroundPath);
+        editorManager->setBackGroundImage( GameFramework::resourcesPath() + backgroundPath);
     }
 
     // On charge les sprites
-    QList<EditorSprite *> sprites = generateSpritesFromJson(jsonObject["sprites"].toArray());
-    for (EditorSprite *sprite : sprites) {
+    QList<EditorSprite*> sprites = generateSpritesFromJson(jsonObject["sprites"].toArray());
+    for (EditorSprite* sprite : sprites) {
         editorManager->addEditorSprite(sprite);
     }
+
+    // On vide l'historique
+    editorManager->resetHistory();
 }
 
 //! Convertit un tableau JSON en liste de sprites d'éditeur
 //! \param jsonArray Le tableau JSON à convertir
-QList<EditorSprite *> SaveFileManager::generateSpritesFromJson(const QJsonArray& jsonArray) {
+QList<EditorSprite*> SaveFileManager::generateSpritesFromJson(const QJsonArray& jsonArray) {
     QList<EditorSprite*> sprites;
     for (QJsonValue jsonValue : jsonArray) { // Pour chaque sprite
         QJsonObject spriteJson = jsonValue.toObject();
-        auto* sprite = new EditorSprite(GameFramework::resourcesPath() + jsonValue["texturePath"].toString());
-        sprite->setPos(spriteJson["x"].toDouble(), spriteJson["y"].toDouble());
+        auto* sprite = new EditorSprite(QDir::toNativeSeparators(GameFramework::resourcesPath() +jsonValue["texturePath"].toString()));
+        sprite->setX(spriteJson["x"].toDouble());
+        sprite->setY(spriteJson["y"].toDouble());
         sprite->setRotation(spriteJson["rotation"].toInt());
-        sprite->setTransform(QTransform::fromScale(spriteJson["width"].toDouble() / sprite->width(), spriteJson["height"].toDouble() / sprite->height()));
+        sprite->setScale(spriteJson["scale"].toDouble());
         sprites.append(sprite);
     }
     return sprites;
