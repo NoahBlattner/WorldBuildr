@@ -208,6 +208,15 @@ void EditorHistory::performAction(EditorHistory::State &state, bool inverse) {
                 m_pEditorManager->setEditorSpriteRotation(sprite, sprite->rotation()+(inverse ? -angle : angle));
             }
             break;
+        case RescaleSprite:
+            for (EditorSprite* sprite : state.sprites) {
+                // On récupère le facteur d'échelle depuis les données additionnelles
+                qreal scale = state.additionalData.toDouble();
+                // Si on veut effectuer l'action inverse, on inverse le facteur d'échelle
+                double newScale = state.additionalData.toDouble() * ((inverse) ? -1 : 1) + sprite->scale();
+                m_pEditorManager->rescaleEditorSprite(sprite, newScale);
+            }
+            break;
         case AddBackground:
             m_pEditorManager->setBackGroundImage(state.additionalData);
             break;
@@ -249,6 +258,8 @@ EditorHistory::Action EditorHistory::inverseAction(EditorHistory::Action action)
             return MoveSprite;
         case RotateSprite:
             return RotateSprite;
+        case RescaleSprite:
+            return RescaleSprite;
         case AddBackground:
             return RemoveBackground;
         case RemoveBackground:

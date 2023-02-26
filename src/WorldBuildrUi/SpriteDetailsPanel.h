@@ -13,6 +13,7 @@
 class QVBoxLayout;
 class QHBoxLayout;
 class QSpinBox;
+class QDoubleSpinBox;
 class QComboBox;
 class EditorManager;
 class EditorSprite;
@@ -29,14 +30,12 @@ public slots:
     void onSpriteModified();
 
     void onPosStepChanged(int newStepIndex);
-    void onSizeStepChanged(int newStepIndex);
     void onRotationStepChanged(int newStepIndex);
 
     void onXPosFieldEdited(int value);
     void onYPosFieldEdited(int value);
 
-    void onWidthFieldEdited(int value);
-    void onHeightFieldEdited(int value);
+    void onScaleFieldEdited(double newScale);
 
     void onRotationFieldEdited(int value);
 
@@ -56,17 +55,16 @@ private:
 
     QHBoxLayout* optionsLayout;
     QVBoxLayout* positionLayout;
-    QVBoxLayout* sizeLayout;
+    QVBoxLayout* scaleLayout;
+    QVBoxLayout* rotationLayout;
 
     QComboBox* posStepEdit;
-    QComboBox* sizeStepEdit;
     QComboBox* rotationStepEdit;
 
     QSpinBox* xPositionEdit;
     QSpinBox* yPositionEdit;
 
-    QSpinBox* widthEdit;
-    QSpinBox* heightEdit;
+    QDoubleSpinBox* scaleEdit;
 
     QSpinBox* rotationEdit;
 

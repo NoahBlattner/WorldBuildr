@@ -53,6 +53,7 @@ public:
         MoveSprite,
         RotateSprite,
         DuplicateSprite,
+        RescaleSprite,
         SelectAll,
         DeselectAll,
         SelectSprite,

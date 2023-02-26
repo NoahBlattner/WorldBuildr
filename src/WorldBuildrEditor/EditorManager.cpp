@@ -583,6 +583,19 @@ void EditorManager::setEditorSpriteRotation(EditorSprite *pEditSprite, qreal ang
     m_editorHistory->addSpriteAction(EditorHistory::Action::RotateSprite, pEditSprite, QString::number(angle));
 }
 
+//! Change la taille d'un sprite d'éditeur.
+//! \param pEditSprite    Sprite d'éditeur à redimensionner.
+//! \param xScale    Facteur d'agrandissement sur l'axe X.
+//! \param yScale    Facteur d'agrandissement sur l'axe Y.
+void EditorManager::rescaleEditorSprite(EditorSprite *pEditSprite, double scale) {
+    double scaleDiff = scale - pEditSprite->scale();
+
+    pEditSprite->setScale(scale);
+
+    // Historique
+    // Les données additionnelles est la différence du scale
+    m_editorHistory->addSpriteAction(EditorHistory::Action::RescaleSprite, pEditSprite, QString::number(scaleDiff));
+}
 
 /********************************************
  * Gestion de l'image de fond
