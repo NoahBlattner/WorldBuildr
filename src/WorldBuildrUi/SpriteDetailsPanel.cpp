@@ -28,6 +28,8 @@ SpriteDetailsPanel::SpriteDetailsPanel(QWidget *pParent) : QWidget(pParent) {
 
     // Met à jour le panneau de détails
     updatePanel();
+
+    // TODO Add Z-Index and opacity fields
 }
 
 //! Lie le gestionnaire d'éditeur au panneau de détails.

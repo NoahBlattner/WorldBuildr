@@ -18,7 +18,22 @@ class QComboBox;
 class EditorManager;
 class EditorSprite;
 
-//! Classe de panneau de détails d'un sprite.
+//! Classe qui affiche les détails éditable d'un sprite.
+//! Elle est automatiquement instanciée par MainFrm.
+//!
+//! Après la création, il faut lier un éditeur avec la méthode bindEditorManager().
+//!
+//! Pour que la classe puisse afficher les détails d'un sprite, il faut lier un sprite
+//! Un sprite peut être lié avec la méthode onBindSprite().
+//! Un sprite peut être délié avec la méthode onUnbindSprite().
+//! Si un sprite est lié, la classe affiche les détails du sprite.
+//! Si aucun sprite n'est lié, la classe désactive les champs d'édition.
+//!
+//! La classe est automatiquement liée à un sprite lorsqu'un sprite est sélectionné dans l'éditeur.
+//! La classe est automatiquement déliée à un sprite lorsque le sprite lié est déselectionné ou supprimé.
+//!
+//! Les champs de détails sont mis à jour automatiquement lorsque le sprite lié est modifié.
+//! Le sprite lié est modifié instantanément lorsque l'utilisateur modifie les champs d'édition.
 class SpriteDetailsPanel : public QWidget {
 
     Q_OBJECT

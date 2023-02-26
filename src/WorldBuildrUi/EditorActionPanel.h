@@ -15,8 +15,9 @@
 class EditorManager;
 class QPushButton;
 
-//! Classe représentant le panneau d'actions de l'éditeur.
+//! Classe affichant le panneau d'actions de l'éditeur.
 //! Elle permet d'interagir avec l'éditeur par une interface graphique.
+//! Elle est automatiquement instanciée par l'MainFrm.
 //!
 //! Après la création, il faut lier un éditeur avec la méthode bindEditorManager().
 class EditorActionPanel : public QWidget {
