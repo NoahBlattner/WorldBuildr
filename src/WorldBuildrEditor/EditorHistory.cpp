@@ -211,9 +211,9 @@ void EditorHistory::performAction(EditorHistory::State &state, bool inverse) {
         case RotateSprite:
             for (EditorSprite* sprite : state.sprites) {
                 // On récupère l'angle de rotation depuis les données additionnelles
-                qreal angle = state.additionalData.toDouble();
+                qreal newAngle = state.additionalData.toDouble() * (inverse ? -1 : 1) + sprite->rotation();
                 // Si on veut effectuer l'action inverse, on inverse l'angle de rotation
-                m_pEditorManager->setEditorSpriteRotation(sprite, sprite->rotation()+(inverse ? -angle : angle));
+                m_pEditorManager->setEditorSpriteRotation(sprite, newAngle);
             }
             break;
         case RescaleSprite:
@@ -223,6 +223,15 @@ void EditorHistory::performAction(EditorHistory::State &state, bool inverse) {
                 // Si on veut effectuer l'action inverse, on inverse le facteur d'échelle
                 double newScale = state.additionalData.toDouble() * ((inverse) ? -1 : 1) + sprite->scale();
                 m_pEditorManager->rescaleEditorSprite(sprite, newScale);
+            }
+            break;
+        case ChangeOpacity:
+            for (EditorSprite* sprite : state.sprites) {
+                // On récupère le nouveau niveau d'opacité depuis les données additionnelles
+                qreal newOpacity = state.additionalData.toDouble() * (inverse ? -1 : 1) + sprite->opacity();
+                qDebug() << "additional data : " << state.additionalData;
+                // Si on veut effectuer l'action inverse, on inverse le niveau d'opacité
+                 m_pEditorManager->setEditorSpriteOpacity(sprite, newOpacity);
             }
             break;
         case AddBackground:
@@ -270,6 +279,8 @@ EditorHistory::Action EditorHistory::inverseAction(EditorHistory::Action action)
             return RotateSprite;
         case RescaleSprite:
             return RescaleSprite;
+        case ChangeOpacity:
+            return ChangeOpacity;
         case AddBackground:
             return RemoveBackground;
         case RemoveBackground:

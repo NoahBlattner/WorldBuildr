@@ -99,6 +99,7 @@ public:
     void setEditorSpriteZIndex(EditorSprite* pEditSprite, int zIndex);
     void setEditorSpriteRotation(EditorSprite* pEditSprite, qreal angle);
     void rescaleEditorSprite(EditorSprite *pEditSprite, double scale);
+    void setEditorSpriteOpacity(EditorSprite *pEditSprite, double opacity);
 
     // Gestion de l'image de fond
     void setBackGroundImage(QString imageFileName = QString());

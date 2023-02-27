@@ -55,6 +55,8 @@ public slots:
 
     void onRotationFieldEdited(int value);
 
+    void onOpacityFieldEdited(int value);
+
 public:
     explicit SpriteDetailsPanel(QWidget* pParent = nullptr);
 
@@ -69,21 +71,18 @@ private:
 
     QHBoxLayout* mainLayout = nullptr;
 
-    QHBoxLayout* optionsLayout;
-    QVBoxLayout* positionLayout;
-    QVBoxLayout* scaleLayout;
-    QVBoxLayout* rotationLayout;
+    QComboBox* m_pPosStepEdit;
+    QComboBox* m_pRotationStepEdit;
 
-    QComboBox* posStepEdit;
-    QComboBox* rotationStepEdit;
+    QSpinBox* m_pXPositionEdit;
+    QSpinBox* m_pYPositionEdit;
+    QSpinBox* m_pZPositionEdit;
 
-    QSpinBox* xPositionEdit;
-    QSpinBox* yPositionEdit;
-    QSpinBox* zPositionEdit;
+    QDoubleSpinBox* m_pScaleEdit;
 
-    QDoubleSpinBox* scaleEdit;
+    QSpinBox* m_pRotationEdit;
 
-    QSpinBox* rotationEdit;
+    QSpinBox* m_pOpacityEdit;
 
     bool m_ignoreFieldEdited = false;
 

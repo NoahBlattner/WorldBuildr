@@ -109,15 +109,18 @@ void SpriteDetailsPanel::updatePanel() {
     m_ignoreFieldEdited = true; // Ignorer les signaux de modification des champs
 
     // Mettre à jour les champs de position
-    xPositionEdit->setValue(m_pSprite->x());
-    yPositionEdit->setValue(m_pSprite->y());
-    zPositionEdit->setValue(m_pSprite->zValue());
+    m_pXPositionEdit->setValue(m_pSprite->x());
+    m_pYPositionEdit->setValue(m_pSprite->y());
+    m_pZPositionEdit->setValue(m_pSprite->zValue());
 
     // Mettre à jour les champs de taille
-    scaleEdit->setValue(m_pSprite->scale());
+    m_pScaleEdit->setValue(m_pSprite->scale());
 
     // Mettre à jour le champ de rotation
-    rotationEdit->setValue(m_pSprite->rotation());
+    m_pRotationEdit->setValue(m_pSprite->rotation());
+
+    // Mettre à jour le champ d'opacité
+    m_pOpacityEdit->setValue(m_pSprite->opacity() * 100);
 
     m_ignoreFieldEdited = false; // Ne plus ignorer les signaux de modification des champs
 }
@@ -125,49 +128,54 @@ void SpriteDetailsPanel::updatePanel() {
 //! Initialise le layout du panneau.
 void SpriteDetailsPanel::initLayout() {
     // Création des layouts
-    optionsLayout = new QHBoxLayout();
+    auto* optionsLayout = new QHBoxLayout();
     optionsLayout->setAlignment(Qt::AlignCenter);
-    positionLayout = new QVBoxLayout();
+    auto* positionLayout = new QVBoxLayout();
     positionLayout->setAlignment(Qt::AlignCenter);
-    scaleLayout = new QVBoxLayout();
+    auto* scaleLayout = new QVBoxLayout();
     scaleLayout->setAlignment(Qt::AlignCenter);
-    rotationLayout = new QVBoxLayout();
+    auto* rotationLayout = new QVBoxLayout();
     rotationLayout->setAlignment(Qt::AlignCenter);
+    auto* opacityLayout = new QVBoxLayout();
+    opacityLayout->setAlignment(Qt::AlignCenter);
 
     // Ajout des champs de texte et leur label
     // Options
     auto* option1VBox = new QVBoxLayout();
     option1VBox->setAlignment(Qt::AlignCenter);
     option1VBox->addWidget(new QLabel("Position"));
-    option1VBox->addWidget(posStepEdit);
+    option1VBox->addWidget(m_pPosStepEdit);
     optionsLayout->addLayout(option1VBox);
     auto* option2VBox = new QVBoxLayout();
     option2VBox->addWidget(new QLabel("Rotation"));
-    option2VBox->addWidget(rotationStepEdit);
+    option2VBox->addWidget(m_pRotationStepEdit);
     optionsLayout->addLayout(option2VBox);
 
     // Position
     auto* xPosHBox = new QHBoxLayout();
     xPosHBox->setAlignment(Qt::AlignCenter);
     xPosHBox->addWidget(new QLabel("X"));
-    xPosHBox->addWidget(xPositionEdit);
+    xPosHBox->addWidget(m_pXPositionEdit);
     positionLayout->addLayout(xPosHBox);
     auto* yPosHBox = new QHBoxLayout();
     yPosHBox->setAlignment(Qt::AlignCenter);
     yPosHBox->addWidget(new QLabel("Y"));
-    yPosHBox->addWidget(yPositionEdit);
+    yPosHBox->addWidget(m_pYPositionEdit);
     positionLayout->addLayout(yPosHBox);
     auto* zPosHBox = new QHBoxLayout();
     zPosHBox->setAlignment(Qt::AlignCenter);
     zPosHBox->addWidget(new QLabel("Z"));
-    zPosHBox->addWidget(zPositionEdit);
+    zPosHBox->addWidget(m_pZPositionEdit);
     positionLayout->addLayout(zPosHBox);
 
     // Taille
-    scaleLayout->addWidget(scaleEdit);
+    scaleLayout->addWidget(m_pScaleEdit);
 
     // Rotation
-    rotationLayout->addWidget(rotationEdit);
+    rotationLayout->addWidget(m_pRotationEdit);
+
+    // Opacité
+    opacityLayout->addWidget(m_pOpacityEdit);
 
     // Ajout des layouts dans les groupes
     auto* optionsGroup = new QGroupBox("Options d'intervalles");
@@ -178,12 +186,15 @@ void SpriteDetailsPanel::initLayout() {
     scaleGroup->setLayout(scaleLayout);
     auto* rotationGroup = new QGroupBox("Rotation");
     rotationGroup->setLayout(rotationLayout);
+    auto* opacityGroup = new QGroupBox("Opacité");
+    opacityGroup->setLayout(opacityLayout);
 
     // Ajout des groupes dans le layout principal
     mainLayout->addWidget(optionsGroup);
     mainLayout->addWidget(positionGroup);
     mainLayout->addWidget(scaleGroup);
     mainLayout->addWidget(rotationGroup);
+    mainLayout->addWidget(opacityGroup);
 }
 
 //! Initialise les champs du panneau.
@@ -191,51 +202,60 @@ void SpriteDetailsPanel::initInputs() {
     // Création des champs de texte
 
     // Création et setup des champs d'options
-    posStepEdit = new QComboBox();
-    posStepEdit->addItems(PIXEL_STEPS);
-    rotationStepEdit = new QComboBox();
-    rotationStepEdit->addItems(ROTATION_STEPS);
+    m_pPosStepEdit = new QComboBox();
+    m_pPosStepEdit->addItems(PIXEL_STEPS);
+    m_pRotationStepEdit = new QComboBox();
+    m_pRotationStepEdit->addItems(ROTATION_STEPS);
 
     // Creation et setup des champs de position
-    xPositionEdit = new QSpinBox();
-    xPositionEdit->setRange(0, 10000);
-    xPositionEdit->setSingleStep(10);
-    xPositionEdit->setSuffix(" px");
-    yPositionEdit = new QSpinBox();
-    yPositionEdit->setRange(0, 10000);
-    yPositionEdit->setSingleStep(10);
-    yPositionEdit->setSuffix(" px");
-    zPositionEdit = new QSpinBox();
-    zPositionEdit->setRange(0, 10000);
-    zPositionEdit->setSingleStep(1);
+    m_pXPositionEdit = new QSpinBox();
+    m_pXPositionEdit->setRange(0, 10000);
+    m_pXPositionEdit->setSingleStep(10);
+    m_pXPositionEdit->setSuffix(" px");
+    m_pYPositionEdit = new QSpinBox();
+    m_pYPositionEdit->setRange(0, 10000);
+    m_pYPositionEdit->setSingleStep(10);
+    m_pYPositionEdit->setSuffix(" px");
+    m_pZPositionEdit = new QSpinBox();
+    m_pZPositionEdit->setRange(0, 10000);
+    m_pZPositionEdit->setSingleStep(1);
 
     // Creation et setup des champs de taille
-    scaleEdit = new QDoubleSpinBox();
-    scaleEdit->setRange(.05, 5);
+    m_pScaleEdit = new QDoubleSpinBox();
+    m_pScaleEdit->setRange(.05, 5);
 
     // Creation et setup du champ de rotation
-    rotationEdit = new QSpinBox();
-    rotationEdit->setRange(-1000, 1000);
-    rotationEdit->setSingleStep(10);
-    rotationEdit->setSuffix("°");
+    m_pRotationEdit = new QSpinBox();
+    m_pRotationEdit->setRange(-1000, 1000);
+    m_pRotationEdit->setSingleStep(10);
+    m_pRotationEdit->setSuffix("°");
+
+    // Création et setup du champ d'opacité
+    m_pOpacityEdit = new QSpinBox();
+    m_pOpacityEdit->setRange(0, 100);
+    m_pOpacityEdit->setSingleStep(10);
+    m_pOpacityEdit->setSuffix("%");
 }
 
 //! Connecte les signaux aux slots.
 void SpriteDetailsPanel::connectSignals() {
     // Connecter les signaux de modification des champs d'options
-    connect(posStepEdit, &QComboBox::currentIndexChanged, this, &SpriteDetailsPanel::onPosStepChanged);
-    connect(rotationStepEdit, &QComboBox::currentIndexChanged   , this, &SpriteDetailsPanel::onRotationStepChanged);
+    connect(m_pPosStepEdit, &QComboBox::currentIndexChanged, this, &SpriteDetailsPanel::onPosStepChanged);
+    connect(m_pRotationStepEdit, &QComboBox::currentIndexChanged   , this, &SpriteDetailsPanel::onRotationStepChanged);
 
     // Connecter les signaux de modification des champs de position
-    connect(xPositionEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onXPosFieldEdited);
-    connect(yPositionEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onYPosFieldEdited);
-    connect(zPositionEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onZPosFieldEdited);
+    connect(m_pXPositionEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onXPosFieldEdited);
+    connect(m_pYPositionEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onYPosFieldEdited);
+    connect(m_pZPositionEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onZPosFieldEdited);
 
     // Connecter les signaux de modification des champs de taille
-    connect(scaleEdit, &QDoubleSpinBox::valueChanged, this, &SpriteDetailsPanel::onScaleFieldEdited);
+    connect(m_pScaleEdit, &QDoubleSpinBox::valueChanged, this, &SpriteDetailsPanel::onScaleFieldEdited);
 
     // Connecter le signal de modification du champ de rotation
-    connect(rotationEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onRotationFieldEdited);
+    connect(m_pRotationEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onRotationFieldEdited);
+
+    // Connecter le signal de modification du champ d'opacité
+    connect(m_pOpacityEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onOpacityFieldEdited);
 }
 
 /*******************************
@@ -246,14 +266,14 @@ void SpriteDetailsPanel::connectSignals() {
 void SpriteDetailsPanel::onPosStepChanged(int newStepIndex) {
     // Mettre à jour l'intervalle du champs de position
     int newStep = PIXEL_STEPS[newStepIndex].split(" ")[0].toInt();
-    xPositionEdit->setSingleStep(newStep);
-    yPositionEdit->setSingleStep(newStep);
+    m_pXPositionEdit->setSingleStep(newStep);
+    m_pYPositionEdit->setSingleStep(newStep);
 }
 
 //! Appelé lorsque la valeur d'intervalle de rotation est modifiée.
 void SpriteDetailsPanel::onRotationStepChanged(int newStepIndex) {
     // Mettre à jour l'intervalle du champs de rotation
-    rotationEdit->setSingleStep(ROTATION_STEPS[newStepIndex].split("°")[0].toInt());
+    m_pRotationEdit->setSingleStep(ROTATION_STEPS[newStepIndex].split("°")[0].toInt());
 }
 
 //! Appelé lorsque la largeur du sprite est modifiée.
@@ -306,11 +326,21 @@ void SpriteDetailsPanel::onRotationFieldEdited(int value) {
     // On transforme la valeur pour qu'elle soit comprise entre 0 et 360
     if (value < 0) {
         value = 360 + value;
-        rotationEdit->setValue(value);
+        m_pRotationEdit->setValue(value);
     } else if (value >= 360) {
         value = value - 360;
-        rotationEdit->setValue(value);
+        m_pRotationEdit->setValue(value);
     }
 
     m_pEditorManager->setEditorSpriteRotation(m_pSprite, value);
+}
+
+//! Appelé lorsque l'opacité du sprite est modifiée.
+//! \param value La nouvelle valeur d'opacité.
+void SpriteDetailsPanel::onOpacityFieldEdited(int value) {
+    if (m_pSprite == nullptr || m_ignoreFieldEdited) // Si le sprite est nul ou qu'on ignore les changements
+        // On ne fait rien
+        return;
+
+    m_pEditorManager->setEditorSpriteOpacity(m_pSprite, value / 100.0);
 }

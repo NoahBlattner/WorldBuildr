@@ -53,6 +53,7 @@ public:
         MoveSprite,
         ChangeZIndex,
         RotateSprite,
+        ChangeOpacity,
         DuplicateSprite,
         RescaleSprite,
         SelectAll,

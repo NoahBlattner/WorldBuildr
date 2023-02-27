@@ -587,10 +587,10 @@ void EditorManager::setEditorSpriteRotation(EditorSprite *pEditSprite, qreal ang
 //! \param pEditSprite    Sprite d'éditeur à modifier.
 //! \param zIndex    Nouvel index de profondeur.
 void EditorManager::setEditorSpriteZIndex(EditorSprite* pEditSprite, int zIndex) {
-    pEditSprite->setZValue(zIndex);
-
     // Historique
     m_editorHistory->addSpriteAction(EditorHistory::Action::ChangeZIndex, pEditSprite, QString::number(zIndex - pEditSprite->zValue()));
+
+    pEditSprite->setZValue(zIndex);
 }
 
 //! Change la taille d'un sprite d'éditeur.
@@ -598,13 +598,20 @@ void EditorManager::setEditorSpriteZIndex(EditorSprite* pEditSprite, int zIndex)
 //! \param xScale    Facteur d'agrandissement sur l'axe X.
 //! \param yScale    Facteur d'agrandissement sur l'axe Y.
 void EditorManager::rescaleEditorSprite(EditorSprite *pEditSprite, double scale) {
-    double scaleDiff = scale - pEditSprite->scale();
-
-    pEditSprite->setScale(scale);
-
     // Historique
     // Les données additionnelles est la différence du scale
-    m_editorHistory->addSpriteAction(EditorHistory::Action::RescaleSprite, pEditSprite, QString::number(scaleDiff));
+    m_editorHistory->addSpriteAction(EditorHistory::Action::RescaleSprite, pEditSprite, QString::number(scale - pEditSprite->scale()));
+
+    pEditSprite->setScale(scale);
+}
+
+//! Change la transparence d'un sprite d'éditeur.
+//! \param pEditSprite    Sprite d'éditeur à modifier.
+void EditorManager::setEditorSpriteOpacity(EditorSprite* pEditSprite, double opacity) {
+    // Historique
+    m_editorHistory->addSpriteAction(EditorHistory::Action::ChangeOpacity, pEditSprite, QString::number(opacity - pEditSprite->opacity()));
+
+    pEditSprite->setOpacity(opacity);
 }
 
 /********************************************
