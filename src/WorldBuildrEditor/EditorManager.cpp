@@ -118,6 +118,25 @@ void EditorManager::createSelectionZone(QPointF startPositon) {
     m_pMultiSelectionZone = new SelectionZone(m_pScene, startPositon);
 }
 
+//! Cherche le z-index le plus élevé parmi tous les sprites d'éditeur.
+//! \return Le z-index le plus élevé.
+int EditorManager::getHighestZIndex() const {
+    if (m_pEditorSprites.isEmpty()) { // Si il n'y a pas de sprite
+        return 0;
+    }
+
+    // Cherche le sprite avec le z-index le plus élevé
+    int maxZIndex = 0;
+    for (EditorSprite* pEditSprite : m_pEditorSprites) {
+        if (pEditSprite->zValue() > maxZIndex) {
+            maxZIndex = pEditSprite->zValue();
+        }
+    }
+
+    // Retourne le z-index suivant
+    return maxZIndex;
+}
+
 /********************************************
  * Gestion des touche et boutons de la souris
  *******************************************/
@@ -308,6 +327,9 @@ void EditorManager::createNewEditorSprite(QString imageFileName, QPointF positio
 
     // On crée le sprite d'éditeur
     auto* pEditorSprite = new EditorSprite(imageFileName);
+
+    // On place le sprite au dessus de tous les autres sprites
+    pEditorSprite->setZValue(getHighestZIndex() + 1);
 
     // On ajoute le sprite à l'éditeur
     addEditorSprite(pEditorSprite, position);

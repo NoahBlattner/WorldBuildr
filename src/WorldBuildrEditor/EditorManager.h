@@ -136,6 +136,8 @@ private:
 
     QString loadImageToEditor();
 
+    int getHighestZIndex() const;
+
 private slots:
     void editorSpriteClicked(EditorSprite* pEditSprite);
 

@@ -229,7 +229,6 @@ void EditorHistory::performAction(EditorHistory::State &state, bool inverse) {
             for (EditorSprite* sprite : state.sprites) {
                 // On récupère le nouveau niveau d'opacité depuis les données additionnelles
                 qreal newOpacity = state.additionalData.toDouble() * (inverse ? -1 : 1) + sprite->opacity();
-                qDebug() << "additional data : " << state.additionalData;
                 // Si on veut effectuer l'action inverse, on inverse le niveau d'opacité
                  m_pEditorManager->setEditorSpriteOpacity(sprite, newOpacity);
             }
@@ -296,4 +295,7 @@ EditorHistory::Action EditorHistory::inverseAction(EditorHistory::Action action)
         case DuplicateSprite:
             return RemoveSprite;
     }
+
+    // On ne devrait jamais arriver ici
+    return AddSprite;
 }
