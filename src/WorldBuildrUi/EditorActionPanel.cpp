@@ -58,9 +58,13 @@ void EditorActionPanel::initLayout() {
 
     // Ajout des layouts dans les groupes de boutons
     groupeActionsCreation->setLayout(layoutActionsCreation);
+    groupeActionsCreation -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
     groupeActionsHistorique->setLayout(layoutActionsHistorique);
+    groupeActionsHistorique -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
     groupeActionsSelection->setLayout(layoutActionsSelection);
+    groupeActionsSelection -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
     groupeActionsFond->setLayout(layoutActionsFond);
+    groupeActionsFond -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
 
     // Ajout des groupes de boutons dans le layout principal
     mainLayout->addWidget(groupeActionsCreation);
