@@ -201,7 +201,7 @@ void SpriteDetailsPanel::initInputs() {
 
     // Creation et setup des champs de taille
     scaleEdit = new QDoubleSpinBox();
-    scaleEdit->setRange(1, 10);
+    scaleEdit->setRange(.05, 5);
 
     // Creation et setup du champ de rotation
     rotationEdit = new QSpinBox();
