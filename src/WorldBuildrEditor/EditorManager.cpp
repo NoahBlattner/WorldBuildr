@@ -583,6 +583,16 @@ void EditorManager::setEditorSpriteRotation(EditorSprite *pEditSprite, qreal ang
     m_editorHistory->addSpriteAction(EditorHistory::Action::RotateSprite, pEditSprite, QString::number(angle));
 }
 
+//! Change l'index de profondeur d'un sprite d'éditeur.
+//! \param pEditSprite    Sprite d'éditeur à modifier.
+//! \param zIndex    Nouvel index de profondeur.
+void EditorManager::setEditorSpriteZIndex(EditorSprite* pEditSprite, int zIndex) {
+    pEditSprite->setZValue(zIndex);
+
+    // Historique
+    m_editorHistory->addSpriteAction(EditorHistory::Action::ChangeZIndex, pEditSprite, QString::number(zIndex - pEditSprite->zValue()));
+}
+
 //! Change la taille d'un sprite d'éditeur.
 //! \param pEditSprite    Sprite d'éditeur à redimensionner.
 //! \param xScale    Facteur d'agrandissement sur l'axe X.

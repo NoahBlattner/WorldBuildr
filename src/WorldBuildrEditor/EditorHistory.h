@@ -51,6 +51,7 @@ public:
         AddSprite,
         RemoveSprite,
         MoveSprite,
+        ChangeZIndex,
         RotateSprite,
         DuplicateSprite,
         RescaleSprite,

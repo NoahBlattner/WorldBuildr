@@ -200,6 +200,14 @@ void EditorHistory::performAction(EditorHistory::State &state, bool inverse) {
                 m_pEditorManager->moveEditorSprite(sprite, (inverse) ? -moveVector : moveVector);
             }
             break;
+        case ChangeZIndex:
+            for (EditorSprite* sprite : state.sprites) {
+                // On récupère le nouveau z-index depuis les données additionnelles
+                int newZIndex = state.additionalData.toInt() * (inverse ? -1 : 1) + sprite->zValue();
+                // Si on veut effectuer l'action inverse, on inverse le z-index
+                m_pEditorManager->setEditorSpriteZIndex(sprite, newZIndex);
+            }
+            break;
         case RotateSprite:
             for (EditorSprite* sprite : state.sprites) {
                 // On récupère l'angle de rotation depuis les données additionnelles
@@ -256,6 +264,8 @@ EditorHistory::Action EditorHistory::inverseAction(EditorHistory::Action action)
             return AddSprite;
         case MoveSprite:
             return MoveSprite;
+        case ChangeZIndex:
+            return ChangeZIndex;
         case RotateSprite:
             return RotateSprite;
         case RescaleSprite:

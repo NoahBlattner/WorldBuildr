@@ -98,18 +98,20 @@ void SpriteDetailsPanel::onSpriteModified() {
 
 //! Met à jour les données du sprite dans le panneau.
 void SpriteDetailsPanel::updatePanel() {
-    if (m_pSprite == nullptr) { // Si le sprite est nul, on ne fait rien
+    if (m_pSprite == nullptr) { // Si le sprite est nul
+        // Désactiver le panneau
         setEnabled(false);
         return;
     }
 
-    setEnabled(true);
+    setEnabled(true); // Activer le panneau
 
-    m_ignoreFieldEdited = true;
+    m_ignoreFieldEdited = true; // Ignorer les signaux de modification des champs
 
     // Mettre à jour les champs de position
     xPositionEdit->setValue(m_pSprite->x());
     yPositionEdit->setValue(m_pSprite->y());
+    zPositionEdit->setValue(m_pSprite->zValue());
 
     // Mettre à jour les champs de taille
     scaleEdit->setValue(m_pSprite->scale());
@@ -117,7 +119,7 @@ void SpriteDetailsPanel::updatePanel() {
     // Mettre à jour le champ de rotation
     rotationEdit->setValue(m_pSprite->rotation());
 
-    m_ignoreFieldEdited = false;
+    m_ignoreFieldEdited = false; // Ne plus ignorer les signaux de modification des champs
 }
 
 //! Initialise le layout du panneau.
@@ -155,6 +157,11 @@ void SpriteDetailsPanel::initLayout() {
     yPosHBox->addWidget(new QLabel("Y"));
     yPosHBox->addWidget(yPositionEdit);
     positionLayout->addLayout(yPosHBox);
+    auto* zPosHBox = new QHBoxLayout();
+    zPosHBox->setAlignment(Qt::AlignCenter);
+    zPosHBox->addWidget(new QLabel("Z"));
+    zPosHBox->addWidget(zPositionEdit);
+    positionLayout->addLayout(zPosHBox);
 
     // Taille
     scaleLayout->addWidget(scaleEdit);
@@ -198,6 +205,9 @@ void SpriteDetailsPanel::initInputs() {
     yPositionEdit->setRange(0, 10000);
     yPositionEdit->setSingleStep(10);
     yPositionEdit->setSuffix(" px");
+    zPositionEdit = new QSpinBox();
+    zPositionEdit->setRange(0, 10000);
+    zPositionEdit->setSingleStep(1);
 
     // Creation et setup des champs de taille
     scaleEdit = new QDoubleSpinBox();
@@ -219,6 +229,7 @@ void SpriteDetailsPanel::connectSignals() {
     // Connecter les signaux de modification des champs de position
     connect(xPositionEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onXPosFieldEdited);
     connect(yPositionEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onYPosFieldEdited);
+    connect(zPositionEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onZPosFieldEdited);
 
     // Connecter les signaux de modification des champs de taille
     connect(scaleEdit, &QDoubleSpinBox::valueChanged, this, &SpriteDetailsPanel::onScaleFieldEdited);
@@ -248,7 +259,8 @@ void SpriteDetailsPanel::onRotationStepChanged(int newStepIndex) {
 //! Appelé lorsque la largeur du sprite est modifiée.
 //! \param value La nouvelle valeur de la largeur.
 void SpriteDetailsPanel::onXPosFieldEdited(int value) {
-    if (m_pSprite == nullptr || m_ignoreFieldEdited) // Si le sprite est nul, on ne fait rien
+    if (m_pSprite == nullptr || m_ignoreFieldEdited) // Si le sprite est nul ou qu'on ignore les changements
+        // On ne fait rien
         return;
 
     m_pEditorManager->moveEditorSprite(m_pSprite,QPointF(value-m_pSprite->x(), 0));
@@ -257,16 +269,28 @@ void SpriteDetailsPanel::onXPosFieldEdited(int value) {
 //! Appelé lorsque la hauteur du sprite est modifiée.
 //! \param value La nouvelle valeur de la hauteur.
 void SpriteDetailsPanel::onYPosFieldEdited(int value) {
-    if (m_pSprite == nullptr || m_ignoreFieldEdited) // Si le sprite est nul, on ne fait rien
+    if (m_pSprite == nullptr || m_ignoreFieldEdited) // Si le sprite est nul ou qu'on ignore les changements
+        // On ne fait rien
         return;
 
     m_pEditorManager->moveEditorSprite(m_pSprite,QPointF(0, value-m_pSprite->y()));
 }
 
+//! Appelé lorsque la profondeur du sprite est modifiée.
+//! \param value La nouvelle valeur de la profondeur.
+void SpriteDetailsPanel::onZPosFieldEdited(int value) {
+    if (m_pSprite == nullptr || m_ignoreFieldEdited) // Si le sprite est nul ou qu'on ignore les changements
+        // On ne fait rien
+        return;
+
+    m_pEditorManager->setEditorSpriteZIndex(m_pSprite, value);
+}
+
 //! Appelé lorsque la taille du sprite est modifiée.
 //! \param newScale La nouvelle valeur de la taille.
 void SpriteDetailsPanel::onScaleFieldEdited(double newScale) {
-    if (m_pSprite == nullptr || m_ignoreFieldEdited) // Si le sprite est nul, on ne fait rien
+    if (m_pSprite == nullptr || m_ignoreFieldEdited) // Si le sprite est nul ou qu'on ignore les changements
+        // On ne fait rien
         return;
 
     m_pEditorManager->rescaleEditorSprite(m_pSprite, newScale);
@@ -275,7 +299,8 @@ void SpriteDetailsPanel::onScaleFieldEdited(double newScale) {
 //! Appelé lorsque la rotation du sprite est modifiée.
 //! \param value La nouvelle valeur de rotation.
 void SpriteDetailsPanel::onRotationFieldEdited(int value) {
-    if (m_pSprite == nullptr || m_ignoreFieldEdited) // Si le sprite est nul, on ne fait rien
+    if (m_pSprite == nullptr || m_ignoreFieldEdited) // Si le sprite est nul ou qu'on ignore les changements
+        // On ne fait rien
         return;
 
     // On transforme la valeur pour qu'elle soit comprise entre 0 et 360

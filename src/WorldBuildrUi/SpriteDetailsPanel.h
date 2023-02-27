@@ -49,6 +49,7 @@ public slots:
 
     void onXPosFieldEdited(int value);
     void onYPosFieldEdited(int value);
+    void onZPosFieldEdited(int value);
 
     void onScaleFieldEdited(double newScale);
 
@@ -78,6 +79,7 @@ private:
 
     QSpinBox* xPositionEdit;
     QSpinBox* yPositionEdit;
+    QSpinBox* zPositionEdit;
 
     QDoubleSpinBox* scaleEdit;
 
