@@ -1,7 +1,7 @@
-# 2018-JCO-GameFramework
+# 2023 WorldBuildr
 
-Ce projet inclut un framework de base pour développer un jeu 2D à base de sprites ainsi que d'une démonstration des différentes fonctionnalités offertes par le framework.
+Ce projet inclut un simple éditeur de monde 2D basé sur le GameFramework de J. Conus
 
-## Authors
+# Authors
 
-* J. Conus
+* N. Blattner
