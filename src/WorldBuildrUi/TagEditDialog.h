@@ -34,7 +34,7 @@ private:
 
     QLineEdit* m_pCurrentTagEdit;
 
-    QPushButton* selectButton;
+    QPushButton* applyTagButton;
     QPushButton* clearTagButton;
 
     void initLayout();
