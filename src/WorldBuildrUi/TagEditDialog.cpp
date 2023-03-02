@@ -13,6 +13,7 @@
 #include "EditorManager.h"
 #include "EditorSprite.h"
 #include "TagsManager.h"
+#include "resources.h"
 
 #include "TagEditDialog.h"
 
@@ -40,19 +41,20 @@ void TagEditDialog::initLayout() {
     buttonLayout->setAlignment(Qt::AlignCenter);
 
     // Ajouter les boutons
-    buttonLayout->addWidget(addButton);
-    buttonLayout->addWidget(removeButton);
+    buttonLayout->addWidget(addTagButton);
+    buttonLayout->addWidget(removeTagButton);
 
     // Ajout des composants dans le layout de tag
     tagListLayout->addLayout(buttonLayout);
     tagListLayout->addWidget(tagList);
 
     auto* currentTagLayout = new QVBoxLayout();
-    currentTagLayout->setAlignment(Qt::AlignRight);
+    currentTagLayout->setAlignment(Qt::AlignCenter);
 
     currentTagLayout->addWidget(new QLabel("Current tag:"));
     currentTagLayout->addWidget(m_pCurrentTagEdit);
-    currentTagLayout->addWidget(selectButton);
+    currentTagLayout->addWidget(applyTagButton);
+    currentTagLayout->addWidget(clearTagButton);
 
     // Ajout du layout dans le layout principal
     mainLayout->addLayout(tagListLayout);
@@ -74,17 +76,34 @@ void TagEditDialog::initInputs() {
     m_pCurrentTagEdit->setReadOnly(true);
 
     // Création des boutons
-    addButton = new QPushButton("Add");
-    removeButton = new QPushButton("Remove");
-    selectButton = new QPushButton("Choose selected tag");
+    addTagButton = new QPushButton("Add");
+    removeTagButton = new QPushButton("Remove");
+    applyTagButton = new QPushButton("Choose selected tag");
+    clearTagButton = new QPushButton("Choose no tag");
+
+    // Style des boutons
+    QString buttonStyle = GameFramework::loadStyleSheetString("buttonStyle.qss");
+    addTagButton->setStyleSheet(buttonStyle);
+    removeTagButton->setStyleSheet(buttonStyle);
+    applyTagButton->setStyleSheet(buttonStyle);
+    clearTagButton->setStyleSheet(buttonStyle);
 
     // Connexion des signaux
-    connect(addButton, &QPushButton::clicked, this, &TagEditDialog::onAddButtonClicked);
-    connect(removeButton, &QPushButton::clicked, this, &TagEditDialog::onRemoveButtonClicked);
-    connect(selectButton, &QPushButton::clicked, this, &TagEditDialog::onSelectButtonClicked);
+    connect(tagList, &QListWidget::itemDoubleClicked, this, &TagEditDialog::onTagListItemDoubleClicked);
+
+    connect(addTagButton, &QPushButton::clicked, this, &TagEditDialog::onAddTagButtonClicked);
+    connect(removeTagButton, &QPushButton::clicked, this, &TagEditDialog::onDeleteTagButtonClicked);
+    connect(applyTagButton, &QPushButton::clicked, this, &TagEditDialog::onSelectButtonClicked);
 }
 
-// Met à jour la liste des tags
+//! Met à jour le tag du sprite. Met également à jour le QLineEdit
+//! \param tag Nouveau tag
+void TagEditDialog::setTagOnSprite(const QString &tag) {
+    m_pSprite->setTag(tag);
+    m_pCurrentTagEdit->setText(tag);
+}
+
+//! Met à jour la liste des tags
 void TagEditDialog::updateList() {
     tagList->clear();
 
@@ -102,8 +121,13 @@ void TagEditDialog::updateList() {
  * SLOTS
  *****************************************/
 
+//! Slot appelé lors du double clic sur un tag
+void TagEditDialog::onTagListItemDoubleClicked(QListWidgetItem *item) {
+    setTagOnSprite(item->text());
+}
+
 //! Slot appelé lors du clic sur le bouton d'ajout
-void TagEditDialog::onAddButtonClicked() {
+void TagEditDialog::onAddTagButtonClicked() {
     QString newTag = QInputDialog::getText(this, "New tag", "Enter the name of the new tag");
 
     if (newTag.isEmpty()) { // Si le tag est vide
@@ -123,7 +147,7 @@ void TagEditDialog::onAddButtonClicked() {
 }
 
 //! Slot appelé lors du clic sur le bouton de suppression
-void TagEditDialog::onRemoveButtonClicked() {
+void TagEditDialog::onDeleteTagButtonClicked() {
     QList<QListWidgetItem*> selectedItems = tagList->selectedItems();
 
     if (selectedItems.isEmpty()) { // Si aucun tag n'est sélectionné
@@ -136,7 +160,7 @@ void TagEditDialog::onRemoveButtonClicked() {
     updateList();
 }
 
-//! Slot appelé lors du clic sur le bouton d'ok
+//! Slot appelé lors du clic sur le bouton de sélection de tag
 void TagEditDialog::onSelectButtonClicked() {
     QList<QListWidgetItem*> selectedItems = tagList->selectedItems();
 
@@ -144,9 +168,13 @@ void TagEditDialog::onSelectButtonClicked() {
         return;
     }
 
-    // Ajout du tag
-    qDebug() << "Tag selected: " << selectedItems.first()->text();
-    // TODO
-    //m_pSprite->setTag(selectedItems.first()->text());
+    // Sélection du tag
+    setTagOnSprite(selectedItems.first()->text());
+}
+
+//! Slot appelé lors du clic sur le bouton de désélection de tag
+void TagEditDialog::onNoTagButtonClicked() {
+    // Suppression du tag du sprite
+    m_pSprite->removeTag();
 }
 

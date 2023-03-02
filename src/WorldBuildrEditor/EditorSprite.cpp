@@ -49,6 +49,17 @@ bool EditorSprite::getEditSelected() const {
     return m_isEditSelected;
 }
 
+//! \brief Ajoute un tag à la sprite. Si un tag existe déjà, il est remplacé.
+//! \param tag   Tag à ajouter.
+void EditorSprite::setTag(const QString &tag) {
+    setData(TAG_KEY, tag);
+}
+
+//! \brief Supprime le tag de la sprite.
+void EditorSprite::removeTag() {
+    setData(TAG_KEY, QVariant());
+}
+
 //! Crée un clone du sprite d'éditeur.
 EditorSprite *EditorSprite::clone() const {
     auto* clone = new EditorSprite(m_imagePath, m_isEditSelected);
@@ -57,6 +68,11 @@ EditorSprite *EditorSprite::clone() const {
     clone->setScale(scale());
     return clone;
 }
+
+/****************************
+ * Override QGraphicsItem to add signals
+ * Call the parent method and emit a signal for the corresponding value change
+ ***************************/
 
 //! \brief Change la position en x du sprite et émet un signal de modification.
 void EditorSprite::setX(qreal x) {

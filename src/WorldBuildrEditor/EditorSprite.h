@@ -33,6 +33,9 @@ public:
     void setEditSelected(bool selected);
     bool getEditSelected() const;
 
+    void setTag(const QString& tag);
+    void removeTag();
+
     QString getImgPath() const { return m_imagePath; }
 
     EditorSprite* clone() const;
@@ -43,6 +46,8 @@ public:
     void setRotation(qreal angle);
 
 private:
+    const int TAG_KEY = 0;
+
     QString m_imagePath = "";
 
     bool m_isEditSelected = false;

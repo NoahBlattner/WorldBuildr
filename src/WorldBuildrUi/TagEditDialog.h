@@ -11,6 +11,7 @@ class QListWidget;
 class EditorManager;
 class EditorSprite;
 class QLineEdit;
+class QListWidgetItem;
 
 #include <QDialog>
 
@@ -26,25 +27,31 @@ private:
 
     EditorSprite* m_pSprite;
 
-    QPushButton* addButton;
-    QPushButton* removeButton;
+    QPushButton* addTagButton;
+    QPushButton* removeTagButton;
 
     QListWidget* tagList;
 
     QLineEdit* m_pCurrentTagEdit;
 
     QPushButton* selectButton;
+    QPushButton* clearTagButton;
 
     void initLayout();
     void initInputs();
 
     void updateList();
 
-private slots:
-    void onAddButtonClicked();
-    void onRemoveButtonClicked();
-    void onSelectButtonClicked();
+    void setTagOnSprite(const QString& tag);
 
+private slots:
+    void onTagListItemDoubleClicked(QListWidgetItem* item);
+
+    void onAddTagButtonClicked();
+    void onDeleteTagButtonClicked();
+
+    void onSelectButtonClicked();
+    void onNoTagButtonClicked();
 };
 
 

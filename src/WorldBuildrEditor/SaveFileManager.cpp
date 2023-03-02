@@ -85,6 +85,8 @@ void SaveFileManager::load(EditorManager *editorManager, QString saveFilePath) {
 //! Convertit l'éditeur en objet JSON
 //! \param editorManager L'éditeur à convertir
 QJsonObject SaveFileManager::convertEditorToJsonObject(EditorManager* editorManager) {
+    // TODO : Sauvegarder les tags
+
     QJsonObject json;
     json["background"] = QDir::toNativeSeparators(editorManager->getBackgroundImagePath()).remove(QDir::toNativeSeparators(GameFramework::resourcesPath()));
     json["sprites"] = convertSpritesToJsonObject(editorManager->getEditorSprites());
@@ -113,6 +115,8 @@ QJsonArray SaveFileManager::convertSpritesToJsonObject(const QList<EditorSprite 
 //! \param path Le chemin du fichier à charger
 void SaveFileManager::loadJsonIntoEditor(EditorManager *editorManager, QJsonObject jsonObject) {
     editorManager->resetEditor(); // On vide l'éditeur
+
+    // TODO : Charger les tags
 
     // On charge le fond
     QString backgroundPath = QDir::toNativeSeparators(jsonObject["background"].toString());
