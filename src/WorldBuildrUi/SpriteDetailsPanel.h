@@ -15,6 +15,7 @@ class QHBoxLayout;
 class QSpinBox;
 class QDoubleSpinBox;
 class QComboBox;
+class QListWidget;
 class EditorManager;
 class EditorSprite;
 
@@ -57,6 +58,8 @@ public slots:
 
     void onOpacityFieldEdited(int value);
 
+    void onEditTagsButtonClicked();
+
 public:
     explicit SpriteDetailsPanel(QWidget* pParent = nullptr);
 
@@ -83,6 +86,8 @@ private:
     QSpinBox* m_pRotationEdit;
 
     QSpinBox* m_pOpacityEdit;
+
+    QPushButton* m_pSetTagButton;
 
     bool m_ignoreFieldEdited = false;
 

@@ -37,7 +37,7 @@ add_executable(WorldBuildr
         src/WorldBuildrUi/EditorActionPanel.cpp src/WorldBuildrUi/EditorActionPanel.h
         src/WorldBuildrEditor/EditorHistory.cpp src/WorldBuildrEditor/EditorHistory.h
         src/WorldBuildrEditor/SaveFileManager.cpp src/WorldBuildrEditor/SaveFileManager.h
-        src/WorldBuildrUi/SpriteDetailsPanel.cpp src/WorldBuildrUi/SpriteDetailsPanel.h)
+        src/WorldBuildrUi/SpriteDetailsPanel.cpp src/WorldBuildrUi/SpriteDetailsPanel.h src/WorldBuildrUi/TagEditDialog.cpp src/WorldBuildrUi/TagEditDialog.h src/WorldBuildrEditor/TagsManager.cpp src/WorldBuildrEditor/TagsManager.h)
 target_link_libraries(WorldBuildr
         Qt::Core
         Qt::Gui

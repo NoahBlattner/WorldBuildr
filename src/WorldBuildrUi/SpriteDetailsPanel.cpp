@@ -7,11 +7,13 @@
 #include <QSpinBox>
 #include <QDoubleSpinBox>
 #include <QComboBox>
+#include <QListWidget>
 #include <QLabel>
 #include "EditorSprite.h"
 #include "EditorManager.h"
 #include "SpriteDetailsPanel.h"
 #include "resources.h"
+#include "TagEditDialog.h"
 
 SpriteDetailsPanel::SpriteDetailsPanel(QWidget *pParent) : QWidget(pParent) {
     // Création du layout
@@ -139,6 +141,8 @@ void SpriteDetailsPanel::initLayout() {
     rotationLayout->setAlignment(Qt::AlignCenter);
     auto* opacityLayout = new QVBoxLayout();
     opacityLayout->setAlignment(Qt::AlignCenter);
+    auto* tagLayout = new QVBoxLayout();
+    tagLayout->setAlignment(Qt::AlignCenter);
 
     // Ajout des champs de texte et leur label
     // Options
@@ -178,6 +182,9 @@ void SpriteDetailsPanel::initLayout() {
     // Opacité
     opacityLayout->addWidget(m_pOpacityEdit);
 
+    // Tag
+    tagLayout->addWidget(m_pSetTagButton);
+
     // Ajout des layouts dans les groupes
     auto* optionsGroup = new QGroupBox("Options d'intervalles");
     optionsGroup->setLayout(optionsLayout);
@@ -189,6 +196,8 @@ void SpriteDetailsPanel::initLayout() {
     rotationGroup->setLayout(rotationLayout);
     auto* opacityGroup = new QGroupBox("Opacité");
     opacityGroup->setLayout(opacityLayout);
+    auto* tagGroup = new QGroupBox("Tags");
+    tagGroup->setLayout(tagLayout);
 
     // Ajout des groupes dans le layout principal
     mainLayout->addWidget(optionsGroup);
@@ -196,6 +205,7 @@ void SpriteDetailsPanel::initLayout() {
     mainLayout->addWidget(scaleGroup);
     mainLayout->addWidget(rotationGroup);
     mainLayout->addWidget(opacityGroup);
+    mainLayout->addWidget(tagGroup);
 }
 
 //! Initialise les champs du panneau.
@@ -244,6 +254,10 @@ void SpriteDetailsPanel::initInputs() {
     m_pOpacityEdit->setSingleStep(10);
     m_pOpacityEdit->setSuffix("%");
     m_pOpacityEdit->setStyleSheet(GameFramework::loadStyleSheetString("spinboxStyle.qss"));
+    
+    // Création et setup button d'édition des tags
+    m_pSetTagButton = new QPushButton("Éditer les tags");
+    m_pSetTagButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
 }
 
 //! Connecte les signaux aux slots.
@@ -265,6 +279,9 @@ void SpriteDetailsPanel::connectSignals() {
 
     // Connecter le signal de modification du champ d'opacité
     connect(m_pOpacityEdit, &QSpinBox::valueChanged, this, &SpriteDetailsPanel::onOpacityFieldEdited);
+
+    // Connecter le signal de clic de bouton d'édition des tags
+    connect(m_pSetTagButton, &QPushButton::clicked, this, &SpriteDetailsPanel::onEditTagsButtonClicked);
 }
 
 /*******************************
@@ -352,4 +369,10 @@ void SpriteDetailsPanel::onOpacityFieldEdited(int value) {
         return;
 
     m_pEditorManager->setEditorSpriteOpacity(m_pSprite, value / 100.0);
+}
+
+//! Appelé lorsque le bouton d'édition des tags est cliqué.
+void SpriteDetailsPanel::onEditTagsButtonClicked() {
+    // Ouvrir un dialogue de modification des tags
+    TagEditDialog dialog(m_pSprite, this);
 }
