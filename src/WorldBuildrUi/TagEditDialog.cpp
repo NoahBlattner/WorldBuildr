@@ -5,15 +5,16 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QListWidget>
+#include <QLabel>
 #include <QPushButton>
 #include <QInputDialog>
 #include <QErrorMessage>
 #include <QMessageBox>
 #include "EditorManager.h"
 #include "EditorSprite.h"
+#include "TagsManager.h"
 
 #include "TagEditDialog.h"
-#include "TagsManager.h"
 
 TagEditDialog::TagEditDialog(EditorSprite* sprite, QWidget* parent) : QDialog(parent) {
     m_pSprite = sprite;
@@ -27,15 +28,15 @@ TagEditDialog::TagEditDialog(EditorSprite* sprite, QWidget* parent) : QDialog(pa
 //! Initialise les layouts
 void TagEditDialog::initLayout() {
     // Création des layouts
-    auto* mainLayout = new QHBoxLayout(this);
+    auto* mainLayout = new QHBoxLayout();
     mainLayout->setAlignment(Qt::AlignCenter);
 
     // Tag list layout
-    auto* tagListLayout = new QVBoxLayout(this);
+    auto* tagListLayout = new QVBoxLayout();
     tagListLayout->setAlignment(Qt::AlignCenter);
 
     // Button layout
-    auto* buttonLayout = new QHBoxLayout(this);
+    auto* buttonLayout = new QHBoxLayout();
     buttonLayout->setAlignment(Qt::AlignCenter);
 
     // Ajouter les boutons
@@ -46,9 +47,10 @@ void TagEditDialog::initLayout() {
     tagListLayout->addLayout(buttonLayout);
     tagListLayout->addWidget(tagList);
 
-    auto* currentTagLayout = new QVBoxLayout(this);
+    auto* currentTagLayout = new QVBoxLayout();
     currentTagLayout->setAlignment(Qt::AlignRight);
 
+    currentTagLayout->addWidget(new QLabel("Current tag:"));
     currentTagLayout->addWidget(m_pCurrentTagEdit);
     currentTagLayout->addWidget(selectButton);
 
@@ -58,8 +60,6 @@ void TagEditDialog::initLayout() {
 
     // Ajout du layout principal au dialog
     setLayout(mainLayout);
-
-    // TODO : Fixer le crash causé par des layouts
 }
 
 //! Initialise les inputs
@@ -148,7 +148,5 @@ void TagEditDialog::onSelectButtonClicked() {
     qDebug() << "Tag selected: " << selectedItems.first()->text();
     // TODO
     //m_pSprite->setTag(selectedItems.first()->text());
-    // Fermeture de la fenêtre
-    close();
 }
 

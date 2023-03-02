@@ -375,4 +375,5 @@ void SpriteDetailsPanel::onOpacityFieldEdited(int value) {
 void SpriteDetailsPanel::onEditTagsButtonClicked() {
     // Ouvrir un dialogue de modification des tags
     TagEditDialog dialog(m_pSprite, this);
+    dialog.exec();
 }
