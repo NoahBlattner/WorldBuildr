@@ -205,43 +205,45 @@ void SpriteDetailsPanel::initInputs() {
     // Création et setup des champs d'options
     m_pPosStepEdit = new QComboBox();
     m_pPosStepEdit->addItems(PIXEL_STEPS);
+    m_pPosStepEdit->setStyleSheet(GameFramework::loadStyleSheetString("comboboxStyle.qss"));
     m_pRotationStepEdit = new QComboBox();
     m_pRotationStepEdit->addItems(ROTATION_STEPS);
+    m_pRotationStepEdit->setStyleSheet(GameFramework::loadStyleSheetString("comboboxStyle.qss"));
 
     // Creation et setup des champs de position
     m_pXPositionEdit = new QSpinBox();
     m_pXPositionEdit->setRange(0, 10000);
     m_pXPositionEdit->setSingleStep(10);
     m_pXPositionEdit->setSuffix(" px");
-    m_pXPositionEdit->setStyleSheet(GameFramework::loadStyleSheetString("editField.qss"));
+    m_pXPositionEdit->setStyleSheet(GameFramework::loadStyleSheetString("spinboxStyle.qss"));
     m_pYPositionEdit = new QSpinBox();
     m_pYPositionEdit->setRange(0, 10000);
     m_pYPositionEdit->setSingleStep(10);
     m_pYPositionEdit->setSuffix(" px");
-    m_pYPositionEdit->setStyleSheet(GameFramework::loadStyleSheetString("editField.qss"));
+    m_pYPositionEdit->setStyleSheet(GameFramework::loadStyleSheetString("spinboxStyle.qss"));
     m_pZPositionEdit = new QSpinBox();
     m_pZPositionEdit->setRange(0, 10000);
     m_pZPositionEdit->setSingleStep(1);
-    m_pZPositionEdit->setStyleSheet(GameFramework::loadStyleSheetString("editField.qss"));
+    m_pZPositionEdit->setStyleSheet(GameFramework::loadStyleSheetString("spinboxStyle.qss"));
 
     // Creation et setup des champs de taille
     m_pScaleEdit = new QDoubleSpinBox();
     m_pScaleEdit->setRange(.05, 5);
-    m_pScaleEdit->setStyleSheet(GameFramework::loadStyleSheetString("editField.qss"));
+    m_pScaleEdit->setStyleSheet(GameFramework::loadStyleSheetString("spinboxStyle.qss"));
 
     // Creation et setup du champ de rotation
     m_pRotationEdit = new QSpinBox();
     m_pRotationEdit->setRange(-1000, 1000);
     m_pRotationEdit->setSingleStep(10);
     m_pRotationEdit->setSuffix("°");
-    m_pRotationEdit->setStyleSheet(GameFramework::loadStyleSheetString("editField.qss"));
+    m_pRotationEdit->setStyleSheet(GameFramework::loadStyleSheetString("spinboxStyle.qss"));
 
     // Création et setup du champ d'opacité
     m_pOpacityEdit = new QSpinBox();
     m_pOpacityEdit->setRange(0, 100);
     m_pOpacityEdit->setSingleStep(10);
     m_pOpacityEdit->setSuffix("%");
-    m_pOpacityEdit->setStyleSheet(GameFramework::loadStyleSheetString("editField.qss"));
+    m_pOpacityEdit->setStyleSheet(GameFramework::loadStyleSheetString("spinboxStyle.qss"));
 }
 
 //! Connecte les signaux aux slots.
