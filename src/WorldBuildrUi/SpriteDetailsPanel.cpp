@@ -27,12 +27,10 @@ SpriteDetailsPanel::SpriteDetailsPanel(QWidget *pParent) : QWidget(pParent) {
     initLayout();
 
     // Initialisation des signaux
-    connectSignals();
+    connectInputSignals();
 
     // Met à jour le panneau de détails
     updatePanel();
-
-    // TODO Add Z-Index and opacity fields
 }
 
 //! Lie le gestionnaire d'éditeur au panneau de détails.
@@ -41,6 +39,8 @@ void SpriteDetailsPanel::bindEditorManager(EditorManager *pEditorManager) {
     // Connecte les signaux du gestionnaire d'éditeur aux slots du panneau de détails
     connect(m_pEditorManager, &EditorManager::editorSpriteSelected, this,
             &SpriteDetailsPanel::onBindSprite);
+    connect(m_pEditorManager, &EditorManager::editorSpriteDeleted, this,
+            &SpriteDetailsPanel::onUnbindSprite);
 }
 
 //! Lie un sprite au panneau de détails.
@@ -67,9 +67,6 @@ void SpriteDetailsPanel::connectSpriteSignals() const {// Connecter les signaux 
 
     // Connecter le signal de désélection du sprite
     connect(m_pSprite, &EditorSprite::editorSpriteUnselected, this, &SpriteDetailsPanel::onUnbindSprite);
-
-    // Connecter le signal de suppression du sprite
-    connect(m_pSprite, &EditorSprite::spriteDestroyed, this, &SpriteDetailsPanel::onUnbindSprite);
 }
 
 //! Déconnecte les signaux du sprite.
@@ -78,7 +75,6 @@ void SpriteDetailsPanel::disconnectSpriteSignals() const {// Déconnecter les si
         return;
     disconnect(m_pSprite, &EditorSprite::editorSpriteModified, this, &SpriteDetailsPanel::onSpriteModified);
     disconnect(m_pSprite, &EditorSprite::editorSpriteUnselected, this, &SpriteDetailsPanel::onUnbindSprite);
-    disconnect(m_pSprite, &EditorSprite::spriteDestroyed, this, &SpriteDetailsPanel::onUnbindSprite);
 }
 
 //! Délie le sprite du panneau de détails.
@@ -261,7 +257,7 @@ void SpriteDetailsPanel::initInputs() {
 }
 
 //! Connecte les signaux aux slots.
-void SpriteDetailsPanel::connectSignals() {
+void SpriteDetailsPanel::connectInputSignals() {
     // Connecter les signaux de modification des champs d'options
     connect(m_pPosStepEdit, &QComboBox::currentIndexChanged, this, &SpriteDetailsPanel::onPosStepChanged);
     connect(m_pRotationStepEdit, &QComboBox::currentIndexChanged   , this, &SpriteDetailsPanel::onRotationStepChanged);

@@ -93,7 +93,7 @@ private:
 
     void initLayout();
     void initInputs();
-    void connectSignals();
+    void connectInputSignals();
 
     void updatePanel();
 

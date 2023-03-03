@@ -15,6 +15,7 @@
 #include "EditorSprite.h"
 #include "EditorManager.h"
 #include "SaveFileManager.h"
+#include "TagsManager.h"
 
 const QString SaveFileManager::DEFAULT_SAVE_DIR = GameFramework::resourcesPath() + "saves";
 
@@ -78,24 +79,37 @@ void SaveFileManager::load(EditorManager *editorManager, QString saveFilePath) {
     // On ferme le fichier
     file.close();
 
+    editorManager->resetEditor(); // On vide l'éditeur
+
     // On charge le JSON dans l'éditeur
     loadJsonIntoEditor(editorManager, json.object());
+
+    // On supprime l'historique
+    editorManager->resetHistory();
 }
 
 //! Convertit l'éditeur en objet JSON
 //! \param editorManager L'éditeur à convertir
 QJsonObject SaveFileManager::convertEditorToJsonObject(EditorManager* editorManager) {
-    // TODO : Sauvegarder les tags
-
     QJsonObject json;
+    json["tags"] = convertTagsToJsonArray(TagsManager::getTags());
     json["background"] = QDir::toNativeSeparators(editorManager->getBackgroundImagePath()).remove(QDir::toNativeSeparators(GameFramework::resourcesPath()));
-    json["sprites"] = convertSpritesToJsonObject(editorManager->getEditorSprites());
+    json["sprites"] = convertSpritesToJsonArray(editorManager -> getEditorSprites());
+    return json;
+}
+
+//! Convertit les tags en tableau JSON
+QJsonArray SaveFileManager::convertTagsToJsonArray(const QList<QString> &tags) {
+    QJsonArray json;
+    for (QString tag : tags) {
+        json.append(tag);
+    }
     return json;
 }
 
 //! Convertit une liste de sprites en tableau JSON
 //! \param sprites La liste de sprites à convertir
-QJsonArray SaveFileManager::convertSpritesToJsonObject(const QList<EditorSprite *>& sprites) {
+QJsonArray SaveFileManager::convertSpritesToJsonArray(const QList<EditorSprite *>& sprites) {
     QJsonArray json;
     qDebug() << QDir::toNativeSeparators(DEFAULT_SAVE_DIR);
     for (EditorSprite *sprite : sprites) { // Pour chaque sprite
@@ -114,9 +128,10 @@ QJsonArray SaveFileManager::convertSpritesToJsonObject(const QList<EditorSprite 
 //! \param editorManager L'éditeur dans lequel charger le fichier
 //! \param path Le chemin du fichier à charger
 void SaveFileManager::loadJsonIntoEditor(EditorManager *editorManager, QJsonObject jsonObject) {
-    editorManager->resetEditor(); // On vide l'éditeur
-
-    // TODO : Charger les tags
+    // On charge les tags
+    for (QJsonValue jsonValue : jsonObject["tags"].toArray()) {
+        TagsManager::addTag(jsonValue.toString());
+    }
 
     // On charge le fond
     QString backgroundPath = QDir::toNativeSeparators(jsonObject["background"].toString());

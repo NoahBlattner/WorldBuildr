@@ -26,6 +26,11 @@ void TagsManager::removeTag(const QString &tag) {
     m_pTags->removeOne(tag);
 }
 
+//! Supprime tous les tags
+void TagsManager::clearTags() {
+    m_pTags->clear();
+}
+
 //! Retourne la liste des tags
 //! \return Liste des tags
 QList<QString> TagsManager::getTags() {

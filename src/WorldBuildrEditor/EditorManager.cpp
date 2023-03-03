@@ -16,6 +16,7 @@
 #include "SelectionZone.h"
 #include "resources.h"
 #include "SaveFileManager.h"
+#include "TagsManager.h"
 
 EditorManager::EditorManager(GameCore* core) {
     m_pScene = core->getScene();
@@ -31,6 +32,9 @@ EditorManager::EditorManager(GameCore* core) {
 
 //! Réinitialise l'éditeur. Supprime tous les sprites d'éditeur.
 void EditorManager::resetEditor() {
+    // Supprimer les tags
+    TagsManager::clearTags();
+
     // Supprime l'image de fond
     removeBackGroundImage();
 
@@ -522,6 +526,8 @@ void EditorManager::updateMultiSelect(QPointF &newMousePosition) {// On met à j
 
 //! Supprime un sprite d'éditeur.
 void EditorManager::deleteEditorSprite(EditorSprite* pEditSprite) {
+    emit editorSpriteDeleted(pEditSprite);
+
     m_pEditorSprites.removeOne(pEditSprite);
     m_pSelectedEditorSprites.removeOne(pEditSprite);
     m_pScene->removeSpriteFromScene(pEditSprite);

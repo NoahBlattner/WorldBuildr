@@ -14,6 +14,7 @@ class TagsManager {
 public:
     static void addTag(const QString& tag);
     static void removeTag(const QString& tag);
+    static void clearTags();
 
     static QList<QString> getTags();
 
