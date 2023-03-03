@@ -101,7 +101,7 @@ QJsonObject SaveFileManager::convertEditorToJsonObject(EditorManager* editorMana
 //! Convertit les tags en tableau JSON
 QJsonArray SaveFileManager::convertTagsToJsonArray(const QList<QString> &tags) {
     QJsonArray json;
-    for (QString tag : tags) {
+    for (const QString& tag : tags) {
         json.append(tag);
     }
     return json;
@@ -119,6 +119,7 @@ QJsonArray SaveFileManager::convertSpritesToJsonArray(const QList<EditorSprite *
         spriteJson["scale"] = sprite->scale();
         spriteJson["texturePath"] = QDir::toNativeSeparators(sprite->getImgPath()).remove(QDir::toNativeSeparators(GameFramework::resourcesPath()));
         spriteJson["rotation"] = sprite->rotation();
+        spriteJson["tag"] = sprite->getTag();
         json.append(spriteJson);
     }
     return json;
@@ -160,6 +161,7 @@ QList<EditorSprite*> SaveFileManager::generateSpritesFromJson(const QJsonArray& 
         sprite->setY(spriteJson["y"].toDouble());
         sprite->setRotation(spriteJson["rotation"].toInt());
         sprite->setScale(spriteJson["scale"].toDouble());
+        sprite->setTag(spriteJson["tag"].toString());
         sprites.append(sprite);
     }
     return sprites;

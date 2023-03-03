@@ -74,6 +74,7 @@ void TagEditDialog::initInputs() {
     // Current tag edit
     m_pCurrentTagEdit = new QLineEdit(this);
     m_pCurrentTagEdit->setReadOnly(true);
+    m_pCurrentTagEdit->setText(m_pSprite->getTag());
 
     // Création des boutons
     addTagButton = new QPushButton("Add");

@@ -55,6 +55,12 @@ void EditorSprite::setTag(const QString &tag) {
     setData(TAG_KEY, tag);
 }
 
+//! \brief Retourne le tag de la sprite.
+//! \return Tag de la sprite.
+QString EditorSprite::getTag() {
+    return data(TAG_KEY).toString();
+}
+
 //! \brief Supprime le tag de la sprite.
 void EditorSprite::removeTag() {
     setData(TAG_KEY, QVariant());
