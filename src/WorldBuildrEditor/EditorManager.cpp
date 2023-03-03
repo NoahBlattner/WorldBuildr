@@ -31,7 +31,7 @@ EditorManager::EditorManager(GameCore* core) {
 }
 
 EditorManager::~EditorManager() {
-    delete m_editorHistory;
+    save(m_saveFilePath); // Sauvegarde le fichier avant de quitter
 }
 
 //! Sauvegarde l'éditeur dans un fichier.
@@ -50,6 +50,9 @@ void EditorManager::save(QString saveFilePath) {
         saveFilePath += ".json";
     }
 
+    // On retient le chemin du fichier de sauvegarde
+    m_saveFilePath = saveFilePath;
+
     // Sauvegarde le fichier
     SaveFileManager::save(this,std::move(saveFilePath));
 }
@@ -63,7 +66,7 @@ void EditorManager::load(QString saveFilePath) {
     }
 
     if (saveFilePath.isEmpty()) { // Si le chemin est vide, demander à l'utilisateur de choisir un fichier
-        saveFilePath = QFileDialog::getSaveFileName(nullptr, "Load file", SaveFileManager::DEFAULT_SAVE_DIR, "JSON (*.json)");
+        saveFilePath = QFileDialog::getOpenFileName(nullptr, "Load file", SaveFileManager::DEFAULT_SAVE_DIR, "JSON (*.json)");
     }
 
     if (saveFilePath.isEmpty()) { // Si le chemin est toujours vide, annuler
@@ -82,7 +85,7 @@ void EditorManager::load(QString saveFilePath) {
 //! \param saveFilePath    Chemin du fichier de sauvegarde.
 void EditorManager::import(QString saveFilePath) {
     if (saveFilePath.isEmpty()) { // Si le chemin est vide, demander à l'utilisateur de choisir un fichier
-        saveFilePath = QFileDialog::getSaveFileName(nullptr, "Save file", SaveFileManager::DEFAULT_SAVE_DIR, "JSON (*.json)");
+        saveFilePath = QFileDialog::getOpenFileName(nullptr, "Load file", SaveFileManager::DEFAULT_SAVE_DIR, "JSON (*.json)");
     }
 
     if (saveFilePath.isEmpty()) { // Si le chemin est toujours vide, annuler
@@ -257,8 +260,13 @@ void EditorManager::onKeyPressed(int key) {
             break;
         case Qt::Key_S:
             if (m_isCtrlHeld) {
-                // On sauvegarde le niveau
-                save("");
+                if (m_isShiftHeld) {
+                    // On sauvegarde le niveau sous
+                    save("");
+                } else {
+                    // On sauvegarde le niveau
+                    save(m_saveFilePath);
+                }
             }
             break;
         case Qt::Key_O:

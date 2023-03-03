@@ -160,6 +160,9 @@ void EditorActionPanel::connectSignals() const {
     connect(duplicateButton, &QPushButton::clicked, this, &EditorActionPanel::duplicateButtonClicked);
     connect(addBackgroundButton, &QPushButton::clicked, this, &EditorActionPanel::addBackgroundButtonClicked);
     connect(removeBackgroundButton, &QPushButton::clicked, this, &EditorActionPanel::removeBackgroundButtonClicked);
+    connect(saveButton, &QPushButton::clicked, this, &EditorActionPanel::saveButtonClicked);
+    connect(loadButton, &QPushButton::clicked, this, &EditorActionPanel::loadButtonClicked);
+    connect(importButton, &QPushButton::clicked, this, &EditorActionPanel::importButtonClicked);
 }
 
 /*********************

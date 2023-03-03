@@ -115,9 +115,9 @@ public:
 private:
     GameScene* m_pScene = nullptr;
 
-    QString m_name = QString();
-
     EditorHistory* m_editorHistory = nullptr;
+
+    QString m_saveFilePath = QString();
 
     QString m_backgroundImageFileName = QString();
 
