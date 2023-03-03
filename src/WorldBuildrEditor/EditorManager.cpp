@@ -200,6 +200,11 @@ void EditorManager::onKeyPressed(int key) {
                     SaveFileManager::load(this, "");
                 }
                 break;
+        case Qt::Key_I:
+            if (m_isCtrlHeld) {
+                SaveFileManager::import(this, "");
+            }
+            break;
     }
 }
 
