@@ -14,6 +14,8 @@
 
 class EditorManager;
 class QPushButton;
+class QCheckBox;
+class QSpinBox;
 
 //! Classe affichant le panneau d'actions de l'éditeur.
 //! Elle permet d'interagir avec l'éditeur par une interface graphique.
@@ -30,6 +32,9 @@ private:
     EditorManager* m_pEditorManager = nullptr;
 
     QVBoxLayout* mainLayout = nullptr;
+
+    QCheckBox* alignToGridCheckBox;
+    QSpinBox* gridCellSizeSpinBox;
 
     QPushButton* addButton;
     QPushButton* duplicateButton;
@@ -48,11 +53,13 @@ private:
     QPushButton* loadButton;
     QPushButton* importButton;
 
-    void initButtons();
+    void initInputs();
     void initLayout();
     void connectSignals() const;
 
 private slots:
+    void alignToGridCheckBoxStateChanged(int state);
+    void girdCellSizeSpinBoxValueChanged(int value);
     void addButtonClicked();
     void deleteButtonClicked();
     void undoButtonClicked();

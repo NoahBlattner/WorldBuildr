@@ -11,13 +11,16 @@
 #include "GameScene.h"
 #include "GameCore.h"
 #include <QPushButton>
+#include <QCheckBox>
+#include <QLabel>
+#include <QSpinBox>
 #include <QVBoxLayout>
 #include <QFileDialog>
 #include <QGroupBox>
 
 EditorActionPanel::EditorActionPanel(QWidget* pParent) : QWidget(pParent){
     // Initialisation des boutons
-    initButtons();
+    initInputs();
 
     // Initialisation du layout
     initLayout();
@@ -38,6 +41,13 @@ void EditorActionPanel::bindEditorManager(EditorManager *editorManager) {
 
 //! Initialise le layout
 void EditorActionPanel::initLayout() {
+    auto* optionsLayout = new QVBoxLayout();
+    optionsLayout->addWidget(alignToGridCheckBox);
+    auto* gridCellSizeLayout = new QHBoxLayout();
+    gridCellSizeLayout->addWidget(gridCellSizeSpinBox);
+    gridCellSizeLayout->addWidget(new QLabel("Taille de la grille"));
+    optionsLayout->addLayout(gridCellSizeLayout);
+
     // Grouper les boutons
     auto* layoutActionsCreation = new QVBoxLayout();
     layoutActionsCreation->addWidget(addButton);
@@ -62,6 +72,9 @@ void EditorActionPanel::initLayout() {
     layoutActionsFichier->addWidget(importButton);
 
     // Ajout des layouts dans les groupes de boutons
+    auto* groupeOptions = new QGroupBox("Options");
+    groupeOptions->setLayout(optionsLayout);
+    groupeOptions -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
     auto* groupeActionsCreation = new QGroupBox("Création et suppression");
     groupeActionsCreation->setLayout(layoutActionsCreation);
     groupeActionsCreation -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
@@ -82,6 +95,7 @@ void EditorActionPanel::initLayout() {
     mainLayout = new QVBoxLayout(this);
     mainLayout->setAlignment(Qt::AlignCenter);
     // Ajout des groupes dans le layout principal
+    mainLayout->addWidget(groupeOptions);
     mainLayout->addWidget(groupeActionsCreation);
     mainLayout->addWidget(groupeActionsHistorique);
     mainLayout->addWidget(groupeActionsSelection);
@@ -90,7 +104,18 @@ void EditorActionPanel::initLayout() {
 }
 
 //! Initialise les boutons
-void EditorActionPanel::initButtons() {
+void EditorActionPanel::initInputs() {
+    // Création de la checkbox d'alignement à la grille
+    alignToGridCheckBox = new QCheckBox("Aligner à la grille");
+    alignToGridCheckBox->setToolTip("Aligner les sprites à la grille");
+    alignToGridCheckBox->setStyleSheet(GameFramework::loadStyleSheetString("checkboxStyle.qss"));
+
+    // Création du champs de texte pour la taille de la grille
+    gridCellSizeSpinBox = new QSpinBox();
+    gridCellSizeSpinBox->setToolTip("Taille de la grille");
+    gridCellSizeSpinBox -> setRange(1, 2000);
+    gridCellSizeSpinBox->setStyleSheet(GameFramework::loadStyleSheetString("spinboxStyle.qss"));
+
     // Création du bouton d'ajout de sprite
     addButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/addIcon.png"), "Ajouter un sprite");
     addButton->setToolTip("Ajouter un sprite");
@@ -136,13 +161,17 @@ void EditorActionPanel::initButtons() {
     removeBackgroundButton->setToolTip("Supprimer l'arrière-plan");
     removeBackgroundButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
 
-    // Création des boutons de sauvegarde et de chargement
+    // Création du bouton de sauvegarde
     saveButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/saveIcon.png"), "Sauvegarder");
     saveButton->setToolTip("Sauvegarder");
     saveButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
+
+    // Création du bouton de chargement
     loadButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/loadIcon.png"), "Charger");
     loadButton->setToolTip("Charger");
     loadButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
+
+    // Création du bouton d'importation
     importButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/importIcon.png"), "Importer");
     importButton->setToolTip("Importer");
     importButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
@@ -151,6 +180,8 @@ void EditorActionPanel::initButtons() {
 //! Connexion des signaux des boutons avec les slots correspondants
 void EditorActionPanel::connectSignals() const {
     // Connexion les signaux des boutons
+    connect(alignToGridCheckBox, &QCheckBox::stateChanged, this, &EditorActionPanel::alignToGridCheckBoxStateChanged);
+    connect(gridCellSizeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &::EditorActionPanel::girdCellSizeSpinBoxValueChanged);
     connect(addButton, &QPushButton::clicked, this, &EditorActionPanel::addButtonClicked);
     connect(removeButton, &QPushButton::clicked, this, &EditorActionPanel::deleteButtonClicked);
     connect(undoButton, &QPushButton::clicked, this, &EditorActionPanel::undoButtonClicked);
@@ -166,8 +197,18 @@ void EditorActionPanel::connectSignals() const {
 }
 
 /*********************
- * Gestion des signaux des boutons
+ * Gestion des signaux des inputs
  ********************/
+
+//! Slot appelé lors du changement de l'état de la case à cocher d'alignement à la grille
+void EditorActionPanel::alignToGridCheckBoxStateChanged(int state) {
+    m_pEditorManager-> setGridEnabled(state == Qt::Checked);
+}
+
+//! Slot appelé lors du changement de la taille des cellules de la grille
+void EditorActionPanel::girdCellSizeSpinBoxValueChanged(int value) {
+    m_pEditorManager->setGridCellSize(value);
+}
 
 //! Slot appelé lors du clic sur le bouton d'ajout de sprite
 void EditorActionPanel::addButtonClicked() {

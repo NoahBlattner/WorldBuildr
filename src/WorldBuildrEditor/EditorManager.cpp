@@ -30,187 +30,6 @@ EditorManager::EditorManager(GameCore* core) {
     connect(core, &GameCore::notifyMouseButtonReleased, this, &EditorManager::onMouseButtonReleased);
 }
 
-EditorManager::~EditorManager() {
-    save(m_saveFilePath); // Sauvegarde le fichier avant de quitter
-}
-
-//! Sauvegarde l'éditeur dans un fichier.
-//! \param saveFilePath    Chemin du fichier de sauvegarde.
-void EditorManager::save(QString saveFilePath) {
-    if (saveFilePath.isEmpty()) { // Si le chemin est vide, demander à l'utilisateur de choisir un fichier
-        saveFilePath = QFileDialog::getSaveFileName(nullptr, "Save file", SaveFileManager::DEFAULT_SAVE_DIR, "JSON (*.json)");
-    }
-
-    if (saveFilePath.isEmpty()) { // Si le chemin est toujours vide, annuler
-        return;
-    }
-
-    // Ajouter l'extension .json si elle n'est pas présente
-    if (!saveFilePath.endsWith(".json")) {
-        saveFilePath += ".json";
-    }
-
-    // On retient le chemin du fichier de sauvegarde
-    m_saveFilePath = saveFilePath;
-
-    // Sauvegarde le fichier
-    SaveFileManager::save(this,std::move(saveFilePath));
-}
-
-//! Charge un fichier de sauvegarde dans l'éditeur.
-//! \param saveFilePath    Chemin du fichier de sauvegarde.
-void EditorManager::load(QString saveFilePath) {
-    // Demander à l'utilisateur s'il est sûr de vouloir charger un fichier
-    if (QMessageBox::question(nullptr, "Load file", "Are you sure you want to load a file? This will erase the current state of the editor.") == QMessageBox::No) {
-        return;
-    }
-
-    if (saveFilePath.isEmpty()) { // Si le chemin est vide, demander à l'utilisateur de choisir un fichier
-        saveFilePath = QFileDialog::getOpenFileName(nullptr, "Load file", SaveFileManager::DEFAULT_SAVE_DIR, "JSON (*.json)");
-    }
-
-    if (saveFilePath.isEmpty()) { // Si le chemin est toujours vide, annuler
-        return;
-    }
-
-    // Ajouter l'extension .json si elle n'est pas présente
-    if (!saveFilePath.endsWith(".json")) {
-        saveFilePath += ".json";
-    }
-
-    SaveFileManager::load(this,std::move(saveFilePath));
-}
-
-//! Importe un fichier de sauvegarde dans l'éditeur.
-//! \param saveFilePath    Chemin du fichier de sauvegarde.
-void EditorManager::import(QString saveFilePath) {
-    if (saveFilePath.isEmpty()) { // Si le chemin est vide, demander à l'utilisateur de choisir un fichier
-        saveFilePath = QFileDialog::getOpenFileName(nullptr, "Load file", SaveFileManager::DEFAULT_SAVE_DIR, "JSON (*.json)");
-    }
-
-    if (saveFilePath.isEmpty()) { // Si le chemin est toujours vide, annuler
-        return;
-    }
-
-    // Ajouter l'extension .json si elle n'est pas présente
-    if (!saveFilePath.endsWith(".json")) {
-        saveFilePath += ".json";
-    }
-
-    SaveFileManager::import(this,std::move(saveFilePath));
-}
-
-//! Réinitialise l'éditeur. Supprime tous les sprites d'éditeur.
-void EditorManager::resetEditor() {
-    // Supprimer les tags
-    TagsManager::clearTags();
-
-    // Supprime l'image de fond
-    removeBackGroundImage();
-
-    // Supprime tous les sprites d'éditeur
-    selectAllEditorSprites();
-    deleteSelectedEditorSprites();
-
-    // Réinitialise l'historique
-    m_editorHistory->clearHistory();
-}
-
-//! Indique si l'éditeur contient le sprite donné.
-//! \param pEditSprite    Sprite d'éditeur à chercher.
-bool EditorManager::containsEditorSprite(EditorSprite *pEditSprite) const {
-    return m_pEditorSprites.contains(pEditSprite);
-}
-
-//! Réinitialise l'historique de l'éditeur
-void EditorManager::resetHistory() {
-    m_editorHistory->clearHistory();
-}
-
-//! Annule la dernière action de l'historique
-void EditorManager::undo() {
-    m_editorHistory->undo();
-}
-
-//! Rétablit la dernière action annulée de l'historique
-void EditorManager::redo() {
-    m_editorHistory->redo();
-}
-
-//! Copie une image sélectionnée dans le dossier d'images de l'éditeur
-//! et retourne le chemin de la nouvelle image
-//! \return Le chemin de l'image6
-QString EditorManager::loadImageToEditor() {
-    // Ouverture d'une boîte de dialogue pour charger une image
-    QString imagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), GameFramework::imagesPath(),
-                                                     tr("Image Files (*.png *.jpg *.bmp)"));
-
-    // Si l'utilisateur a annulé, on retourne une chaîne vide
-    if (imagePath.isEmpty() || QPixmap(imagePath).isNull()) {
-        QMessageBox::warning(this, tr("Error"), tr("Une erreur est survenue lors du chargement de l'image"));
-        return QString();
-    }
-
-    // Chemin du dossier d'images de l'éditeur
-    QString editorImagePath = GameFramework::imagesPath() + "editorImages/";
-
-    // Si le dossier d'image n'existe pas
-    if (!QDir(editorImagePath).exists()) {
-        // On le crée
-        QDir().mkdir(editorImagePath);
-    }
-
-    // Chemin de la nouvelle image
-    QString newImagePath = editorImagePath + imagePath.split("/").last();
-    newImagePath = QDir::toNativeSeparators(newImagePath);
-
-    // Copie de l'image dans le dossier d'images de l'éditeur
-    QFile::copy(imagePath, newImagePath);
-
-    return newImagePath;
-}
-
-//! Traite le click d'un sprite d'editeur.
-//! \param pEditSprite    Sprite d'éditeur cliqué.
-void EditorManager::editorSpriteClicked(EditorSprite* pEditSprite) {
-    if (m_isShiftHeld) { // Si la touche shift est enfoncée
-        // On change la sélection du sprite
-        toggleSelectEditorSprite(pEditSprite);
-    } else {
-        // On sélectionne ce sprite uniquement
-        selectSingleEditorSprite(pEditSprite);
-    }
-}
-
-//! Crée une zone de sélection à une position donnée.
-//! \param startPositon    Position de la souris.
-void EditorManager::createSelectionZone(QPointF startPositon) {
-    if (m_pMultiSelectionZone != nullptr) {
-        m_pMultiSelectionZone->endSelection();
-    }
-
-    m_pMultiSelectionZone = new SelectionZone(m_pScene, startPositon);
-}
-
-//! Cherche le z-index le plus élevé parmi tous les sprites d'éditeur.
-//! \return Le z-index le plus élevé.
-int EditorManager::getHighestZIndex() const {
-    if (m_pEditorSprites.isEmpty()) { // Si il n'y a pas de sprite
-        return 0;
-    }
-
-    // Cherche le sprite avec le z-index le plus élevé
-    int maxZIndex = 0;
-    for (EditorSprite* pEditSprite : m_pEditorSprites) {
-        if (pEditSprite->zValue() > maxZIndex) {
-            maxZIndex = pEditSprite->zValue();
-        }
-    }
-
-    // Retourne le z-index suivant
-    return maxZIndex;
-}
-
 /********************************************
  * Gestion des touche et boutons de la souris
  *******************************************/
@@ -340,8 +159,38 @@ void EditorManager::onMouseMoved(QPointF newMousePosition, QPointF oldMousePosit
                         m_isDragging = true;
                         m_startDragPosition = oldMousePosition;
                     }
-                    // On déplace le sprite
-                    moveSelectedEditorSprites(newMousePosition-oldMousePosition);
+
+                    if (m_isGridEnabled) { // Si la grille est activée
+                        // Activer l'historique
+                        m_editorHistory->requestResumeHistory(2);
+
+                        int prevGridX = oldMousePosition.x() / m_gridCellSize;
+                        int prevGridY = oldMousePosition.y() / m_gridCellSize;
+
+                        int newGridX = newMousePosition.x() / m_gridCellSize;
+                        int newGridY = newMousePosition.y() / m_gridCellSize;
+
+                        if (prevGridX != newGridX) { // Si on a changé de case en X
+                            // On déplace le sprite
+                            setEditorSpriteX(mouseDownEditorSprite, newGridX * m_gridCellSize);
+                        }
+
+                        if (prevGridY != newGridY) { // Si on a changé de case en Y
+                            // On déplace le sprite
+                            setEditorSpriteY(mouseDownEditorSprite, newGridY * m_gridCellSize);
+                        }
+
+                        // On met en pause l'historique
+                        m_editorHistory->pauseHistory(2);
+
+                    } else if (m_isSpriteSnappingEnabled) { // Sinon si le snap est activé
+
+                        // TODO
+
+                    } else {
+                        // On déplace le sprite
+                        moveSelectedEditorSprites(newMousePosition - oldMousePosition);
+                    }
                 } else {
                     selectSingleEditorSprite(mouseDownEditorSprite);
                 }
@@ -394,6 +243,213 @@ void EditorManager::onMouseButtonReleased(QPointF mousePosition, Qt::MouseButton
             mouseDownEditorSprite = nullptr;
             break;
     }
+}
+
+/**********************
+ * Gestion de l'éditeur
+ *********************/
+
+//! Sauvegarde l'éditeur dans un fichier.
+//! \param saveFilePath    Chemin du fichier de sauvegarde.
+void EditorManager::save(QString saveFilePath) {
+    if (saveFilePath.isEmpty()) { // Si le chemin est vide, demander à l'utilisateur de choisir un fichier
+        saveFilePath = QFileDialog::getSaveFileName(nullptr, "Save file", SaveFileManager::DEFAULT_SAVE_DIR, "JSON (*.json)");
+    }
+
+    if (saveFilePath.isEmpty()) { // Si le chemin est toujours vide, annuler
+        return;
+    }
+
+    // Ajouter l'extension .json si elle n'est pas présente
+    if (!saveFilePath.endsWith(".json")) {
+        saveFilePath += ".json";
+    }
+
+    // On retient le chemin du fichier de sauvegarde
+    m_saveFilePath = saveFilePath;
+
+    // Sauvegarde le fichier
+    SaveFileManager::save(this,std::move(saveFilePath));
+}
+
+//! Charge un fichier de sauvegarde dans l'éditeur.
+//! \param saveFilePath    Chemin du fichier de sauvegarde.
+void EditorManager::load(QString saveFilePath) {
+    // Demander à l'utilisateur s'il est sûr de vouloir charger un fichier
+    if (QMessageBox::question(nullptr, "Load file", "Are you sure you want to load a file? This will erase the current state of the editor.") == QMessageBox::No) {
+        return;
+    }
+
+    if (saveFilePath.isEmpty()) { // Si le chemin est vide, demander à l'utilisateur de choisir un fichier
+        saveFilePath = QFileDialog::getOpenFileName(nullptr, "Load file", SaveFileManager::DEFAULT_SAVE_DIR, "JSON (*.json)");
+    }
+
+    if (saveFilePath.isEmpty()) { // Si le chemin est toujours vide, annuler
+        return;
+    }
+
+    // Ajouter l'extension .json si elle n'est pas présente
+    if (!saveFilePath.endsWith(".json")) {
+        saveFilePath += ".json";
+    }
+
+    SaveFileManager::load(this,std::move(saveFilePath));
+}
+
+//! Importe un fichier de sauvegarde dans l'éditeur.
+//! \param saveFilePath    Chemin du fichier de sauvegarde.
+void EditorManager::import(QString saveFilePath) {
+    if (saveFilePath.isEmpty()) { // Si le chemin est vide, demander à l'utilisateur de choisir un fichier
+        saveFilePath = QFileDialog::getOpenFileName(nullptr, "Load file", SaveFileManager::DEFAULT_SAVE_DIR, "JSON (*.json)");
+    }
+
+    if (saveFilePath.isEmpty()) { // Si le chemin est toujours vide, annuler
+        return;
+    }
+
+    // Ajouter l'extension .json si elle n'est pas présente
+    if (!saveFilePath.endsWith(".json")) {
+        saveFilePath += ".json";
+    }
+
+    SaveFileManager::import(this,std::move(saveFilePath));
+}
+
+//! Réinitialise l'éditeur. Supprime tous les sprites d'éditeur.
+void EditorManager::resetEditor() {
+    // Supprimer les tags
+    TagsManager::clearTags();
+
+    // Supprime l'image de fond
+    removeBackGroundImage();
+
+    // Supprime tous les sprites d'éditeur
+    selectAllEditorSprites();
+    deleteSelectedEditorSprites();
+
+    // Réinitialise l'historique
+    m_editorHistory->clearHistory();
+}
+
+//! Indique si un rectangle est dans la scène. Le rectangle est considéré comme dans la scène s'il a au moins un point dans la scène.
+//! \param rectF    Rectangle à tester.
+//! \return         Vrai si le rectangle est dans la scène, faux sinon.
+bool EditorManager::isInScene(QRectF rectF) const {
+    return rectF.right() >= 0 && rectF.left() <= m_pScene->width()
+        && rectF.bottom() >= 0 && rectF.top() <= m_pScene->height();
+}
+
+//! Indique si l'éditeur contient le sprite donné.
+//! \param pEditSprite    Sprite d'éditeur à chercher.
+bool EditorManager::containsEditorSprite(EditorSprite *pEditSprite) const {
+    return m_pEditorSprites.contains(pEditSprite);
+}
+
+//! Réinitialise l'historique de l'éditeur
+void EditorManager::resetHistory() {
+    m_editorHistory->clearHistory();
+}
+
+//! Annule la dernière action de l'historique
+void EditorManager::undo() {
+    m_editorHistory->undo();
+}
+
+//! Rétablit la dernière action annulée de l'historique
+void EditorManager::redo() {
+    m_editorHistory->redo();
+}
+
+//! Set la taille des cellules de la grille
+//! \param size    Taille des cellules de la grille
+void EditorManager::setGridCellSize(int size) {
+    m_gridCellSize = size;
+}
+
+//! Set si la grille est activée.
+//! \param enabled    Si la grille est activée
+void EditorManager::setGridEnabled(bool enabled) {
+    m_isGridEnabled = enabled;
+}
+
+//! Set si le snap est activé.
+//! \param enabled    Si le snap est activé
+void EditorManager::setSnapEnabled(bool enabled) {
+    m_isSpriteSnappingEnabled = enabled;
+}
+
+//! Copie une image sélectionnée dans le dossier d'images de l'éditeur
+//! et retourne le chemin de la nouvelle image
+//! \return Le chemin de l'image6
+QString EditorManager::loadImageToEditor() {
+    // Ouverture d'une boîte de dialogue pour charger une image
+    QString imagePath = QFileDialog::getOpenFileName(this, tr("Load Image"), GameFramework::imagesPath(),
+                                                     tr("Image Files (*.png *.jpg *.bmp)"));
+
+    // Si l'utilisateur a annulé, on retourne une chaîne vide
+    if (imagePath.isEmpty() || QPixmap(imagePath).isNull()) {
+        QMessageBox::warning(this, tr("Error"), tr("Une erreur est survenue lors du chargement de l'image"));
+        return QString();
+    }
+
+    // Chemin du dossier d'images de l'éditeur
+    QString editorImagePath = GameFramework::imagesPath() + "editorImages/";
+
+    // Si le dossier d'image n'existe pas
+    if (!QDir(editorImagePath).exists()) {
+        // On le crée
+        QDir().mkdir(editorImagePath);
+    }
+
+    // Chemin de la nouvelle image
+    QString newImagePath = editorImagePath + imagePath.split("/").last();
+    newImagePath = QDir::toNativeSeparators(newImagePath);
+
+    // Copie de l'image dans le dossier d'images de l'éditeur
+    QFile::copy(imagePath, newImagePath);
+
+    return newImagePath;
+}
+
+//! Traite le click d'un sprite d'editeur.
+//! \param pEditSprite    Sprite d'éditeur cliqué.
+void EditorManager::editorSpriteClicked(EditorSprite* pEditSprite) {
+    if (m_isShiftHeld) { // Si la touche shift est enfoncée
+        // On change la sélection du sprite
+        toggleSelectEditorSprite(pEditSprite);
+    } else {
+        // On sélectionne ce sprite uniquement
+        selectSingleEditorSprite(pEditSprite);
+    }
+}
+
+//! Crée une zone de sélection à une position donnée.
+//! \param startPositon    Position de la souris.
+void EditorManager::createSelectionZone(QPointF startPositon) {
+    if (m_pMultiSelectionZone != nullptr) {
+        m_pMultiSelectionZone->endSelection();
+    }
+
+    m_pMultiSelectionZone = new SelectionZone(m_pScene, startPositon);
+}
+
+//! Cherche le z-index le plus élevé parmi tous les sprites d'éditeur.
+//! \return Le z-index le plus élevé.
+int EditorManager::getHighestZIndex() const {
+    if (m_pEditorSprites.isEmpty()) { // Si il n'y a pas de sprite
+        return 0;
+    }
+
+    // Cherche le sprite avec le z-index le plus élevé
+    int maxZIndex = 0;
+    for (EditorSprite* pEditSprite : m_pEditorSprites) {
+        if (pEditSprite->zValue() > maxZIndex) {
+            maxZIndex = pEditSprite->zValue();
+        }
+    }
+
+    // Retourne le z-index suivant
+    return maxZIndex;
 }
 
 /********************************************
@@ -635,29 +691,47 @@ void EditorManager::deleteSelectedEditorSprites() {
  * Gestion de modification de sprites
  *******************************************/
 
+//! Déplace un sprite d'éditeur à une position donnée sur l'axe X.
+//! \param pEditSprite    Sprite d'éditeur à déplacer.
+//! \param x    Position sur l'axe X.
+void EditorManager::setEditorSpriteX(EditorSprite* pEditSprite, qreal x) {
+    QRectF currentSpriteBounds = pEditSprite->sceneBoundingRect();
+    currentSpriteBounds.translate(x - pEditSprite->x(), 0);
+
+    if (!isInScene(currentSpriteBounds)) { // Si le sprite sort de la scène complétement, on ne le déplace pas
+        return;
+    }
+
+    m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, pEditSprite, QString::number(x - pEditSprite->x()) + ";0");
+    pEditSprite->setX(x);
+}
+
+//! Déplace un sprite d'éditeur à une position donnée sur l'axe Y.
+//! \param pEditSprite    Sprite d'éditeur à déplacer.
+//! \param y    Position sur l'axe Y.
+void EditorManager::setEditorSpriteY(EditorSprite* pEditSprite, qreal y) {
+    QRectF currentSpriteBounds = pEditSprite->sceneBoundingRect();
+    currentSpriteBounds.translate(0, y - pEditSprite->y());
+
+    if (!isInScene(currentSpriteBounds)) { // Si le sprite sort de la scène complétement, on ne le déplace pas
+        return;
+    }
+
+    m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, pEditSprite, "0;" + QString::number(y - pEditSprite->y()));
+    pEditSprite->setY(y);
+}
+
 //! Déplace un sprite d'éditeur d'un vecteur donné.
 //! \param pEditSprite    Sprite d'éditeur à déplacer.
 //! \param moveVector    Vecteur de déplacement.
 void EditorManager::moveEditorSprite(EditorSprite *pEditSprite, QPointF moveVector) {
     // Calcule la nouvelle position du sprite
-    QRectF currentSpriteBounds = pEditSprite->sceneBoundingRect();
-    QRectF newSpriteBounds = currentSpriteBounds;
+    QRectF newSpriteBounds = pEditSprite->sceneBoundingRect();
     newSpriteBounds.translate(moveVector);
 
-    // Si le sprite sort de la scène sur l'axe X,
-    // on le déplace pour qu'il soit à la limite de la scène
-    if (newSpriteBounds.left() < 0) {
-        moveVector.setX(-currentSpriteBounds.left());
-    } else if (newSpriteBounds.right() > m_pScene->sceneRect().right()) {
-        moveVector.setX(m_pScene->sceneRect().right() - currentSpriteBounds.right());
-    }
-
-    // Si le sprite sort de la scène sur l'axe Y,
-    // on le déplace pour qu'il soit à la limite de la scène
-    if (newSpriteBounds.top() < 0) {
-        moveVector.setY(-currentSpriteBounds.top());
-    } else if (newSpriteBounds.bottom() > m_pScene->sceneRect().bottom()) {
-        moveVector.setY(m_pScene->sceneRect().bottom() - currentSpriteBounds.bottom());
+    // Si le sprite sort de la scène complétement, on ne le déplace pas
+    if (!isInScene(newSpriteBounds)) {
+        return;
     }
 
     // Déplace le sprite

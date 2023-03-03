@@ -61,7 +61,6 @@ class EditorManager : public QWidget {
 
 public:
     explicit EditorManager(GameCore* core);
-    ~EditorManager();
 
     void resetEditor();
 
@@ -73,6 +72,11 @@ public:
     void save(QString saveFilePath);
     void load(QString saveFilePath);
     void import(QString saveFilePath);
+
+    // Gestion du snap et de la grille
+    void setGridCellSize(int size);
+    void setGridEnabled(bool enabled);
+    void setSnapEnabled(bool enabled);
 
     // Gestion de l'historique
     void undo();
@@ -100,6 +104,8 @@ public:
     void deleteSelectedEditorSprites();
 
     // Gestion de modification de sprites
+    void setEditorSpriteX(EditorSprite* pEditSprite, qreal x);
+    void setEditorSpriteY(EditorSprite* pEditSprite, qreal y);
     void moveEditorSprite(EditorSprite* pEditSprite, QPointF moveVector);
     void moveSelectedEditorSprites(QPointF moveVector);
     void setEditorSpriteZIndex(EditorSprite* pEditSprite, int zIndex);
@@ -136,9 +142,17 @@ private:
     bool m_isDragging = false;
     EditorSprite* mouseDownEditorSprite = nullptr;
 
+    // Grid and sprite snapping
+    QPointF m_mouseGridOffset = QPointF(0, 0);
+    int m_gridCellSize = 32;
+    bool m_isGridEnabled = false;
+    bool m_isSpriteSnappingEnabled = false;
+
     // Liste des sprites
     QList<EditorSprite*> m_pEditorSprites;
     QList<EditorSprite*> m_pSelectedEditorSprites;
+
+    bool isInScene(QRectF rectF) const;
 
     QString loadImageToEditor();
 
