@@ -61,12 +61,18 @@ class EditorManager : public QWidget {
 
 public:
     explicit EditorManager(GameCore* core);
+    ~EditorManager();
 
     void resetEditor();
 
     // Gestion des sprites
     QList<EditorSprite*> getEditorSprites() const { return m_pEditorSprites; }
     bool containsEditorSprite(EditorSprite* pEditSprite) const;
+
+    // Gestion de sauvegarde et chargement
+    void save(QString saveFilePath);
+    void load(QString saveFilePath);
+    void import(QString saveFilePath);
 
     // Gestion de l'historique
     void undo();

@@ -30,6 +30,73 @@ EditorManager::EditorManager(GameCore* core) {
     connect(core, &GameCore::notifyMouseButtonReleased, this, &EditorManager::onMouseButtonReleased);
 }
 
+EditorManager::~EditorManager() {
+    delete m_editorHistory;
+}
+
+//! Sauvegarde l'éditeur dans un fichier.
+//! \param saveFilePath    Chemin du fichier de sauvegarde.
+void EditorManager::save(QString saveFilePath) {
+    if (saveFilePath.isEmpty()) { // Si le chemin est vide, demander à l'utilisateur de choisir un fichier
+        saveFilePath = QFileDialog::getSaveFileName(nullptr, "Save file", SaveFileManager::DEFAULT_SAVE_DIR, "JSON (*.json)");
+    }
+
+    if (saveFilePath.isEmpty()) { // Si le chemin est toujours vide, annuler
+        return;
+    }
+
+    // Ajouter l'extension .json si elle n'est pas présente
+    if (!saveFilePath.endsWith(".json")) {
+        saveFilePath += ".json";
+    }
+
+    // Sauvegarde le fichier
+    SaveFileManager::save(this,std::move(saveFilePath));
+}
+
+//! Charge un fichier de sauvegarde dans l'éditeur.
+//! \param saveFilePath    Chemin du fichier de sauvegarde.
+void EditorManager::load(QString saveFilePath) {
+    // Demander à l'utilisateur s'il est sûr de vouloir charger un fichier
+    if (QMessageBox::question(nullptr, "Load file", "Are you sure you want to load a file? This will erase the current state of the editor.") == QMessageBox::No) {
+        return;
+    }
+
+    if (saveFilePath.isEmpty()) { // Si le chemin est vide, demander à l'utilisateur de choisir un fichier
+        saveFilePath = QFileDialog::getSaveFileName(nullptr, "Load file", SaveFileManager::DEFAULT_SAVE_DIR, "JSON (*.json)");
+    }
+
+    if (saveFilePath.isEmpty()) { // Si le chemin est toujours vide, annuler
+        return;
+    }
+
+    // Ajouter l'extension .json si elle n'est pas présente
+    if (!saveFilePath.endsWith(".json")) {
+        saveFilePath += ".json";
+    }
+
+    SaveFileManager::load(this,std::move(saveFilePath));
+}
+
+//! Importe un fichier de sauvegarde dans l'éditeur.
+//! \param saveFilePath    Chemin du fichier de sauvegarde.
+void EditorManager::import(QString saveFilePath) {
+    if (saveFilePath.isEmpty()) { // Si le chemin est vide, demander à l'utilisateur de choisir un fichier
+        saveFilePath = QFileDialog::getSaveFileName(nullptr, "Save file", SaveFileManager::DEFAULT_SAVE_DIR, "JSON (*.json)");
+    }
+
+    if (saveFilePath.isEmpty()) { // Si le chemin est toujours vide, annuler
+        return;
+    }
+
+    // Ajouter l'extension .json si elle n'est pas présente
+    if (!saveFilePath.endsWith(".json")) {
+        saveFilePath += ".json";
+    }
+
+    SaveFileManager::import(this,std::move(saveFilePath));
+}
+
 //! Réinitialise l'éditeur. Supprime tous les sprites d'éditeur.
 void EditorManager::resetEditor() {
     // Supprimer les tags
@@ -188,21 +255,22 @@ void EditorManager::onKeyPressed(int key) {
                 m_editorHistory->redo();
             }
             break;
-            case Qt::Key_S:
-                if (m_isCtrlHeld) {
-                    // On sauvegarde le niveau
-                    SaveFileManager::save(this, "");
-                }
-                break;
-            case Qt::Key_O:
-                if (m_isCtrlHeld) {
-                    // On ouvre un niveau
-                    SaveFileManager::load(this, "");
-                }
-                break;
+        case Qt::Key_S:
+            if (m_isCtrlHeld) {
+                // On sauvegarde le niveau
+                save("");
+            }
+            break;
+        case Qt::Key_O:
+            if (m_isCtrlHeld) {
+                // On charge un niveau
+                load("");
+            }
+            break;
         case Qt::Key_I:
             if (m_isCtrlHeld) {
-                SaveFileManager::import(this, "");
+                // On importe un niveau
+                import("");
             }
             break;
     }

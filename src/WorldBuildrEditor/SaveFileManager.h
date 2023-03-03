@@ -14,13 +14,14 @@ class QJsonObject;
 
 class SaveFileManager {
 public:
+
+    static const QString DEFAULT_SAVE_DIR;
+
     static void save(EditorManager *editorManager, QString savePath);
     static void load(EditorManager *editorManager, QString saveFilePath);
     static void import(EditorManager *editorManager, QString saveFilePath);
 
 private:
-    static const QString DEFAULT_SAVE_DIR;
-
     static QJsonDocument loadJsonDocument(QString saveFilePath);
 
     static QJsonObject convertEditorToJsonObject(EditorManager* editorManager);

@@ -16,10 +16,6 @@
 #include <QGroupBox>
 
 EditorActionPanel::EditorActionPanel(QWidget* pParent) : QWidget(pParent){
-    // Création du layout
-    mainLayout = new QVBoxLayout(this);
-    mainLayout->setAlignment(Qt::AlignCenter);
-
     // Initialisation des boutons
     initButtons();
 
@@ -43,34 +39,54 @@ void EditorActionPanel::bindEditorManager(EditorManager *editorManager) {
 //! Initialise le layout
 void EditorActionPanel::initLayout() {
     // Grouper les boutons
+    auto* layoutActionsCreation = new QVBoxLayout();
     layoutActionsCreation->addWidget(addButton);
     layoutActionsCreation->addWidget(duplicateButton);
     layoutActionsCreation->addWidget(removeButton);
 
+    auto* layoutActionsHistorique = new QVBoxLayout();
     layoutActionsHistorique->addWidget(undoButton);
     layoutActionsHistorique->addWidget(redoButton);
 
+    auto* layoutActionsSelection = new QVBoxLayout();
     layoutActionsSelection->addWidget(selectAllButton);
     layoutActionsSelection->addWidget(deselectAllButton);
 
+    auto* layoutActionsFond = new QVBoxLayout();
     layoutActionsFond->addWidget(addBackgroundButton);
     layoutActionsFond->addWidget(removeBackgroundButton);
 
+    auto* layoutActionsFichier = new QVBoxLayout();
+    layoutActionsFichier->addWidget(saveButton);
+    layoutActionsFichier->addWidget(loadButton);
+    layoutActionsFichier->addWidget(importButton);
+
     // Ajout des layouts dans les groupes de boutons
+    auto* groupeActionsCreation = new QGroupBox("Création et suppression");
     groupeActionsCreation->setLayout(layoutActionsCreation);
     groupeActionsCreation -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
+    auto* groupeActionsHistorique = new QGroupBox("Historique");
     groupeActionsHistorique->setLayout(layoutActionsHistorique);
     groupeActionsHistorique -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
+    auto* groupeActionsSelection = new QGroupBox("Sélection");
     groupeActionsSelection->setLayout(layoutActionsSelection);
     groupeActionsSelection -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
+    auto* groupeActionsFond = new QGroupBox("Autres actions");
     groupeActionsFond->setLayout(layoutActionsFond);
     groupeActionsFond -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
+    auto* groupeActionsFichier = new QGroupBox("Fichier");
+    groupeActionsFichier->setLayout(layoutActionsFichier);
+    groupeActionsFichier -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
 
-    // Ajout des groupes de boutons dans le layout principal
+    // Création du layout
+    mainLayout = new QVBoxLayout(this);
+    mainLayout->setAlignment(Qt::AlignCenter);
+    // Ajout des groupes dans le layout principal
     mainLayout->addWidget(groupeActionsCreation);
     mainLayout->addWidget(groupeActionsHistorique);
     mainLayout->addWidget(groupeActionsSelection);
     mainLayout->addWidget(groupeActionsFond);
+    mainLayout->addWidget(groupeActionsFichier);
 }
 
 //! Initialise les boutons
@@ -119,6 +135,17 @@ void EditorActionPanel::initButtons() {
     removeBackgroundButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/removeBackgroundIcon.png"), "Supprimer l'arrière-plan");
     removeBackgroundButton->setToolTip("Supprimer l'arrière-plan");
     removeBackgroundButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
+
+    // Création des boutons de sauvegarde et de chargement
+    saveButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/saveIcon.png"), "Sauvegarder");
+    saveButton->setToolTip("Sauvegarder");
+    saveButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
+    loadButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/loadIcon.png"), "Charger");
+    loadButton->setToolTip("Charger");
+    loadButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
+    importButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/importIcon.png"), "Importer");
+    importButton->setToolTip("Importer");
+    importButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
 }
 
 //! Connexion des signaux des boutons avec les slots correspondants
@@ -187,4 +214,19 @@ void EditorActionPanel::addBackgroundButtonClicked() {
 //! Slot appelé lors du clic sur le bouton de suppression d'arrière-plan
 void EditorActionPanel::removeBackgroundButtonClicked() {
     m_pEditorManager->removeBackGroundImage();
+}
+
+//! Slot appelé lors du clic sur le bouton de sauvegarde
+void EditorActionPanel::saveButtonClicked() {
+    m_pEditorManager->save("");
+}
+
+//! Slot appelé lors du clic sur le bouton de chargement
+void EditorActionPanel::loadButtonClicked() {
+    m_pEditorManager->load("");
+}
+
+//! Slot appelé lors du clic sur le bouton d'importation
+void EditorActionPanel::importButtonClicked() {
+    m_pEditorManager->import("");
 }
