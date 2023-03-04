@@ -118,6 +118,8 @@ public:
     QString getBackgroundImagePath() const { return m_backgroundImageFileName; }
     void removeBackGroundImage();
 
+    // TODO : Gestion de la scène (taille, couleur de fond, etc...)
+
 private:
     GameScene* m_pScene = nullptr;
 
