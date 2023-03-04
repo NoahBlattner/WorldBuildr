@@ -42,6 +42,7 @@ void EditorActionPanel::bindEditorManager(EditorManager *editorManager) {
 //! Initialise le layout
 void EditorActionPanel::initLayout() {
     auto* optionsLayout = new QVBoxLayout();
+    optionsLayout->addWidget(snapToSpritesCheckBox);
     optionsLayout->addWidget(alignToGridCheckBox);
     auto* gridCellSizeLayout = new QHBoxLayout();
     gridCellSizeLayout->addWidget(gridCellSizeSpinBox);
@@ -105,8 +106,13 @@ void EditorActionPanel::initLayout() {
 
 //! Initialise les boutons
 void EditorActionPanel::initInputs() {
+    // Création de la checkbox d'alignement aux sprites
+    snapToSpritesCheckBox = new QCheckBox("Aligner aux sprites");
+    snapToSpritesCheckBox->setToolTip("Aligner aux sprites");
+    snapToSpritesCheckBox->setStyleSheet(GameFramework::loadStyleSheetString("checkboxStyle.qss"));
+
     // Création de la checkbox d'alignement à la grille
-    alignToGridCheckBox = new QCheckBox("Aligner à la grille");
+    alignToGridCheckBox = new QCheckBox("Utiliser la grille");
     alignToGridCheckBox->setToolTip("Aligner les sprites à la grille");
     alignToGridCheckBox->setStyleSheet(GameFramework::loadStyleSheetString("checkboxStyle.qss"));
 
@@ -114,6 +120,7 @@ void EditorActionPanel::initInputs() {
     gridCellSizeSpinBox = new QSpinBox();
     gridCellSizeSpinBox->setToolTip("Taille de la grille");
     gridCellSizeSpinBox -> setRange(1, 2000);
+    gridCellSizeSpinBox ->setValue(50);
     gridCellSizeSpinBox->setStyleSheet(GameFramework::loadStyleSheetString("spinboxStyle.qss"));
 
     // Création du bouton d'ajout de sprite
@@ -180,6 +187,7 @@ void EditorActionPanel::initInputs() {
 //! Connexion des signaux des boutons avec les slots correspondants
 void EditorActionPanel::connectSignals() const {
     // Connexion les signaux des boutons
+    connect(snapToSpritesCheckBox, &QCheckBox::stateChanged, this, &EditorActionPanel::snapToSpritesCheckBoxStateChanged);
     connect(alignToGridCheckBox, &QCheckBox::stateChanged, this, &EditorActionPanel::alignToGridCheckBoxStateChanged);
     connect(gridCellSizeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &::EditorActionPanel::girdCellSizeSpinBoxValueChanged);
     connect(addButton, &QPushButton::clicked, this, &EditorActionPanel::addButtonClicked);
@@ -200,9 +208,26 @@ void EditorActionPanel::connectSignals() const {
  * Gestion des signaux des inputs
  ********************/
 
+//! Slot appelé lors du changement de l'état de la case à cocher de l'alignement aux sprites
+void EditorActionPanel::snapToSpritesCheckBoxStateChanged(int state) {
+    m_pEditorManager->setSnapEnabled(state == Qt::Checked);
+
+    // Si l'alignement aux sprites est activé, on désactive l'alignement à la grille
+    if (state == Qt::Checked) {
+        alignToGridCheckBox->setChecked(false);
+        m_pEditorManager->setGridEnabled(false);
+    }
+}
+
 //! Slot appelé lors du changement de l'état de la case à cocher d'alignement à la grille
 void EditorActionPanel::alignToGridCheckBoxStateChanged(int state) {
-    m_pEditorManager-> setGridEnabled(state == Qt::Checked);
+    m_pEditorManager->setGridEnabled(state == Qt::Checked);
+
+    // Si l'alignement à la grille est activé, on désactive l'alignement aux sprites
+    if (state == Qt::Checked) {
+        snapToSpritesCheckBox->setChecked(false);
+        m_pEditorManager->setSnapEnabled(false);
+    }
 }
 
 //! Slot appelé lors du changement de la taille des cellules de la grille

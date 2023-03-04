@@ -33,6 +33,7 @@ private:
 
     QVBoxLayout* mainLayout = nullptr;
 
+    QCheckBox* snapToSpritesCheckBox;
     QCheckBox* alignToGridCheckBox;
     QSpinBox* gridCellSizeSpinBox;
 
@@ -58,6 +59,7 @@ private:
     void connectSignals() const;
 
 private slots:
+    void snapToSpritesCheckBoxStateChanged(int state);
     void alignToGridCheckBoxStateChanged(int state);
     void girdCellSizeSpinBoxValueChanged(int value);
     void addButtonClicked();

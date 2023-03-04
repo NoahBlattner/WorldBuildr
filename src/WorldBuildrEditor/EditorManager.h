@@ -143,8 +143,7 @@ private:
     EditorSprite* mouseDownEditorSprite = nullptr;
 
     // Grid and sprite snapping
-    QPointF m_mouseGridOffset = QPointF(0, 0);
-    int m_gridCellSize = 32;
+    int m_gridCellSize = 50;
     bool m_isGridEnabled = false;
     bool m_isSpriteSnappingEnabled = false;
 

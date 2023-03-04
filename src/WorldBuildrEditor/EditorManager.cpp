@@ -184,8 +184,15 @@ void EditorManager::onMouseMoved(QPointF newMousePosition, QPointF oldMousePosit
                         m_editorHistory->pauseHistory(2);
 
                     } else if (m_isSpriteSnappingEnabled) { // Sinon si le snap est activé
+                        // Prévoir le déplacement du sprite
+                        QRectF spriteRectPredict = mouseDownEditorSprite->sceneBoundingRect();
+                        spriteRectPredict.translate(newMousePosition - oldMousePosition);
 
-                        // TODO
+                        // Si le rect entre en collision avec seulement le sprite lui-même
+                        if (m_pScene->collidingSprites(spriteRectPredict).size() <= 1) {
+                            // On déplace le sprite
+                            moveEditorSprite(mouseDownEditorSprite, newMousePosition - oldMousePosition);
+                        }
 
                     } else {
                         // On déplace le sprite
@@ -370,12 +377,22 @@ void EditorManager::setGridCellSize(int size) {
 //! \param enabled    Si la grille est activée
 void EditorManager::setGridEnabled(bool enabled) {
     m_isGridEnabled = enabled;
+
+    if (m_isGridEnabled) { // Si la grille est activée
+        // On désactive le snap
+        m_isSpriteSnappingEnabled = false;
+    }
 }
 
 //! Set si le snap est activé.
 //! \param enabled    Si le snap est activé
 void EditorManager::setSnapEnabled(bool enabled) {
     m_isSpriteSnappingEnabled = enabled;
+
+    if (m_isSpriteSnappingEnabled) { // Si le snap est activé
+        // On désactive la grille
+        m_isGridEnabled = false;
+    }
 }
 
 //! Copie une image sélectionnée dans le dossier d'images de l'éditeur
