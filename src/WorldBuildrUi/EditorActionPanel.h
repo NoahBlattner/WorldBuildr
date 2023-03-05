@@ -37,6 +37,8 @@ private:
     QCheckBox* alignToGridCheckBox;
     QSpinBox* gridCellSizeSpinBox;
 
+    QPushButton* editSceneButton;
+
     QPushButton* addButton;
     QPushButton* duplicateButton;
     QPushButton* removeButton;
@@ -62,6 +64,7 @@ private slots:
     void snapToSpritesCheckBoxStateChanged(int state);
     void alignToGridCheckBoxStateChanged(int state);
     void girdCellSizeSpinBoxValueChanged(int value);
+    void editSceneButtonClicked();
     void addButtonClicked();
     void deleteButtonClicked();
     void undoButtonClicked();

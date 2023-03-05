@@ -38,9 +38,6 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     // Créé la scène de base et indique au canvas qu'il faut l'afficher.
     m_pScene = pGameCanvas->createScene(0, 0, SCENE_WIDTH, SCENE_WIDTH / GameFramework::screenRatio());
     pGameCanvas->setCurrentScene(m_pScene);
-    
-    // Trace un rectangle blanc tout autour des limites de la scène.
-    m_pScene->addRect(m_pScene->sceneRect(), QPen(Qt::white));
 
     // Créé le gestionnaire d'éditeur
     m_pEditorManager = new EditorManager(this);

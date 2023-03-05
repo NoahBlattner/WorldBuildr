@@ -17,6 +17,7 @@
 #include "resources.h"
 #include "SaveFileManager.h"
 #include "TagsManager.h"
+#include "SceneEditDialog.h"
 
 EditorManager::EditorManager(GameCore* core) {
     m_pScene = core->getScene();
@@ -344,6 +345,12 @@ void EditorManager::resetEditor() {
 bool EditorManager::isInScene(QRectF rectF) const {
     return rectF.right() >= 0 && rectF.left() <= m_pScene->width()
         && rectF.bottom() >= 0 && rectF.top() <= m_pScene->height();
+}
+
+//! Affiche la boîte de dialogue de modification de la scène.
+void EditorManager::showSceneEditDialog() {
+    SceneEditDialog dialog(m_pScene);
+    dialog.exec();
 }
 
 //! Indique si l'éditeur contient le sprite donné.

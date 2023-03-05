@@ -210,12 +210,16 @@ void GameScene::setBackgroundColor(QColor color) {
 //! \param sceneWidth   Largeur de la scène en pixels.
 void GameScene::setWidth(int sceneWidth)  {
     setSceneRect(0,0, sceneWidth, height());
+
+    outlineRect->setRect(0, 0, sceneWidth, height());
 }
 
 //! Change la hauteur de la scène.
 //! \param sceneHeight   Hauteur de la scène, en pixels.
 void GameScene::setHeight(int sceneHeight)  {
     setSceneRect(0,0, width(), sceneHeight);
+
+    outlineRect->setRect(0, 0, width(), sceneHeight);
 }
 
 //! Le sprite donné sera informé du tick.
@@ -303,6 +307,9 @@ void GameScene::init() {
     this->setBackgroundBrush(QBrush(Qt::black));
     //setBackgroundImage(QImage(GameFramework::imagesPath("demo") + "landscape_background.jpg"));
     //this->setBackgroundBrush(QBrush(Qt::white)); // fond blanc
+
+    // Trace un rectangle blanc tout autour des limites de la scène.
+    outlineRect = addRect(sceneRect(), QPen(Qt::white));
 
 }
 

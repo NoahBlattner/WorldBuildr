@@ -41,6 +41,8 @@ void EditorActionPanel::bindEditorManager(EditorManager *editorManager) {
 
 //! Initialise le layout
 void EditorActionPanel::initLayout() {
+
+    // Layout des options
     auto* optionsLayout = new QVBoxLayout();
     optionsLayout->addWidget(snapToSpritesCheckBox);
     optionsLayout->addWidget(alignToGridCheckBox);
@@ -50,6 +52,9 @@ void EditorActionPanel::initLayout() {
     optionsLayout->addLayout(gridCellSizeLayout);
 
     // Grouper les boutons
+    auto* layoutActionsScene = new QVBoxLayout();
+    layoutActionsScene->addWidget(editSceneButton);
+
     auto* layoutActionsCreation = new QVBoxLayout();
     layoutActionsCreation->addWidget(addButton);
     layoutActionsCreation->addWidget(duplicateButton);
@@ -76,6 +81,8 @@ void EditorActionPanel::initLayout() {
     auto* groupeOptions = new QGroupBox("Options");
     groupeOptions->setLayout(optionsLayout);
     groupeOptions -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
+    auto* groupeActionsScene = new QGroupBox("Scène");
+    groupeActionsScene->setLayout(layoutActionsScene);
     auto* groupeActionsCreation = new QGroupBox("Création et suppression");
     groupeActionsCreation->setLayout(layoutActionsCreation);
     groupeActionsCreation -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
@@ -97,6 +104,7 @@ void EditorActionPanel::initLayout() {
     mainLayout->setAlignment(Qt::AlignCenter);
     // Ajout des groupes dans le layout principal
     mainLayout->addWidget(groupeOptions);
+    mainLayout->addWidget(groupeActionsScene);
     mainLayout->addWidget(groupeActionsCreation);
     mainLayout->addWidget(groupeActionsHistorique);
     mainLayout->addWidget(groupeActionsSelection);
@@ -122,6 +130,11 @@ void EditorActionPanel::initInputs() {
     gridCellSizeSpinBox -> setRange(1, 2000);
     gridCellSizeSpinBox ->setValue(50);
     gridCellSizeSpinBox->setStyleSheet(GameFramework::loadStyleSheetString("spinboxStyle.qss"));
+
+    // Création du bouton d'édition de la scène
+    editSceneButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/editIcon.png"), "Editer la scène");
+    editSceneButton->setToolTip("Editer la scène");
+    editSceneButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
 
     // Création du bouton d'ajout de sprite
     addButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/addIcon.png"), "Ajouter un sprite");
@@ -190,6 +203,7 @@ void EditorActionPanel::connectSignals() const {
     connect(snapToSpritesCheckBox, &QCheckBox::stateChanged, this, &EditorActionPanel::snapToSpritesCheckBoxStateChanged);
     connect(alignToGridCheckBox, &QCheckBox::stateChanged, this, &EditorActionPanel::alignToGridCheckBoxStateChanged);
     connect(gridCellSizeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &::EditorActionPanel::girdCellSizeSpinBoxValueChanged);
+    connect(editSceneButton, &QPushButton::clicked, this, &EditorActionPanel::editSceneButtonClicked);
     connect(addButton, &QPushButton::clicked, this, &EditorActionPanel::addButtonClicked);
     connect(removeButton, &QPushButton::clicked, this, &EditorActionPanel::deleteButtonClicked);
     connect(undoButton, &QPushButton::clicked, this, &EditorActionPanel::undoButtonClicked);
@@ -233,6 +247,12 @@ void EditorActionPanel::alignToGridCheckBoxStateChanged(int state) {
 //! Slot appelé lors du changement de la taille des cellules de la grille
 void EditorActionPanel::girdCellSizeSpinBoxValueChanged(int value) {
     m_pEditorManager->setGridCellSize(value);
+}
+
+//! Slot appelé lors du clic sur le bouton d'édition de la scène
+void EditorActionPanel::editSceneButtonClicked() {
+    // Ouverture de la fenêtre d'édition de la scène
+    m_pEditorManager->showSceneEditDialog();
 }
 
 //! Slot appelé lors du clic sur le bouton d'ajout de sprite
