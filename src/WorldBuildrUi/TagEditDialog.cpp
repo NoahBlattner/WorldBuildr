@@ -1,6 +1,9 @@
-//
-// Created by blatnoa on 02.03.2023.
-//
+/**
+ * @file TagEditDialog.cpp
+ * @brief Définition de la classe TagEditDialog.
+ * @author Noah Blattner
+ * @date Mars 2023
+ */
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -95,6 +98,7 @@ void TagEditDialog::initInputs() {
     connect(addTagButton, &QPushButton::clicked, this, &TagEditDialog::onAddTagButtonClicked);
     connect(removeTagButton, &QPushButton::clicked, this, &TagEditDialog::onDeleteTagButtonClicked);
     connect(applyTagButton, &QPushButton::clicked, this, &TagEditDialog::onSelectButtonClicked);
+    connect(clearTagButton, &QPushButton::clicked, this, &TagEditDialog::onNoTagButtonClicked);
 }
 
 //! Met à jour le tag du sprite. Met également à jour le QLineEdit

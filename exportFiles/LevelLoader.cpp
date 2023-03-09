@@ -15,6 +15,9 @@
 #include "sprite.h"
 #include "resources.h"
 
+//! Constructeur
+//! \param scene La scène dans laquelle charger les niveaux
+//! \param levelsPath Le chemin des niveaux
 LevelLoader::LevelLoader(GameScene* scene, QString levelsPath) {
     m_pScene = scene;
     m_levelsPath = std::move(levelsPath);

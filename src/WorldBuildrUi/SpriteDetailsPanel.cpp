@@ -1,11 +1,13 @@
-//
-// Created by Noah on 18.02.2023.
-//
+/**
+ * @file SpriteDetailsPanel.cpp
+ * @brief Définition de la classe SpriteDetailsPanel.
+ * @author Noah Blattner
+ * @date Février 2023
+ */
 
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QSpinBox>
-#include <QDoubleSpinBox>
 #include <QComboBox>
 #include <QListWidget>
 #include <QLabel>

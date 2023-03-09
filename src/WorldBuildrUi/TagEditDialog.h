@@ -1,6 +1,9 @@
-//
-// Created by blatnoa on 02.03.2023.
-//
+/**
+ * @file TagEditDialog.h
+ * @brief Définition de la classe TagEditDialog.
+ * @author Noah Blattner
+ * @date Mars 2023
+ */
 
 #ifndef WORLDBUILDR_TAGEDITDIALOG_H
 #define WORLDBUILDR_TAGEDITDIALOG_H
@@ -15,6 +18,14 @@ class QListWidgetItem;
 
 #include <QDialog>
 
+/**
+ * @brief Fenêtre de dialogue permettant d'éditer les tags d'un sprite.
+ *
+ * Cette fenêtre permet d'ajouter, de supprimer et de sélectionner des tags.
+ *
+ * Elle affiche une liste de tout les tags et permet d'en ajouter ou d'en supprimer.
+ * Ainsi qu'un champ de texte qui montre le tag du sprite lié à la fenêtre.
+ */
 class TagEditDialog : public QDialog {
 
     Q_OBJECT

@@ -12,6 +12,19 @@ class QString;
 class EditorManager;
 class QJsonObject;
 
+/**
+ * @brief Gestionnaire de sauvegarde.
+ *
+ * Cette classe permet de gérer les sauvegardes de niveau.
+ *
+ * Elle permet de sauvegarder, de charger et d'importer des niveaux.
+ *
+ * save() permet de sauvegarder un niveau dans un fichier.
+ * load() permet de charger un niveau à partir d'un fichier. (Les sprites générés remplacent les sprites actuels)
+ * import() permet d'importer un niveau à partir d'un fichier. (Les sprites générés sont ajoutés aux sprites actuels)
+ * Ces 3 fonctions nécessitent un EditorManager et un chemin de sauvegarde.
+ * Si le chemin de sauvegarde est vide, le fichier sera sauvegardé dans le dossier par défaut.
+ */
 class SaveFileManager {
 public:
 

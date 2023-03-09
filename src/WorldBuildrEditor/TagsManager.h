@@ -1,6 +1,9 @@
-//
-// Created by blatnoa on 02.03.2023.
-//
+/**
+ * @file TagsManager.h
+ * @brief Définition de la classe TagsManager.
+ * @author Noah Blattner
+ * @date Mars 2023
+ */
 
 #ifndef WORLDBUILDR_TAGSMANAGER_H
 #define WORLDBUILDR_TAGSMANAGER_H
@@ -9,6 +12,14 @@ class QString;
 
 #include <QList>
 
+/**
+ * @brief Gestionnaire de tags.
+ *
+ * Cette classe permet de gérer les tags.
+ * Elle permet d'ajouter, de supprimer et de récupérer la liste des tags.
+ *
+ * Tout les tags sont stockés dans une liste statique.
+ */
 class TagsManager {
 
 public:

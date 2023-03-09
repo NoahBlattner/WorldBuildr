@@ -1,6 +1,9 @@
-//
-// Created by blatnoa on 02.03.2023.
-//
+/**
+ * @file TagsManager.cpp
+ * @brief Définition de la classe TagsManager.
+ * @author Noah Blattner
+ * @date Mars 2023
+ */
 
 #include <QMessageBox>
 

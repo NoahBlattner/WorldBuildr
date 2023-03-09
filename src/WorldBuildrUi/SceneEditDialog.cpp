@@ -1,6 +1,9 @@
-//
-// Created by Noah on 05.03.2023.
-//
+/**
+ * @file SceneEditDialog.cpp
+ * @brief Définition de la classe SceneEditDialog.
+ * @author Noah Blattner
+ * @date Mars 2023
+ */
 
 #include <QSpinBox>
 #include <QLabel>
