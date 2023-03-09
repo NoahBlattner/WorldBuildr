@@ -120,6 +120,8 @@ public:
     void removeBackGroundImage();
 
     void showSceneEditDialog();
+    QSize getSceneSize() const;
+    void setSceneSize(QSize size);
 
 private:
     GameScene* m_pScene = nullptr;

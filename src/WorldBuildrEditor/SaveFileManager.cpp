@@ -66,8 +66,16 @@ void SaveFileManager::load(EditorManager *editorManager, QString saveFilePath) {
         return;
     }
 
+    editorManager->resetEditor(); // On vide l'éditeur
+
     // On charge le JSON dans l'éditeur
     loadJsonIntoEditor(editorManager, json.object());
+
+    // On charge le fond
+    QString backgroundPath = QDir::toNativeSeparators(json.object()["background"].toString());
+    if (!backgroundPath.isEmpty()) {
+        editorManager->setBackGroundImage( GameFramework::resourcesPath() + backgroundPath);
+    }
 }
 
 //! Importe un fichier JSON dans l'éditeur. Ceci ajoute les sprites du fichier à l'état actuel de l'éditeur.
@@ -83,7 +91,7 @@ void SaveFileManager::import(EditorManager *editorManager, QString importFilePat
     }
 
     // On importe le JSON dans l'éditeur
-    importJsonIntoEditor(editorManager, json.object());
+    loadJsonIntoEditor(editorManager, json.object());
 }
 
 //! Charge le données depuis un fichier JSON vers un objet QJsonDocument
@@ -124,6 +132,8 @@ QJsonDocument SaveFileManager::loadJsonDocument(QString saveFilePath) {
 QJsonObject SaveFileManager::convertEditorToJsonObject(EditorManager* editorManager) {
     QJsonObject json;
     json["tags"] = convertTagsToJsonArray(TagsManager::getTags());
+    json["sceneWidth"] = editorManager->getSceneSize().width();
+    json["sceneHeight"] = editorManager->getSceneSize().height();
     json["background"] = QDir::toNativeSeparators(editorManager->getBackgroundImagePath()).remove(QDir::toNativeSeparators(GameFramework::resourcesPath()));
     json["sprites"] = convertSpritesToJsonArray(editorManager -> getEditorSprites());
     return json;
@@ -160,33 +170,11 @@ QJsonArray SaveFileManager::convertSpritesToJsonArray(const QList<EditorSprite *
 //! \param editorManager L'éditeur dans lequel charger le fichier
 //! \param path Le chemin du fichier à charger
 void SaveFileManager::loadJsonIntoEditor(EditorManager *editorManager, QJsonObject jsonObject) {
-    editorManager->resetEditor(); // On vide l'éditeur
-
     // On charge les tags
     loadTagsFromJson(jsonObject["tags"].toArray());
 
-    // On charge le fond
-    QString backgroundPath = QDir::toNativeSeparators(jsonObject["background"].toString());
-    if (!backgroundPath.isEmpty()) {
-        editorManager->setBackGroundImage( GameFramework::resourcesPath() + backgroundPath);
-    }
-
-    // On charge les sprites
-    QList<EditorSprite*> sprites = loadSpritesFromJson(jsonObject["sprites"] . toArray());
-    for (EditorSprite* sprite : sprites) {
-        editorManager->addEditorSprite(sprite);
-    }
-
-    // On vide l'historique
-    editorManager->resetHistory();
-}
-
-//! Importe un fichier JSON dans l'éditeur. Ceci ajoute les sprites et les tags du fichier à l'état actuel de l'éditeur.
-//! \param editorManager L'éditeur dans lequel importer le fichier
-//! \param jsonObject L'objet JSON à importer
-void SaveFileManager::importJsonIntoEditor(EditorManager* editorManager, QJsonObject jsonObject) {
-    // On charge les tags
-    loadTagsFromJson(jsonObject["tags"].toArray());
+    // On charge la taille de la scène
+    editorManager->setSceneSize(QSize(jsonObject["sceneWidth"].toInt(), jsonObject["sceneHeight"].toInt()));
 
     // On charge les sprites
     QList<EditorSprite*> sprites = loadSpritesFromJson(jsonObject["sprites"] . toArray());

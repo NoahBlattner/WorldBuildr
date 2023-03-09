@@ -380,6 +380,19 @@ void EditorManager::showSceneEditDialog() {
     dialog.exec();
 }
 
+//! Retourne la taille de la scène.
+//! \return    Taille de la scène.
+QSize EditorManager::getSceneSize() const {
+    return QSize(m_pScene->width(), m_pScene->height());
+}
+
+//! Modifie la taille de la scène.
+//! \param size    Nouvelle taille de la scène.
+void EditorManager::setSceneSize(QSize size) {
+    m_pScene->setWidth(size.width());
+    m_pScene->setHeight(size.height());
+}
+
 //! Indique si l'éditeur contient le sprite donné.
 //! \param pEditSprite    Sprite d'éditeur à chercher.
 bool EditorManager::containsEditorSprite(EditorSprite *pEditSprite) const {

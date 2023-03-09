@@ -29,7 +29,6 @@ private:
     static QJsonArray convertSpritesToJsonArray(const QList<EditorSprite*>& sprites);
 
     static void loadJsonIntoEditor(EditorManager* editorManager, QJsonObject jsonObject);
-    static void importJsonIntoEditor(EditorManager* editorManager, QJsonObject jsonObject);
     static void loadTagsFromJson(const QJsonArray& jsonArray);
     static QList<EditorSprite*> loadSpritesFromJson(const QJsonArray& jsonArray);
 };
