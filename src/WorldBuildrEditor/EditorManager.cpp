@@ -48,6 +48,18 @@ void EditorManager::onKeyPressed(int key) {
             // On désélectionne tous les sprites
             unselectAllEditorSprites();
             break;
+        case Qt::Key_Down:
+            m_arrowKeysVector += QVector2D(0, 1);
+            break;
+        case Qt::Key_Up:
+            m_arrowKeysVector += QVector2D(0, -1);
+            break;
+        case Qt::Key_Left:
+            m_arrowKeysVector += QVector2D(-1, 0);
+            break;
+        case Qt::Key_Right:
+            m_arrowKeysVector += QVector2D(1, 0);
+            break;
         case Qt::Key_A:
             if (m_isCtrlHeld) {
                 // On sélectionne tous les sprites
@@ -115,6 +127,18 @@ void EditorManager::onKeyReleased(int key) {
             break;
         case Qt::Key_Delete:
             deleteSelectedEditorSprites();
+            break;
+        case Qt::Key_Down:
+            m_arrowKeysVector -= QVector2D(0, 1);
+            break;
+        case Qt::Key_Up:
+            m_arrowKeysVector -= QVector2D(0, -1);
+            break;
+        case Qt::Key_Left:
+            m_arrowKeysVector -= QVector2D(-1, 0);
+            break;
+        case Qt::Key_Right:
+            m_arrowKeysVector -= QVector2D(1, 0);
             break;
     }
 }
@@ -536,10 +560,27 @@ EditorSprite* EditorManager::duplicateEditorSprite(EditorSprite* pEditSprite) {
     auto* duplicatedSprite = pEditSprite->clone();
 
     // On ajoute le sprite à l'éditeur décalé de 10 pixels
-    addEditorSprite(duplicatedSprite, pEditSprite->pos() + QPointF(10, 10));
+    addEditorSprite(duplicatedSprite, pEditSprite->pos());
 
     // On sélectionne le nouveau sprite
     selectEditorSprite(duplicatedSprite);
+
+    // On déplace le sprite dupliqué
+    if (m_arrowKeysVector == QVector2D(0,0)) { // Si aucune touche de direction n'est enfoncée
+        duplicatedSprite->moveBy(10, 10);
+    } else { // Si une touche de direction est enfoncée
+        if (m_arrowKeysVector.x() > 0) { // Si la touche de droite est enfoncée
+            duplicatedSprite->setX(pEditSprite->right());
+        } else if (m_arrowKeysVector.x() < 0) { // Si la touche de gauche est enfoncée
+            duplicatedSprite->setX(pEditSprite->left() - duplicatedSprite->width());
+        }
+
+        if (m_arrowKeysVector.y() > 0) { // Si la touche du bas est enfoncée
+            duplicatedSprite->setY(pEditSprite->bottom());
+        } else if (m_arrowKeysVector.y() < 0) { // Si la touche du haut est enfoncée
+            duplicatedSprite->setY(pEditSprite->top() - duplicatedSprite->height());
+        }
+    }
 
     // Historique
     m_editorHistory->requestResumeHistory();

@@ -10,6 +10,7 @@
 
 #include <QWidget>
 #include <QPointF>
+#include <QVector2D>
 
 class EditorSprite;
 class EditorHistory;
@@ -132,6 +133,7 @@ private:
     // Etat de touche
     bool m_isShiftHeld = false;
     bool m_isCtrlHeld = false;
+    QVector2D m_arrowKeysVector = QVector2D(0, 0);
 
     // Etat de la souris
     Qt::MouseButtons m_heldMouseButtons;
