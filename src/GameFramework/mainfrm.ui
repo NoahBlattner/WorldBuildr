@@ -13,19 +13,19 @@
   <property name="windowTitle">
    <string>WorldBuildr</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="EditorActionPanel" name="editorActionPanel"/>
-   </item>
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="EditorActionPanel" name="editorActionPanel"/>
+     </item>
      <item>
       <widget class="GameView" name="grvGame"/>
      </item>
-     <item>
-      <widget class="SpriteDetailsPanel" name="detailsPanel"/>
-     </item>
     </layout>
+   </item>
+   <item>
+    <widget class="SpriteDetailsPanel" name="detailsPanel"/>
    </item>
   </layout>
  </widget>

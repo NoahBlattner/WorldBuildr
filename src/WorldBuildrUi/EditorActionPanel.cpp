@@ -41,20 +41,6 @@ void EditorActionPanel::bindEditorManager(EditorManager *editorManager) {
 
 //! Initialise le layout
 void EditorActionPanel::initLayout() {
-
-    // Layout des options
-    auto* optionsLayout = new QVBoxLayout();
-    optionsLayout->addWidget(snapToSpritesCheckBox);
-    optionsLayout->addWidget(alignToGridCheckBox);
-    auto* gridCellSizeLayout = new QHBoxLayout();
-    gridCellSizeLayout->addWidget(gridCellSizeSpinBox);
-    gridCellSizeLayout->addWidget(new QLabel("Taille de la grille"));
-    optionsLayout->addLayout(gridCellSizeLayout);
-
-    // Grouper les boutons
-    auto* layoutActionsScene = new QVBoxLayout();
-    layoutActionsScene->addWidget(editSceneButton);
-
     auto* layoutActionsCreation = new QVBoxLayout();
     layoutActionsCreation->addWidget(addButton);
     layoutActionsCreation->addWidget(duplicateButton);
@@ -68,9 +54,19 @@ void EditorActionPanel::initLayout() {
     layoutActionsSelection->addWidget(selectAllButton);
     layoutActionsSelection->addWidget(deselectAllButton);
 
-    auto* layoutActionsFond = new QVBoxLayout();
-    layoutActionsFond->addWidget(addBackgroundButton);
-    layoutActionsFond->addWidget(removeBackgroundButton);
+    auto* layoutActionsScene = new QVBoxLayout();
+    layoutActionsScene->addWidget(addBackgroundButton);
+    layoutActionsScene->addWidget(removeBackgroundButton);
+    layoutActionsScene->addWidget(editSceneButton);
+
+    // Layout des options
+    auto* optionsLayout = new QVBoxLayout();
+    optionsLayout->addWidget(snapToSpritesCheckBox);
+    optionsLayout->addWidget(alignToGridCheckBox);
+    auto* gridCellSizeLayout = new QHBoxLayout();
+    gridCellSizeLayout->addWidget(gridCellSizeSpinBox);
+    gridCellSizeLayout->addWidget(new QLabel("Taille de la grille"));
+    optionsLayout->addLayout(gridCellSizeLayout);
 
     auto* layoutActionsFichier = new QVBoxLayout();
     layoutActionsFichier->addWidget(saveButton);
@@ -78,9 +74,6 @@ void EditorActionPanel::initLayout() {
     layoutActionsFichier->addWidget(importButton);
 
     // Ajout des layouts dans les groupes de boutons
-    auto* groupeOptions = new QGroupBox("Options");
-    groupeOptions->setLayout(optionsLayout);
-    groupeOptions -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
     auto* groupeActionsScene = new QGroupBox("Scène");
     groupeActionsScene->setLayout(layoutActionsScene);
     auto* groupeActionsCreation = new QGroupBox("Création et suppression");
@@ -92,9 +85,9 @@ void EditorActionPanel::initLayout() {
     auto* groupeActionsSelection = new QGroupBox("Sélection");
     groupeActionsSelection->setLayout(layoutActionsSelection);
     groupeActionsSelection -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
-    auto* groupeActionsFond = new QGroupBox("Autres actions");
-    groupeActionsFond->setLayout(layoutActionsFond);
-    groupeActionsFond -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
+    auto* groupeOptions = new QGroupBox("Options");
+    groupeOptions->setLayout(optionsLayout);
+    groupeOptions -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
     auto* groupeActionsFichier = new QGroupBox("Fichier");
     groupeActionsFichier->setLayout(layoutActionsFichier);
     groupeActionsFichier -> setStyleSheet(GameFramework::loadStyleSheetString("groupboxStyle.qss"));
@@ -103,39 +96,17 @@ void EditorActionPanel::initLayout() {
     mainLayout = new QVBoxLayout(this);
     mainLayout->setAlignment(Qt::AlignCenter);
     // Ajout des groupes dans le layout principal
-    mainLayout->addWidget(groupeOptions);
-    mainLayout->addWidget(groupeActionsScene);
+    mainLayout->addWidget(groupeActionsFichier);
+    mainLayout->addStretch();
     mainLayout->addWidget(groupeActionsCreation);
     mainLayout->addWidget(groupeActionsHistorique);
     mainLayout->addWidget(groupeActionsSelection);
-    mainLayout->addWidget(groupeActionsFond);
-    mainLayout->addWidget(groupeActionsFichier);
+    mainLayout->addWidget(groupeActionsScene);
+    mainLayout->addWidget(groupeOptions);
 }
 
 //! Initialise les boutons
 void EditorActionPanel::initInputs() {
-    // Création de la checkbox d'alignement aux sprites
-    snapToSpritesCheckBox = new QCheckBox("Aligner aux sprites");
-    snapToSpritesCheckBox->setToolTip("Aligner aux sprites");
-    snapToSpritesCheckBox->setStyleSheet(GameFramework::loadStyleSheetString("checkboxStyle.qss"));
-
-    // Création de la checkbox d'alignement à la grille
-    alignToGridCheckBox = new QCheckBox("Utiliser la grille");
-    alignToGridCheckBox->setToolTip("Aligner les sprites à la grille");
-    alignToGridCheckBox->setStyleSheet(GameFramework::loadStyleSheetString("checkboxStyle.qss"));
-
-    // Création du champs de texte pour la taille de la grille
-    gridCellSizeSpinBox = new QSpinBox();
-    gridCellSizeSpinBox->setToolTip("Taille de la grille");
-    gridCellSizeSpinBox -> setRange(1, 2000);
-    gridCellSizeSpinBox ->setValue(50);
-    gridCellSizeSpinBox->setStyleSheet(GameFramework::loadStyleSheetString("spinboxStyle.qss"));
-
-    // Création du bouton d'édition de la scène
-    editSceneButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/editIcon.png"), "Editer la scène");
-    editSceneButton->setToolTip("Editer la scène");
-    editSceneButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
-
     // Création du bouton d'ajout de sprite
     addButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/addIcon.png"), "Ajouter un sprite");
     addButton->setToolTip("Ajouter un sprite");
@@ -173,13 +144,35 @@ void EditorActionPanel::initInputs() {
 
     // Création d'un bouton d'ajout d'arrière-plan
     addBackgroundButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/backgroundIcon.png"), "Ajouter un arrière-plan");
-    addBackgroundButton->setToolTip("Ajouter un arrière-plan");
+    addBackgroundButton->setToolTip("Ajouter un arrière-plan à la scène");
     addBackgroundButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
 
     // Création d'un bouton de suppression d'arrière-plan
     removeBackgroundButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/removeBackgroundIcon.png"), "Supprimer l'arrière-plan");
-    removeBackgroundButton->setToolTip("Supprimer l'arrière-plan");
+    removeBackgroundButton->setToolTip("Supprimer l'arrière-plan de la scène");
     removeBackgroundButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
+
+    // Création du bouton d'édition de la scène
+    editSceneButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/editIcon.png"), "Changer la taille");
+    editSceneButton->setToolTip("Changer la taille de la scène");
+    editSceneButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
+
+    // Création de la checkbox d'alignement aux sprites
+    snapToSpritesCheckBox = new QCheckBox("Aligner aux sprites");
+    snapToSpritesCheckBox->setToolTip("Aligner aux sprites");
+    snapToSpritesCheckBox->setStyleSheet(GameFramework::loadStyleSheetString("checkboxStyle.qss"));
+
+    // Création de la checkbox d'alignement à la grille
+    alignToGridCheckBox = new QCheckBox("Utiliser la grille");
+    alignToGridCheckBox->setToolTip("Aligner les sprites à la grille");
+    alignToGridCheckBox->setStyleSheet(GameFramework::loadStyleSheetString("checkboxStyle.qss"));
+
+    // Création du champs de texte pour la taille de la grille
+    gridCellSizeSpinBox = new QSpinBox();
+    gridCellSizeSpinBox->setToolTip("Taille de la grille");
+    gridCellSizeSpinBox -> setRange(1, 2000);
+    gridCellSizeSpinBox ->setValue(50);
+    gridCellSizeSpinBox->setStyleSheet(GameFramework::loadStyleSheetString("spinboxStyle.qss"));
 
     // Création du bouton de sauvegarde
     saveButton = new QPushButton(QIcon(GameFramework::imagesPath() + "icons/saveIcon.png"), "Sauvegarder");
