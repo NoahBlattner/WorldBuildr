@@ -352,6 +352,9 @@ void EditorManager::resetEditor() {
     // Supprimer les tags
     TagsManager::clearTags();
 
+    // Réinitialise le chemin de sauvegarde
+    m_saveFilePath = "";
+
     // Supprime l'image de fond
     removeBackGroundImage();
 
