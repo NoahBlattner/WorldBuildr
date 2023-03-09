@@ -172,6 +172,7 @@ void EditorActionPanel::initInputs() {
     gridCellSizeSpinBox->setToolTip("Taille de la grille");
     gridCellSizeSpinBox -> setRange(1, 2000);
     gridCellSizeSpinBox ->setValue(50);
+    gridCellSizeSpinBox->setEnabled(false);
     gridCellSizeSpinBox->setStyleSheet(GameFramework::loadStyleSheetString("spinboxStyle.qss"));
 
     // Création du bouton de sauvegarde
@@ -215,37 +216,19 @@ void EditorActionPanel::connectSignals() const {
  * Gestion des signaux des inputs
  ********************/
 
-//! Slot appelé lors du changement de l'état de la case à cocher de l'alignement aux sprites
-void EditorActionPanel::snapToSpritesCheckBoxStateChanged(int state) {
-    m_pEditorManager->setSnapEnabled(state == Qt::Checked);
-
-    // Si l'alignement aux sprites est activé, on désactive l'alignement à la grille
-    if (state == Qt::Checked) {
-        alignToGridCheckBox->setChecked(false);
-        m_pEditorManager->setGridEnabled(false);
-    }
+//! Slot appelé lors du clic sur le bouton de sauvegarde
+void EditorActionPanel::saveButtonClicked() {
+    m_pEditorManager->save("");
 }
 
-//! Slot appelé lors du changement de l'état de la case à cocher d'alignement à la grille
-void EditorActionPanel::alignToGridCheckBoxStateChanged(int state) {
-    m_pEditorManager->setGridEnabled(state == Qt::Checked);
-
-    // Si l'alignement à la grille est activé, on désactive l'alignement aux sprites
-    if (state == Qt::Checked) {
-        snapToSpritesCheckBox->setChecked(false);
-        m_pEditorManager->setSnapEnabled(false);
-    }
+//! Slot appelé lors du clic sur le bouton de chargement
+void EditorActionPanel::loadButtonClicked() {
+    m_pEditorManager->load("");
 }
 
-//! Slot appelé lors du changement de la taille des cellules de la grille
-void EditorActionPanel::girdCellSizeSpinBoxValueChanged(int value) {
-    m_pEditorManager->setGridCellSize(value);
-}
-
-//! Slot appelé lors du clic sur le bouton d'édition de la scène
-void EditorActionPanel::editSceneButtonClicked() {
-    // Ouverture de la fenêtre d'édition de la scène
-    m_pEditorManager->showSceneEditDialog();
+//! Slot appelé lors du clic sur le bouton d'importation
+void EditorActionPanel::importButtonClicked() {
+    m_pEditorManager->import("");
 }
 
 //! Slot appelé lors du clic sur le bouton d'ajout de sprite
@@ -298,17 +281,38 @@ void EditorActionPanel::removeBackgroundButtonClicked() {
     m_pEditorManager->removeBackGroundImage();
 }
 
-//! Slot appelé lors du clic sur le bouton de sauvegarde
-void EditorActionPanel::saveButtonClicked() {
-    m_pEditorManager->save("");
+//! Slot appelé lors du clic sur le bouton d'édition de la scène
+void EditorActionPanel::editSceneButtonClicked() {
+    // Ouverture de la fenêtre d'édition de la scène
+    m_pEditorManager->showSceneEditDialog();
 }
 
-//! Slot appelé lors du clic sur le bouton de chargement
-void EditorActionPanel::loadButtonClicked() {
-    m_pEditorManager->load("");
+//! Slot appelé lors du changement de l'état de la case à cocher de l'alignement aux sprites
+void EditorActionPanel::snapToSpritesCheckBoxStateChanged(int state) {
+    m_pEditorManager->setSnapEnabled(state == Qt::Checked);
+
+    // Si l'alignement aux sprites est activé, on désactive l'alignement à la grille
+    if (state == Qt::Checked) {
+        alignToGridCheckBox->setChecked(false);
+        m_pEditorManager->setGridEnabled(false);
+    }
 }
 
-//! Slot appelé lors du clic sur le bouton d'importation
-void EditorActionPanel::importButtonClicked() {
-    m_pEditorManager->import("");
+//! Slot appelé lors du changement de l'état de la case à cocher d'alignement à la grille
+void EditorActionPanel::alignToGridCheckBoxStateChanged(int state) {
+    m_pEditorManager->setGridEnabled(state == Qt::Checked);
+
+    // Si l'alignement à la grille est activé, on désactive l'alignement aux sprites
+    if (state == Qt::Checked) {
+        snapToSpritesCheckBox->setChecked(false);
+        m_pEditorManager->setSnapEnabled(false);
+    }
+
+    // Activation ou désactivation de la taille des cellules de la grille
+    gridCellSizeSpinBox->setEnabled(state == Qt::Checked);
+}
+
+//! Slot appelé lors du changement de la taille des cellules de la grille
+void EditorActionPanel::girdCellSizeSpinBoxValueChanged(int value) {
+    m_pEditorManager->setGridCellSize(value);
 }

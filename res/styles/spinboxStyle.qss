@@ -14,3 +14,9 @@ QAbstractSpinBox:up-button {
 QAbstractSpinBox:down-button {
     height: 10px;
 }
+
+QAbstractSpinBox:disabled {
+    background-color: #d0d0d0;
+    color: #808080;
+    border: 1px solid #a4a4a4;
+}
