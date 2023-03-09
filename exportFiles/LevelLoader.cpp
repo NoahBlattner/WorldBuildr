@@ -26,7 +26,12 @@ LevelLoader::LevelLoader(GameScene* scene, QString levelsPath) {
 //! \return La liste des sprites chargés
 QList<Sprite *> LevelLoader::loadLevel(const QString& levelName) {
     // Concaténation du chemin du niveau avec le nom du niveau
-    QString levelPath = m_levelsPath + "/" + levelName + ".json";
+    QString levelPath = m_levelsPath + "/" + levelName;
+
+    if (!levelName.endsWith(".json")) { // Si le nom du niveau ne finit pas par .json
+        levelPath += ".json";
+    }
+
     levelPath = QDir::toNativeSeparators(levelPath);
 
     if (!QFile::exists(levelPath)) { // Si le fichier n'existe pas
