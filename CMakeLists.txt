@@ -1,13 +1,15 @@
 cmake_minimum_required(VERSION 3.24)
-project(WorldBuildr)
+project(WorldBuildr LANGUAGES CXX)
 
 set(UIS src/GameFramework/mainfrm.ui)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
-set(CMAKE_PREFIX_PATH C:/Qt/6.4.0/mingw_64/)
+set(CMAKE_PREFIX_PATH C:/Qt/Tools/CMake_64)
 set(CMAKE_AUTOMOC TRUE)
 
 find_package(Qt6 COMPONENTS
@@ -43,6 +45,8 @@ target_link_libraries(WorldBuildr
         Qt::Gui
         Qt6::Widgets
         )
+
+install(TARGETS WorldBuildr DESTINATION build)
 
 if (WIN32)
     set(DEBUG_SUFFIX)
