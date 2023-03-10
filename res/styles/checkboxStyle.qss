@@ -1,0 +1,9 @@
+QCheckBox {
+    margin-left: 50%;
+    margin-right: 50%;
+}
+
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+}

@@ -10,6 +10,7 @@
 
 #include <QWidget>
 #include <QPointF>
+#include <QVector2D>
 
 class EditorSprite;
 class EditorHistory;
@@ -68,6 +69,16 @@ public:
     QList<EditorSprite*> getEditorSprites() const { return m_pEditorSprites; }
     bool containsEditorSprite(EditorSprite* pEditSprite) const;
 
+    // Gestion de sauvegarde et chargement
+    void save(QString saveFilePath);
+    void load(QString saveFilePath);
+    void import(QString saveFilePath);
+
+    // Gestion du snap et de la grille
+    void setGridCellSize(int size);
+    void setGridEnabled(bool enabled);
+    void setSnapEnabled(bool enabled);
+
     // Gestion de l'historique
     void undo();
     void redo();
@@ -94,26 +105,37 @@ public:
     void deleteSelectedEditorSprites();
 
     // Gestion de modification de sprites
+    void setEditorSpriteX(EditorSprite* pEditSprite, qreal x);
+    void setEditorSpriteY(EditorSprite* pEditSprite, qreal y);
     void moveEditorSprite(EditorSprite* pEditSprite, QPointF moveVector);
     void moveSelectedEditorSprites(QPointF moveVector);
+    void setEditorSpriteZIndex(EditorSprite* pEditSprite, int zIndex);
+    void setEditorSpriteRotation(EditorSprite* pEditSprite, qreal angle);
+    void rescaleEditorSprite(EditorSprite *pEditSprite, double scale);
+    void setEditorSpriteOpacity(EditorSprite *pEditSprite, double opacity);
 
     // Gestion de l'image de fond
     void setBackGroundImage(QString imageFileName = QString());
     QString getBackgroundImagePath() const { return m_backgroundImageFileName; }
     void removeBackGroundImage();
 
+    void showSceneEditDialog();
+    QSize getSceneSize() const;
+    void setSceneSize(QSize size);
+
 private:
     GameScene* m_pScene = nullptr;
 
-    QString m_name = QString();
-
     EditorHistory* m_editorHistory = nullptr;
+
+    QString m_saveFilePath = QString();
 
     QString m_backgroundImageFileName = QString();
 
     // Etat de touche
     bool m_isShiftHeld = false;
     bool m_isCtrlHeld = false;
+    QVector2D m_arrowKeysVector = QVector2D(0, 0);
 
     // Etat de la souris
     Qt::MouseButtons m_heldMouseButtons;
@@ -126,11 +148,20 @@ private:
     bool m_isDragging = false;
     EditorSprite* mouseDownEditorSprite = nullptr;
 
+    // Grid and sprite snapping
+    int m_gridCellSize = 50;
+    bool m_isGridEnabled = false;
+    bool m_isSpriteSnappingEnabled = false;
+
     // Liste des sprites
     QList<EditorSprite*> m_pEditorSprites;
     QList<EditorSprite*> m_pSelectedEditorSprites;
 
+    bool isInScene(QRectF rectF) const;
+
     QString loadImageToEditor();
+
+    int getHighestZIndex() const;
 
 private slots:
     void editorSpriteClicked(EditorSprite* pEditSprite);
@@ -143,6 +174,11 @@ private slots:
     void onMouseButtonReleased(QPointF mousePosition, Qt::MouseButtons buttons);
 
     void updateMultiSelect(QPointF &newMousePosition);
+
+signals:
+    void editorSpriteSelected(EditorSprite* pEditSprite);
+
+    void editorSpriteDeleted(EditorSprite* pEditSprite);
 };
 
 

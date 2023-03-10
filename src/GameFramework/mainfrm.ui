@@ -13,19 +13,21 @@
   <property name="windowTitle">
    <string>WorldBuildr</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="ActionPanel" name="actionPanel"/>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="EditorActionPanel" name="editorActionPanel"/>
+     </item>
+     <item>
+      <widget class="GameView" name="grvGame"/>
+     </item>
+    </layout>
    </item>
    <item>
-    <widget class="GameView" name="grvGame"/>
+    <widget class="SpriteDetailsPanel" name="detailsPanel"/>
    </item>
-   <!--
-    <item>
-     <widget class="TodoDetailsPanel" name="DetailsHud"/>
-    </item>
-   -->
-   </layout>
+  </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -33,11 +35,6 @@
    <class>GameView</class>
    <extends>QGraphicsView</extends>
    <header>gameview.h</header>
-  </customwidget>
-  <customwidget>
-   <class>EditorHud</class>
-   <extends>QGraphicsScene</extends>
-   <header>EditorHud.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

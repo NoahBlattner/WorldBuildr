@@ -104,6 +104,7 @@ private:
 
     QImage* m_pBackgroundImage;
     QList<Sprite*> m_registeredForTickSpriteList;
+    QGraphicsRectItem* outlineRect;
 
 private slots:
     void onSpriteDestroyed(Sprite* pSprite);

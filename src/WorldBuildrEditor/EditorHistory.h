@@ -51,7 +51,11 @@ public:
         AddSprite,
         RemoveSprite,
         MoveSprite,
+        ChangeZIndex,
+        RotateSprite,
+        ChangeOpacity,
         DuplicateSprite,
+        RescaleSprite,
         SelectAll,
         DeselectAll,
         SelectSprite,
@@ -59,6 +63,8 @@ public:
         AddBackground,
         RemoveBackground
     };
+
+    static Action inverseAction(Action action);
 
     void addAction(Action action, QString additionalData);
     void addSpriteAction(Action action, QList<EditorSprite*> sprites);
@@ -95,8 +101,7 @@ private:
 
     void deleteUnreferencedSpritesInState(int i);
 
-    void performAction(State &state);
-    void performInverseAction(State &state);
+    void performAction(State &state, bool inverse = false);
 };
 
 

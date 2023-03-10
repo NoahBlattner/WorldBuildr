@@ -28,9 +28,10 @@ const int STAT_TRIGGER_INTERVAL = 1000;
 //! Construit le canvas de jeu, qui se charge de faire l'interface entre GameView, GameScene et GameCore.
 //! \param pView    La vue qui affiche les scènes du jeu.
 //! \param pParent  Objet parent.
-GameCanvas::GameCanvas(GameView* pView, EditorActionPanel* editHud, QObject* pParent) : QObject(pParent) {
-    m_pView = pView;
-    m_pEditHud = editHud;
+GameCanvas::GameCanvas(Ui::MainFrm* ui, QObject* pParent) : QObject(pParent) {
+    m_pView = ui->grvGame;
+    m_pEditHud = ui->editorActionPanel;
+    m_pDetailsPanel = ui->detailsPanel;
     m_pGameCore = nullptr;
     m_pDetailedInfosItem = nullptr;
 
@@ -350,8 +351,14 @@ void GameCanvas::resetStatistics() {
     m_statsTrigger = STAT_TRIGGER_INTERVAL;
 }
 
-EditorActionPanel* GameCanvas::getEditorHud() {
+//! Retourne le panneau d'édition.
+EditorActionPanel* GameCanvas::getActionPanel() {
     return m_pEditHud;
+}
+
+//! Retourne le panneau de détails.
+SpriteDetailsPanel* GameCanvas::getDetailsPanel() {
+    return m_pDetailsPanel;
 }
 
 #endif

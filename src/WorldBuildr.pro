@@ -20,26 +20,38 @@ TEMPLATE = app
 #DEFINES += DEBUG_SHAPE
 #DEFINES += DEPLOY # Pour une compilation dans un but de déploiement
 
-SOURCES += main.cpp\
-    mainfrm.cpp \
-    gamescene.cpp \
-    sprite.cpp \
-    gamecore.cpp \
-    resources.cpp \
-    gameview.cpp \
-    utilities.cpp \
-    gamecanvas.cpp \
-    spritetickhandler.cpp
+SOURCES += GameFramework/main.cpp\
+    GameFramework/mainfrm.cpp \
+    GameFramework/gamescene.cpp \
+    GameFramework/sprite.cpp \
+    GameFramework/resources.cpp \
+    GameFramework/gameview.cpp \
+    GameFramework/utilities.cpp \
+    GameFramework/gamecanvas.cpp \
+    GameFramework/spritetickhandler.cpp \
+    WorldBuildrEditor/EditorHistory.cpp \
+    WorldBuildrEditor/EditorManager.cpp \
+    WorldBuildrEditor/EditorSprite.cpp \
+    WorldBuildrEditor/gamecore.cpp \
+    WorldBuildrEditor/SaveFileManager.cpp \
+    WorldBuildrEditor/SelectionZone.cpp \
+    WorldBuildrUi/EditorActionPanel.cpp
 
-HEADERS  += mainfrm.h \
-    gamescene.h \
-    sprite.h \
-    gamecore.h \
-    resources.h \
-    gameview.h \
-    utilities.h \
-    gamecanvas.h \
-    spritetickhandler.h
+HEADERS  += GameFramework/mainfrm.h \
+    GameFramework/gamescene.h \
+    GameFramework/sprite.h \
+    GameFramework/resources.h \
+    GameFramework/gameview.h \
+    GameFramework/utilities.h \
+    GameFramework/gamecanvas.h \
+    GameFramework/spritetickhandler.h \
+    WorldBuildrEditor/EditorHistory.h \
+    WorldBuildrEditor/EditorManager.h \
+    WorldBuildrEditor/EditorSprite.h \
+    WorldBuildrEditor/gamecore.h \
+    WorldBuildrEditor/SaveFileManager.h \
+    WorldBuildrEditor/SelectionZone.h \
+    WorldBuildrUi/EditorActionPanel.h
 
-FORMS    += mainfrm.ui
+FORMS    += GameFramework/mainfrm.ui
 

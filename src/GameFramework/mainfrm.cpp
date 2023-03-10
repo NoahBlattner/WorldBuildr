@@ -14,7 +14,7 @@
 MainFrm::MainFrm(QWidget *pParent) : QWidget(pParent), ui(new Ui::MainFrm) {
     ui->setupUi(this);
 
-    m_pGameCanvas = new GameCanvas(ui->grvGame, ui->actionPanel);
+    m_pGameCanvas = new GameCanvas(ui);
 
     // Pour fermer l'application si demandé par GameCanvas.
     connect(m_pGameCanvas, &GameCanvas::requestToCloseApp, this, &QWidget::close);
@@ -23,7 +23,7 @@ MainFrm::MainFrm(QWidget *pParent) : QWidget(pParent), ui(new Ui::MainFrm) {
     ui->grvGame->setFitToScreenEnabled(true);
 
     // Pour supprimer les marges de la zone de jeu
-    // ui->verticalLayout->setContentsMargins(QMargins(0,0,0,0));
+    ui->verticalLayout->setContentsMargins(QMargins(0,0,0,0));
 }
 
 //! Détruit la fenêtre principale.

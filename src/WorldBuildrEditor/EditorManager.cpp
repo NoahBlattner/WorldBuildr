@@ -16,6 +16,8 @@
 #include "SelectionZone.h"
 #include "resources.h"
 #include "SaveFileManager.h"
+#include "TagsManager.h"
+#include "SceneEditDialog.h"
 
 EditorManager::EditorManager(GameCore* core) {
     m_pScene = core->getScene();
@@ -29,8 +31,330 @@ EditorManager::EditorManager(GameCore* core) {
     connect(core, &GameCore::notifyMouseButtonReleased, this, &EditorManager::onMouseButtonReleased);
 }
 
+/********************************************
+ * Gestion des touche et boutons de la souris
+ *******************************************/
+
+//! Traite la pression d'une touche du clavier.
+void EditorManager::onKeyPressed(int key) {
+    switch (key) {
+        case Qt::Key_Shift:
+            m_isShiftHeld = true;
+            break;
+        case Qt::Key_Control:
+            m_isCtrlHeld = true;
+            break;
+        case Qt::Key_Escape:
+            // On désélectionne tous les sprites
+            unselectAllEditorSprites();
+            break;
+        case Qt::Key_Down:
+            m_arrowKeysVector += QVector2D(0, 1);
+            break;
+        case Qt::Key_Up:
+            m_arrowKeysVector += QVector2D(0, -1);
+            break;
+        case Qt::Key_Left:
+            m_arrowKeysVector += QVector2D(-1, 0);
+            break;
+        case Qt::Key_Right:
+            m_arrowKeysVector += QVector2D(1, 0);
+            break;
+        case Qt::Key_A:
+            if (m_isCtrlHeld) {
+                // On sélectionne tous les sprites
+                selectMultipleEditorSprites(m_pEditorSprites);
+            }
+            break;
+        case Qt::Key_N:
+            if (m_isCtrlHeld) {
+                // On crée un nouveau sprite
+                createNewEditorSprite();
+            }
+            break;
+        case Qt::Key_V:
+            if (m_isCtrlHeld) {
+                // On colle les sprites copiés
+                duplicateSelectedEditorSprites();
+            }
+            break;
+        case Qt::Key_Z:
+            if (m_isCtrlHeld) {
+                // On annule la dernière action
+                m_editorHistory->undo();
+            }
+            break;
+        case Qt::Key_Y:
+            if (m_isCtrlHeld) {
+                // On rétablit la dernière action annulée
+                m_editorHistory->redo();
+            }
+            break;
+        case Qt::Key_S:
+            if (m_isCtrlHeld) {
+                if (m_isShiftHeld) {
+                    // On sauvegarde le niveau sous
+                    save("");
+                } else {
+                    // On sauvegarde le niveau
+                    save(m_saveFilePath);
+                }
+            }
+            break;
+        case Qt::Key_O:
+            if (m_isCtrlHeld) {
+                // On charge un niveau
+                load("");
+            }
+            break;
+        case Qt::Key_I:
+            if (m_isCtrlHeld) {
+                // On importe un niveau
+                import("");
+            }
+            break;
+    }
+}
+
+//! Traite le relâchement d'une touche du clavier.
+void EditorManager::onKeyReleased(int key) {
+    switch (key) {
+        case Qt::Key_Shift:
+            m_isShiftHeld = false;
+            break;
+        case Qt::Key_Control:
+            m_isCtrlHeld = false;
+            break;
+        case Qt::Key_Delete:
+            deleteSelectedEditorSprites();
+            break;
+        case Qt::Key_Down:
+            m_arrowKeysVector -= QVector2D(0, 1);
+            break;
+        case Qt::Key_Up:
+            m_arrowKeysVector -= QVector2D(0, -1);
+            break;
+        case Qt::Key_Left:
+            m_arrowKeysVector -= QVector2D(-1, 0);
+            break;
+        case Qt::Key_Right:
+            m_arrowKeysVector -= QVector2D(1, 0);
+            break;
+    }
+}
+
+//! Traite la pression d'un bouton de la souris.
+void EditorManager::onMouseButtonPressed(QPointF mousePosition, Qt::MouseButtons buttons) {
+    // Ajout le bouton à l'état de la souris
+    m_heldMouseButtons |= buttons;
+
+    switch (buttons) {
+        case Qt::LeftButton:
+            // Get le sprite cliqué
+            mouseDownEditorSprite = dynamic_cast<EditorSprite *>(m_pScene->spriteAt(mousePosition));
+            if (mouseDownEditorSprite == nullptr) {  // Si on a pas cliqué sur un sprite
+                createSelectionZone(mousePosition);
+            }
+            break;
+        case Qt::RightButton:
+            // On désélectionne tous les sprites
+            unselectAllEditorSprites();
+            break;
+    }
+}
+
+//! Traite le mouvement de la souris.
+void EditorManager::onMouseMoved(QPointF newMousePosition, QPointF oldMousePosition) {
+    // Switch sur les boutons de la souris appuyés durant le mouvement
+    switch (m_heldMouseButtons) {
+        case Qt::LeftButton:
+            if (m_pMultiSelectionZone != nullptr) { // Si une zone de sélection est en cours
+                // On met à jour la sélection
+                updateMultiSelect(newMousePosition);
+            } else if (m_isShiftHeld) {
+                createSelectionZone(newMousePosition);
+            } else if (mouseDownEditorSprite != nullptr) { // Sinon si on a précédemment cliqué sur un sprite
+                if (mouseDownEditorSprite->getEditSelected()) { // Si le sprite est sélectionné
+                    // On fait du drag and drop
+                    if (!m_isDragging) { // Si c'est le premier mouvement du drag and drop
+                        // On met en pause l'historique
+                        m_editorHistory->pauseHistory(2);
+
+                        // On commence le drag and drop
+                        m_isDragging = true;
+                        m_startDragPosition = oldMousePosition;
+                    }
+
+                    if (m_isGridEnabled) { // Si la grille est activée
+                        // Activer l'historique
+                        m_editorHistory->requestResumeHistory(2);
+
+                        int prevGridX = oldMousePosition.x() / m_gridCellSize;
+                        int prevGridY = oldMousePosition.y() / m_gridCellSize;
+
+                        int newGridX = newMousePosition.x() / m_gridCellSize;
+                        int newGridY = newMousePosition.y() / m_gridCellSize;
+
+                        if (prevGridX != newGridX) { // Si on a changé de case en X
+                            // On déplace le sprite
+                            setEditorSpriteX(mouseDownEditorSprite, newGridX * m_gridCellSize);
+                        }
+
+                        if (prevGridY != newGridY) { // Si on a changé de case en Y
+                            // On déplace le sprite
+                            setEditorSpriteY(mouseDownEditorSprite, newGridY * m_gridCellSize);
+                        }
+
+                        // On met en pause l'historique
+                        m_editorHistory->pauseHistory(2);
+
+                    } else if (m_isSpriteSnappingEnabled) { // Sinon si le snap est activé
+                        // Prévoir le déplacement du sprite
+                        QRectF spriteRectPredict = mouseDownEditorSprite->sceneBoundingRect();
+                        spriteRectPredict.translate(newMousePosition - oldMousePosition);
+
+                        // Si le rect entre en collision avec seulement le sprite lui-même
+                        if (m_pScene->collidingSprites(spriteRectPredict).size() <= 1) {
+                            // On déplace le sprite
+                            moveEditorSprite(mouseDownEditorSprite, newMousePosition - oldMousePosition);
+                        }
+
+                    } else {
+                        // On déplace le sprite
+                        moveSelectedEditorSprites(newMousePosition - oldMousePosition);
+                    }
+                } else {
+                    selectSingleEditorSprite(mouseDownEditorSprite);
+                }
+            }
+            break;
+    }
+}
+
+//! Traite le relâchement d'un bouton de la souris.
+void EditorManager::onMouseButtonReleased(QPointF mousePosition, Qt::MouseButtons buttons) {
+    // Enlève le bouton de l'état de la souris
+    m_heldMouseButtons &= ~buttons;
+
+    // Switch sur les boutons de la souris
+    switch (buttons) {
+        case Qt::LeftButton:
+            EditorSprite* mouseUpSprite;
+            mouseUpSprite = dynamic_cast<EditorSprite *>(m_pScene->spriteAt(mousePosition));
+
+            if (m_isDragging) { // Si on a fait un drag and drop
+                // On reprend l'historique
+                m_editorHistory->requestResumeHistory(2);
+                // On enregistre l'action
+                QPointF delta = mousePosition - m_startDragPosition;
+                m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, m_pSelectedEditorSprites, QString::number(delta.x()) + ";" + QString::number(delta.y()));
+                m_isDragging = false;
+            } else if (mouseUpSprite != nullptr && mouseUpSprite == mouseDownEditorSprite) { // Si le sprite relâché est le même que le sprite cliqué
+                // On sélectionne le sprite
+                editorSpriteClicked(mouseUpSprite);
+            } else if (m_pMultiSelectionZone != nullptr) { // Sinon si une zone de sélection est en cours
+                // On récupère tous les sprites qui sont dans la zone de sélection
+                auto sprites = m_pMultiSelectionZone->endSelection();
+
+                if (!sprites.empty()) {
+                    m_editorHistory->addSpriteAction(EditorHistory::Action::SelectSprite, sprites);
+                    m_editorHistory->pauseHistory(2);
+
+                    // On désélectionne tous les sprites
+                    unselectAllEditorSprites();
+
+                    // On sélectionne tous les sprites qui sont dans la zone de sélection
+                    selectMultipleEditorSprites(sprites);
+
+                    m_editorHistory->requestResumeHistory(2);
+                }
+
+                m_pMultiSelectionZone = nullptr;
+            }
+
+            mouseDownEditorSprite = nullptr;
+            break;
+    }
+}
+
+/**********************
+ * Gestion de l'éditeur
+ *********************/
+
+//! Sauvegarde l'éditeur dans un fichier.
+//! \param saveFilePath    Chemin du fichier de sauvegarde.
+void EditorManager::save(QString saveFilePath) {
+    if (saveFilePath.isEmpty()) { // Si le chemin est vide, demander à l'utilisateur de choisir un fichier
+        saveFilePath = QFileDialog::getSaveFileName(nullptr, "Save file", SaveFileManager::DEFAULT_SAVE_DIR, "JSON (*.json)");
+    }
+
+    if (saveFilePath.isEmpty()) { // Si le chemin est toujours vide, annuler
+        return;
+    }
+
+    // Ajouter l'extension .json si elle n'est pas présente
+    if (!saveFilePath.endsWith(".json")) {
+        saveFilePath += ".json";
+    }
+
+    // On retient le chemin du fichier de sauvegarde
+    m_saveFilePath = saveFilePath;
+
+    // Sauvegarde le fichier
+    SaveFileManager::save(this,std::move(saveFilePath));
+}
+
+//! Charge un fichier de sauvegarde dans l'éditeur.
+//! \param saveFilePath    Chemin du fichier de sauvegarde.
+void EditorManager::load(QString saveFilePath) {
+    // Demander à l'utilisateur s'il est sûr de vouloir charger un fichier
+    if (QMessageBox::question(nullptr, "Load file", "Are you sure you want to load a file? This will erase the current state of the editor.") == QMessageBox::No) {
+        return;
+    }
+
+    if (saveFilePath.isEmpty()) { // Si le chemin est vide, demander à l'utilisateur de choisir un fichier
+        saveFilePath = QFileDialog::getOpenFileName(nullptr, "Load file", SaveFileManager::DEFAULT_SAVE_DIR, "JSON (*.json)");
+    }
+
+    if (saveFilePath.isEmpty()) { // Si le chemin est toujours vide, annuler
+        return;
+    }
+
+    // Ajouter l'extension .json si elle n'est pas présente
+    if (!saveFilePath.endsWith(".json")) {
+        saveFilePath += ".json";
+    }
+
+    SaveFileManager::load(this,std::move(saveFilePath));
+}
+
+//! Importe un fichier de sauvegarde dans l'éditeur.
+//! \param saveFilePath    Chemin du fichier de sauvegarde.
+void EditorManager::import(QString saveFilePath) {
+    if (saveFilePath.isEmpty()) { // Si le chemin est vide, demander à l'utilisateur de choisir un fichier
+        saveFilePath = QFileDialog::getOpenFileName(nullptr, "Load file", SaveFileManager::DEFAULT_SAVE_DIR, "JSON (*.json)");
+    }
+
+    if (saveFilePath.isEmpty()) { // Si le chemin est toujours vide, annuler
+        return;
+    }
+
+    // Ajouter l'extension .json si elle n'est pas présente
+    if (!saveFilePath.endsWith(".json")) {
+        saveFilePath += ".json";
+    }
+
+    SaveFileManager::import(this,std::move(saveFilePath));
+}
+
 //! Réinitialise l'éditeur. Supprime tous les sprites d'éditeur.
 void EditorManager::resetEditor() {
+    // Supprimer les tags
+    TagsManager::clearTags();
+
+    // Réinitialise le chemin de sauvegarde
+    m_saveFilePath = "";
+
     // Supprime l'image de fond
     removeBackGroundImage();
 
@@ -40,6 +364,33 @@ void EditorManager::resetEditor() {
 
     // Réinitialise l'historique
     m_editorHistory->clearHistory();
+}
+
+//! Indique si un rectangle est dans la scène. Le rectangle est considéré comme dans la scène s'il a au moins un point dans la scène.
+//! \param rectF    Rectangle à tester.
+//! \return         Vrai si le rectangle est dans la scène, faux sinon.
+bool EditorManager::isInScene(QRectF rectF) const {
+    return rectF.right() >= 0 && rectF.left() <= m_pScene->width()
+        && rectF.bottom() >= 0 && rectF.top() <= m_pScene->height();
+}
+
+//! Affiche la boîte de dialogue de modification de la scène.
+void EditorManager::showSceneEditDialog() {
+    SceneEditDialog dialog(m_pScene);
+    dialog.exec();
+}
+
+//! Retourne la taille de la scène.
+//! \return    Taille de la scène.
+QSize EditorManager::getSceneSize() const {
+    return QSize(m_pScene->width(), m_pScene->height());
+}
+
+//! Modifie la taille de la scène.
+//! \param size    Nouvelle taille de la scène.
+void EditorManager::setSceneSize(QSize size) {
+    m_pScene->setWidth(size.width());
+    m_pScene->setHeight(size.height());
 }
 
 //! Indique si l'éditeur contient le sprite donné.
@@ -61,6 +412,34 @@ void EditorManager::undo() {
 //! Rétablit la dernière action annulée de l'historique
 void EditorManager::redo() {
     m_editorHistory->redo();
+}
+
+//! Set la taille des cellules de la grille
+//! \param size    Taille des cellules de la grille
+void EditorManager::setGridCellSize(int size) {
+    m_gridCellSize = size;
+}
+
+//! Set si la grille est activée.
+//! \param enabled    Si la grille est activée
+void EditorManager::setGridEnabled(bool enabled) {
+    m_isGridEnabled = enabled;
+
+    if (m_isGridEnabled) { // Si la grille est activée
+        // On désactive le snap
+        m_isSpriteSnappingEnabled = false;
+    }
+}
+
+//! Set si le snap est activé.
+//! \param enabled    Si le snap est activé
+void EditorManager::setSnapEnabled(bool enabled) {
+    m_isSpriteSnappingEnabled = enabled;
+
+    if (m_isSpriteSnappingEnabled) { // Si le snap est activé
+        // On désactive la grille
+        m_isGridEnabled = false;
+    }
 }
 
 //! Copie une image sélectionnée dans le dossier d'images de l'éditeur
@@ -118,178 +497,23 @@ void EditorManager::createSelectionZone(QPointF startPositon) {
     m_pMultiSelectionZone = new SelectionZone(m_pScene, startPositon);
 }
 
-/********************************************
- * Gestion des touche et boutons de la souris
- *******************************************/
-
-//! Traite la pression d'une touche du clavier.
-void EditorManager::onKeyPressed(int key) {
-    switch (key) {
-        case Qt::Key_Shift:
-            m_isShiftHeld = true;
-            break;
-        case Qt::Key_Control:
-            m_isCtrlHeld = true;
-            break;
-        case Qt::Key_Escape:
-            // On désélectionne tous les sprites
-            unselectAllEditorSprites();
-            break;
-        case Qt::Key_A:
-            if (m_isCtrlHeld) {
-                // On sélectionne tous les sprites
-                selectMultipleEditorSprites(m_pEditorSprites);
-            }
-            break;
-        case Qt::Key_N:
-            if (m_isCtrlHeld) {
-                // On crée un nouveau sprite
-                createNewEditorSprite();
-            }
-            break;
-        case Qt::Key_V:
-            if (m_isCtrlHeld) {
-                // On colle les sprites copiés
-                duplicateSelectedEditorSprites();
-            }
-            break;
-        case Qt::Key_Z:
-            if (m_isCtrlHeld) {
-                // On annule la dernière action
-                m_editorHistory->undo();
-            }
-            break;
-        case Qt::Key_Y:
-            if (m_isCtrlHeld) {
-                // On rétablit la dernière action annulée
-                m_editorHistory->redo();
-            }
-            break;
-            case Qt::Key_S:
-                if (m_isCtrlHeld) {
-                    // On sauvegarde le niveau
-                    SaveFileManager::save(this, "");
-                }
-                break;
-            case Qt::Key_O:
-                if (m_isCtrlHeld) {
-                    // On ouvre un niveau
-                    SaveFileManager::load(this, "");
-                }
-                break;
+//! Cherche le z-index le plus élevé parmi tous les sprites d'éditeur.
+//! \return Le z-index le plus élevé.
+int EditorManager::getHighestZIndex() const {
+    if (m_pEditorSprites.isEmpty()) { // Si il n'y a pas de sprite
+        return 0;
     }
-}
 
-//! Traite le relâchement d'une touche du clavier.
-void EditorManager::onKeyReleased(int key) {
-    switch (key) {
-        case Qt::Key_Shift:
-            m_isShiftHeld = false;
-            break;
-        case Qt::Key_Control:
-            m_isCtrlHeld = false;
-            break;
-        case Qt::Key_Delete:
-            deleteSelectedEditorSprites();
-            break;
+    // Cherche le sprite avec le z-index le plus élevé
+    int maxZIndex = 0;
+    for (EditorSprite* pEditSprite : m_pEditorSprites) {
+        if (pEditSprite->zValue() > maxZIndex) {
+            maxZIndex = pEditSprite->zValue();
+        }
     }
-}
 
-//! Traite la pression d'un bouton de la souris.
-void EditorManager::onMouseButtonPressed(QPointF mousePosition, Qt::MouseButtons buttons) {
-    // Ajout le bouton à l'état de la souris
-    m_heldMouseButtons |= buttons;
-
-    switch (buttons) {
-        case Qt::LeftButton:
-            // Get le sprite cliqué
-            mouseDownEditorSprite = dynamic_cast<EditorSprite *>(m_pScene->spriteAt(mousePosition));
-            if (mouseDownEditorSprite == nullptr) {  // Si on a pas cliqué sur un sprite
-                createSelectionZone(mousePosition);
-            }
-            break;
-        case Qt::RightButton:
-            // On désélectionne tous les sprites
-            unselectAllEditorSprites();
-            break;
-    }
-}
-
-//! Traite le mouvement de la souris.
-void EditorManager::onMouseMoved(QPointF newMousePosition, QPointF oldMousePosition) {
-    // Switch sur les boutons de la souris appuyés durant le mouvement
-    switch (m_heldMouseButtons) {
-        case Qt::LeftButton:
-            if (m_pMultiSelectionZone != nullptr) { // Si une zone de sélection est en cours
-                // On met à jour la sélection
-                updateMultiSelect(newMousePosition);
-            } else if (m_isShiftHeld) {
-                createSelectionZone(newMousePosition);
-            } else if (mouseDownEditorSprite != nullptr) { // Sinon si on a précédemment cliqué sur un sprite
-                if (mouseDownEditorSprite->getEditSelected()) { // Si le sprite est sélectionné
-                    // On fait du drag and drop
-                    if (!m_isDragging) { // Si c'est le premier mouvement du drag and drop
-                        // On met en pause l'historique
-                        m_editorHistory->pauseHistory(2);
-
-                        // On commence le drag and drop
-                        m_isDragging = true;
-                        m_startDragPosition = oldMousePosition;
-                    }
-                    // On déplace le sprite
-                    moveSelectedEditorSprites(newMousePosition-oldMousePosition);
-                } else {
-                    selectSingleEditorSprite(mouseDownEditorSprite);
-                }
-            }
-            break;
-    }
-}
-
-//! Traite le relâchement d'un bouton de la souris.
-void EditorManager::onMouseButtonReleased(QPointF mousePosition, Qt::MouseButtons buttons) {
-    // Enlève le bouton de l'état de la souris
-    m_heldMouseButtons &= ~buttons;
-
-    // Switch sur les boutons de la souris
-    switch (buttons) {
-        case Qt::LeftButton:
-            EditorSprite* mouseUpSprite;
-            mouseUpSprite = dynamic_cast<EditorSprite *>(m_pScene->spriteAt(mousePosition));
-
-            if (m_isDragging) { // Si on a fait un drag and drop
-                // On reprend l'historique
-                m_editorHistory->requestResumeHistory(2);
-                // On enregistre l'action
-                QPointF delta = mousePosition - m_startDragPosition;
-                m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, m_pSelectedEditorSprites, QString::number(delta.x()) + ";" + QString::number(delta.y()));
-                m_isDragging = false;
-            } else if (mouseUpSprite != nullptr && mouseUpSprite == mouseDownEditorSprite) { // Si le sprite relâché est le même que le sprite cliqué
-                // On sélectionne le sprite
-                editorSpriteClicked(mouseUpSprite);
-            } else if (m_pMultiSelectionZone != nullptr) { // Sinon si une zone de sélection est en cours
-                // On récupère tous les sprites qui sont dans la zone de sélection
-                auto sprites = m_pMultiSelectionZone->endSelection();
-
-                if (!sprites.empty()) {
-                    m_editorHistory->addSpriteAction(EditorHistory::Action::SelectSprite, sprites);
-                    m_editorHistory->pauseHistory(2);
-
-                    // On désélectionne tous les sprites
-                    unselectAllEditorSprites();
-
-                    // On sélectionne tous les sprites qui sont dans la zone de sélection
-                    selectMultipleEditorSprites(sprites);
-
-                    m_editorHistory->requestResumeHistory(2);
-                }
-
-                m_pMultiSelectionZone = nullptr;
-            }
-
-            mouseDownEditorSprite = nullptr;
-            break;
-    }
+    // Retourne le z-index suivant
+    return maxZIndex;
 }
 
 /********************************************
@@ -305,8 +529,12 @@ void EditorManager::createNewEditorSprite(QString imageFileName, QPointF positio
         imageFileName = loadImageToEditor();
     }
 
+
     // On crée le sprite d'éditeur
     auto* pEditorSprite = new EditorSprite(imageFileName);
+
+    // On place le sprite au dessus de tous les autres sprites
+    pEditorSprite->setZValue(getHighestZIndex() + 1);
 
     // On ajoute le sprite à l'éditeur
     addEditorSprite(pEditorSprite, position);
@@ -348,10 +576,27 @@ EditorSprite* EditorManager::duplicateEditorSprite(EditorSprite* pEditSprite) {
     auto* duplicatedSprite = pEditSprite->clone();
 
     // On ajoute le sprite à l'éditeur décalé de 10 pixels
-    addEditorSprite(duplicatedSprite, pEditSprite->pos() + QPointF(10, 10));
+    addEditorSprite(duplicatedSprite, pEditSprite->pos());
 
     // On sélectionne le nouveau sprite
     selectEditorSprite(duplicatedSprite);
+
+    // On déplace le sprite dupliqué
+    if (m_arrowKeysVector == QVector2D(0,0)) { // Si aucune touche de direction n'est enfoncée
+        duplicatedSprite->moveBy(10, 10);
+    } else { // Si une touche de direction est enfoncée
+        if (m_arrowKeysVector.x() > 0) { // Si la touche de droite est enfoncée
+            duplicatedSprite->setX(pEditSprite->right());
+        } else if (m_arrowKeysVector.x() < 0) { // Si la touche de gauche est enfoncée
+            duplicatedSprite->setX(pEditSprite->left() - duplicatedSprite->width());
+        }
+
+        if (m_arrowKeysVector.y() > 0) { // Si la touche du bas est enfoncée
+            duplicatedSprite->setY(pEditSprite->bottom());
+        } else if (m_arrowKeysVector.y() < 0) { // Si la touche du haut est enfoncée
+            duplicatedSprite->setY(pEditSprite->top() - duplicatedSprite->height());
+        }
+    }
 
     // Historique
     m_editorHistory->requestResumeHistory();
@@ -393,6 +638,7 @@ void EditorManager::duplicateSelectedEditorSprites() {
 void EditorManager::selectEditorSprite(EditorSprite *pEditSprite) {
     // Ajoute le sprite cliqué à la liste des sprites sélectionnés
     if (!m_pSelectedEditorSprites.contains(pEditSprite)) {
+        emit editorSpriteSelected(pEditSprite);
         m_pSelectedEditorSprites.append(pEditSprite);
 
         // Indique au sprite qu'il est sélectionné
@@ -498,6 +744,8 @@ void EditorManager::updateMultiSelect(QPointF &newMousePosition) {// On met à j
 
 //! Supprime un sprite d'éditeur.
 void EditorManager::deleteEditorSprite(EditorSprite* pEditSprite) {
+    emit editorSpriteDeleted(pEditSprite);
+
     m_pEditorSprites.removeOne(pEditSprite);
     m_pSelectedEditorSprites.removeOne(pEditSprite);
     m_pScene->removeSpriteFromScene(pEditSprite);
@@ -524,29 +772,47 @@ void EditorManager::deleteSelectedEditorSprites() {
  * Gestion de modification de sprites
  *******************************************/
 
+//! Déplace un sprite d'éditeur à une position donnée sur l'axe X.
+//! \param pEditSprite    Sprite d'éditeur à déplacer.
+//! \param x    Position sur l'axe X.
+void EditorManager::setEditorSpriteX(EditorSprite* pEditSprite, qreal x) {
+    QRectF currentSpriteBounds = pEditSprite->sceneBoundingRect();
+    currentSpriteBounds.translate(x - pEditSprite->x(), 0);
+
+    if (!isInScene(currentSpriteBounds)) { // Si le sprite sort de la scène complétement, on ne le déplace pas
+        return;
+    }
+
+    m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, pEditSprite, QString::number(x - pEditSprite->x()) + ";0");
+    pEditSprite->setX(x);
+}
+
+//! Déplace un sprite d'éditeur à une position donnée sur l'axe Y.
+//! \param pEditSprite    Sprite d'éditeur à déplacer.
+//! \param y    Position sur l'axe Y.
+void EditorManager::setEditorSpriteY(EditorSprite* pEditSprite, qreal y) {
+    QRectF currentSpriteBounds = pEditSprite->sceneBoundingRect();
+    currentSpriteBounds.translate(0, y - pEditSprite->y());
+
+    if (!isInScene(currentSpriteBounds)) { // Si le sprite sort de la scène complétement, on ne le déplace pas
+        return;
+    }
+
+    m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, pEditSprite, "0;" + QString::number(y - pEditSprite->y()));
+    pEditSprite->setY(y);
+}
+
 //! Déplace un sprite d'éditeur d'un vecteur donné.
 //! \param pEditSprite    Sprite d'éditeur à déplacer.
 //! \param moveVector    Vecteur de déplacement.
 void EditorManager::moveEditorSprite(EditorSprite *pEditSprite, QPointF moveVector) {
     // Calcule la nouvelle position du sprite
-    QRectF currentSpriteBounds = pEditSprite->sceneBoundingRect();
-    QRectF newSpriteBounds = currentSpriteBounds;
+    QRectF newSpriteBounds = pEditSprite->sceneBoundingRect();
     newSpriteBounds.translate(moveVector);
 
-    // Si le sprite sort de la scène sur l'axe X,
-    // on le déplace pour qu'il soit à la limite de la scène
-    if (newSpriteBounds.left() < 0) {
-        moveVector.setX(-currentSpriteBounds.left());
-    } else if (newSpriteBounds.right() > m_pScene->sceneRect().right()) {
-        moveVector.setX(m_pScene->sceneRect().right() - currentSpriteBounds.right());
-    }
-
-    // Si le sprite sort de la scène sur l'axe Y,
-    // on le déplace pour qu'il soit à la limite de la scène
-    if (newSpriteBounds.top() < 0) {
-        moveVector.setY(-currentSpriteBounds.top());
-    } else if (newSpriteBounds.bottom() > m_pScene->sceneRect().bottom()) {
-        moveVector.setY(m_pScene->sceneRect().bottom() - currentSpriteBounds.bottom());
+    // Si le sprite sort de la scène complétement, on ne le déplace pas
+    if (!isInScene(newSpriteBounds)) {
+        return;
     }
 
     // Déplace le sprite
@@ -569,6 +835,47 @@ void EditorManager::moveSelectedEditorSprites(QPointF moveVector) {
     // Historique
     m_editorHistory->requestResumeHistory();
     m_editorHistory->addSpriteAction(EditorHistory::Action::MoveSprite, m_pSelectedEditorSprites, QString::number(moveVector.x()) + ";" + QString::number(moveVector.y()));
+}
+
+//! Tourne un sprite d'éditeur d'un angle donné.
+//! \param pEditSprite    Sprite d'éditeur à tourner.
+//! \param angle    Angle de rotation à appliquer.
+void EditorManager::setEditorSpriteRotation(EditorSprite *pEditSprite, qreal angle) {
+    pEditSprite->setRotation(angle);
+
+    // Historique
+    m_editorHistory->addSpriteAction(EditorHistory::Action::RotateSprite, pEditSprite, QString::number(angle));
+}
+
+//! Change l'index de profondeur d'un sprite d'éditeur.
+//! \param pEditSprite    Sprite d'éditeur à modifier.
+//! \param zIndex    Nouvel index de profondeur.
+void EditorManager::setEditorSpriteZIndex(EditorSprite* pEditSprite, int zIndex) {
+    // Historique
+    m_editorHistory->addSpriteAction(EditorHistory::Action::ChangeZIndex, pEditSprite, QString::number(zIndex - pEditSprite->zValue()));
+
+    pEditSprite->setZValue(zIndex);
+}
+
+//! Change la taille d'un sprite d'éditeur.
+//! \param pEditSprite    Sprite d'éditeur à redimensionner.
+//! \param xScale    Facteur d'agrandissement sur l'axe X.
+//! \param yScale    Facteur d'agrandissement sur l'axe Y.
+void EditorManager::rescaleEditorSprite(EditorSprite *pEditSprite, double scale) {
+    // Historique
+    // Les données additionnelles est la différence du scale
+    m_editorHistory->addSpriteAction(EditorHistory::Action::RescaleSprite, pEditSprite, QString::number(scale - pEditSprite->scale()));
+
+    pEditSprite->setScale(scale);
+}
+
+//! Change la transparence d'un sprite d'éditeur.
+//! \param pEditSprite    Sprite d'éditeur à modifier.
+void EditorManager::setEditorSpriteOpacity(EditorSprite* pEditSprite, double opacity) {
+    // Historique
+    m_editorHistory->addSpriteAction(EditorHistory::Action::ChangeOpacity, pEditSprite, QString::number(opacity - pEditSprite->opacity()));
+
+    pEditSprite->setOpacity(opacity);
 }
 
 /********************************************
@@ -613,4 +920,3 @@ void EditorManager::removeBackGroundImage() {
     // On charge une image vide dans la scène
     m_pScene->setBackgroundColor(Qt::black);
 }
-

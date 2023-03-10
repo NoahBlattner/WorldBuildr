@@ -33,17 +33,32 @@ public:
     void setEditSelected(bool selected);
     bool getEditSelected() const;
 
+    void setTag(const QString& tag);
+    QString getTag();
+    void removeTag();
+
     QString getImgPath() const { return m_imagePath; }
 
     EditorSprite* clone() const;
 
+    void setX(qreal x);
+    void setY(qreal y);
+    void moveBy(qreal dx, qreal dy);
+    void setRotation(qreal angle);
+
 private:
+    const int TAG_KEY = 0;
+
     QString m_imagePath = "";
 
     bool m_isEditSelected = false;
 
 signals:
     void editorSpriteLeftClicked(EditorSprite* pSprite);
+
+    void editorSpriteUnselected();
+
+    void editorSpriteModified();
 };
 
 

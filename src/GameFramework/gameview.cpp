@@ -84,7 +84,6 @@ void GameView::resizeEvent(QResizeEvent* pEvent) {
     if (m_fitToScreen) {
         fitInView(sceneRect(), Qt::KeepAspectRatio);
     }
-
 }
 
 //! Si la scène doit être clippée, dessine en avant-plan des rectangles permettant
