@@ -63,13 +63,9 @@ void EditorHistory::addSpriteAction(EditorHistory::Action action, QList<EditorSp
     state.sprites = std::move(sprites);
     state.additionalData = std::move(additionalData);
 
-    // On supprime les états suivants (si CTRL+Z -> Action -> CTRL+Y n'est plus possible)
-    if (m_currentStateIndex < m_states.size() - 1) {
-        for (int i = m_states.size()-1; i > m_currentStateIndex; i--) {
-            // On supprime les sprites non référencés
-            deleteUnreferencedSpritesInState(i);
-            m_states.removeLast();
-        }
+    if (m_currentStateIndex < m_states.size() - 1) { // Si CTRL+Z -> Action
+        // On supprime les états après l'état ajouté
+        deleteActionsFrom(m_currentStateIndex + 1);
     }
 
     // On ajoute l'état
@@ -77,11 +73,8 @@ void EditorHistory::addSpriteAction(EditorHistory::Action action, QList<EditorSp
 
     // On supprime les états en trop
     if (m_states.size() > MAX_HISTORY_SIZE) {
-        for (int i = 0; i < m_states.size() - MAX_HISTORY_SIZE; i++) {
-            // On supprime les sprites non référencés
-            deleteUnreferencedSpritesInState(i);
-            m_states.removeFirst();
-        }
+        // On supprime les états en trop
+        deleteActionsTo(m_states.size() - MAX_HISTORY_SIZE);
     }
 
     // On met à jour l'index de l'état courant
@@ -112,33 +105,61 @@ void EditorHistory::requestResumeHistory(int level) {
     }
 }
 
-//! Supprime les sprites non référencés dans l'état ou dans l'éditeur
-void EditorHistory::deleteUnreferencedSpritesInState(int stateIndex) {
-    for (EditorSprite* sprite : m_states[stateIndex].sprites) { // Pour chaque sprite de l'état
+//! Supprime les sprites non référencés dans l'historique autre que dans l'état passé en paramètre
+//! \param stateIndex L'index de l'état dont on veut supprimer les sprites non référencés
+void EditorHistory::deleteActionAndUnreferencedSprites(int stateIndex) {
+    if (stateIndex < 0 || stateIndex >= m_states.size()) { // Si l'état n'existe pas
+        return;
+    }
+
+    // On récupère les spritesToCheckForDelete de l'état
+    auto spritesToCheckForDelete = m_states[stateIndex].sprites;
+
+    // On supprime l'action de l'historique
+    m_states.removeAt(stateIndex);
+
+    for (EditorSprite* currentSprite : spritesToCheckForDelete) { // Pour chaque sprite de l'état supprimé
         bool deleteSprite = true;
-        if (m_pEditorManager->containsEditorSprite(sprite)) { // Si le sprite est référencé dans l'éditeur
+        if (m_pEditorManager->containsEditorSprite(currentSprite)) { // Si le sprite est référencé dans l'éditeur
             // On ne le supprime pas
             deleteSprite = false;
         } else {
-            for (const State& state : m_states) { // On regarde s'il est référencé dans un autre état
-                if (state.sprites.contains(sprite)) { // S'il est référencé
-                    // On le supprime aps
+            // On regarde s'il est référencé dans une autre action de l'historique
+            for (const State& state : m_states) { // Pour chaque action de l'historique
+                if (state.sprites.contains(currentSprite)) {
+                    // On le supprime pas
                     deleteSprite = false;
                     break;
                 }
             }
         }
 
-        if (deleteSprite) {
-            delete sprite;
+        if (deleteSprite) { // Si le sprite n'est pas référencé dans l'éditeur et dans l'historique
+            delete currentSprite;
         }
+    }
+}
+
+//! Supprime les états suivants l'état à l'index donné (Incluant cet état)
+//! \param index L'index de l'état à partir duquel on supprime
+void EditorHistory::deleteActionsFrom(int index) {
+    for (int i = index; i < m_states.size(); i++) {
+        deleteAction(i);
+    }
+}
+
+//! Supprime les états précédents l'état à l'index donné (Incluant cet état)
+//! \param index L'index de l'état à jusqu'auquel on supprime
+void EditorHistory::deleteActionsTo(int index) {
+    for (int i = index; i >= 0; i--) {
+        deleteAction(i);
     }
 }
 
 //! Supprime tout l'historique
 void EditorHistory::clearHistory() {
     for (int i = m_states.size()-1; i >= 0; i--) {
-        deleteUnreferencedSpritesInState(i);
+        deleteActionAndUnreferencedSprites(i);
         m_states.removeLast();
     }
     m_currentStateIndex = -1;

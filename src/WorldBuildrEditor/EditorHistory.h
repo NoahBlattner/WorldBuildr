@@ -99,7 +99,11 @@ private:
     QList<State> m_states;
     int m_currentStateIndex = -1;
 
-    void deleteUnreferencedSpritesInState(int i);
+    void deleteAction(int i);
+    void deleteActionsFrom(int index);
+    void deleteActionsTo(int index);
+
+    void deleteActionAndUnreferencedSprites(int i);
 
     void performAction(State &state, bool inverse = false);
 };
