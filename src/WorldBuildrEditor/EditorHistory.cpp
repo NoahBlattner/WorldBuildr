@@ -148,7 +148,7 @@ void EditorHistory::deleteActionAndUnreferencedSprites(int stateIndex) {
 //! \param index L'index de l'état à partir duquel on supprime
 void EditorHistory::deleteActionsFrom(int index) {
     for (int i = index; i < m_states.size(); i++) {
-        deleteAction(i);
+        deleteActionAndUnreferencedSprites(i);
     }
 }
 
@@ -156,7 +156,7 @@ void EditorHistory::deleteActionsFrom(int index) {
 //! \param index L'index de l'état à jusqu'auquel on supprime
 void EditorHistory::deleteActionsTo(int index) {
     for (int i = index; i >= 0; i--) {
-        deleteAction(i);
+        deleteActionAndUnreferencedSprites(i);
     }
 }
 
