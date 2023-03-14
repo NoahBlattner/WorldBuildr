@@ -13,10 +13,10 @@
 #include <QInputDialog>
 #include <QErrorMessage>
 #include <QMessageBox>
-#include "EditorManager.h"
-#include "EditorSprite.h"
-#include "TagsManager.h"
-#include "resources.h"
+#include "WorldBuildrEditor/EditorManager.h"
+#include "WorldBuildrEditor/EditorSprite.h"
+#include "WorldBuildrEditor/TagsManager.h"
+#include "GameFramework/resources.h"
 
 #include "TagEditDialog.h"
 

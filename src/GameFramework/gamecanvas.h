@@ -117,9 +117,10 @@ private:
     Qt::MouseButtons previousMouseButtons;
     QPointF previousMousePosition = QPointF(0, 0);
 
+    int m_totalElapsedTime;
+
 #ifdef QT_DEBUG
     void resetStatistics();
-    int m_totalElapsedTime;
     int m_maxTickDuration;
     int m_minTickDuration;
     int m_statsTrigger;

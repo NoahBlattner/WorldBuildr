@@ -11,7 +11,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 
-#include "resources.h"
+#include "GameFramework/resources.h"
 #include "EditorSprite.h"
 #include "EditorManager.h"
 #include "SaveFileManager.h"

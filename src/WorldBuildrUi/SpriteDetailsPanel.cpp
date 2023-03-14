@@ -11,10 +11,10 @@
 #include <QComboBox>
 #include <QListWidget>
 #include <QLabel>
-#include "EditorSprite.h"
-#include "EditorManager.h"
+#include "WorldBuildrEditor/EditorSprite.h"
+#include "WorldBuildrEditor/EditorManager.h"
 #include "SpriteDetailsPanel.h"
-#include "resources.h"
+#include "GameFramework/resources.h"
 #include "TagEditDialog.h"
 
 SpriteDetailsPanel::SpriteDetailsPanel(QWidget *pParent) : QWidget(pParent) {

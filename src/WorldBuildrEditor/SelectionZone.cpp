@@ -6,7 +6,7 @@
  */
 
 #include "SelectionZone.h"
-#include "GameScene.h"
+#include "GameFramework/GameScene.h"
 #include "EditorSprite.h"
 #include "QPainter"
 

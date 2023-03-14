@@ -6,10 +6,10 @@
  */
 
 #include "EditorActionPanel.h"
-#include "EditorManager.h"
-#include "resources.h"
-#include "GameScene.h"
-#include "GameCore.h"
+#include "WorldBuildrEditor/EditorManager.h"
+#include "GameFramework/resources.h"
+#include "GameFramework/GameScene.h"
+#include "GameFramework/gamecore.h"
 #include <QPushButton>
 #include <QCheckBox>
 #include <QLabel>

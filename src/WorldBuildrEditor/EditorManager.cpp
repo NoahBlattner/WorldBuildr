@@ -10,14 +10,14 @@
 #include <utility>
 #include "EditorManager.h"
 #include "EditorHistory.h"
-#include "GameCore.h"
-#include "GameScene.h"
+#include "GameFramework/gamecore.h"
+#include "GameFramework/GameScene.h"
 #include "EditorSprite.h"
 #include "SelectionZone.h"
-#include "resources.h"
+#include "GameFramework/resources.h"
 #include "SaveFileManager.h"
 #include "TagsManager.h"
-#include "SceneEditDialog.h"
+#include "WorldBuildrUi/SceneEditDialog.h"
 
 EditorManager::EditorManager(GameCore* core) {
     m_pScene = core->getScene();

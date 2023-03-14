@@ -34,17 +34,17 @@
   <customwidget>
    <class>GameView</class>
    <extends>QGraphicsView</extends>
-   <header>gameview.h</header>
+   <header>GameFramework/gameview.h</header>
   </customwidget>
   <customwidget>
    <class>EditorActionPanel</class>
    <extends>QWidget</extends>
-   <header>editoractionpanel.h</header>
+   <header>WorldBuildrUi/EditorActionPanel.h</header>
   </customwidget>
   <customwidget>
     <class>SpriteDetailsPanel</class>
     <extends>QWidget</extends>
-   <header>spritedetailspanel.h</header>
+   <header>WorldBuildrUi/SpriteDetailsPanel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

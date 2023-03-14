@@ -8,8 +8,6 @@ QT += core gui
 
 QT += svgwidgets
 
-QT += multimedia
-
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = WorldBuildr
@@ -21,6 +19,7 @@ TEMPLATE = app
 #DEFINES += DEPLOY # Pour une compilation dans un but de déploiement
 
 SOURCES += GameFramework/main.cpp\
+    GameFramework/gamecore.cpp \
     GameFramework/mainfrm.cpp \
     GameFramework/gamescene.cpp \
     GameFramework/sprite.cpp \
@@ -32,12 +31,12 @@ SOURCES += GameFramework/main.cpp\
     WorldBuildrEditor/EditorHistory.cpp \
     WorldBuildrEditor/EditorManager.cpp \
     WorldBuildrEditor/EditorSprite.cpp \
-    WorldBuildrEditor/gamecore.cpp \
     WorldBuildrEditor/SaveFileManager.cpp \
     WorldBuildrEditor/SelectionZone.cpp \
     WorldBuildrUi/EditorActionPanel.cpp
 
 HEADERS  += GameFramework/mainfrm.h \
+    GameFramework/gamecore.h \
     GameFramework/gamescene.h \
     GameFramework/sprite.h \
     GameFramework/resources.h \
@@ -48,7 +47,6 @@ HEADERS  += GameFramework/mainfrm.h \
     WorldBuildrEditor/EditorHistory.h \
     WorldBuildrEditor/EditorManager.h \
     WorldBuildrEditor/EditorSprite.h \
-    WorldBuildrEditor/gamecore.h \
     WorldBuildrEditor/SaveFileManager.h \
     WorldBuildrEditor/SelectionZone.h \
     WorldBuildrUi/EditorActionPanel.h

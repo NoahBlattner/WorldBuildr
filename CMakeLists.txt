@@ -31,7 +31,7 @@ add_executable(WorldBuildr
         src/GameFramework/resources.cpp src/GameFramework/resources.h
         src/GameFramework/sprite.cpp src/GameFramework/sprite.h
         src/GameFramework/utilities.cpp src/GameFramework/utilities.h
-        src/WorldBuildrEditor/gamecore.cpp src/WorldBuildrEditor/gamecore.h
+        src/GameFramework/gamecore.cpp src/GameFramework/gamecore.h
         src/WorldBuildr.pro
         src/WorldBuildrEditor/EditorSprite.cpp src/WorldBuildrEditor/EditorSprite.h
         src/WorldBuildrEditor/SelectionZone.cpp src/WorldBuildrEditor/SelectionZone.h
@@ -39,7 +39,10 @@ add_executable(WorldBuildr
         src/WorldBuildrUi/EditorActionPanel.cpp src/WorldBuildrUi/EditorActionPanel.h
         src/WorldBuildrEditor/EditorHistory.cpp src/WorldBuildrEditor/EditorHistory.h
         src/WorldBuildrEditor/SaveFileManager.cpp src/WorldBuildrEditor/SaveFileManager.h
-        src/WorldBuildrUi/SpriteDetailsPanel.cpp src/WorldBuildrUi/SpriteDetailsPanel.h src/WorldBuildrUi/TagEditDialog.cpp src/WorldBuildrUi/TagEditDialog.h src/WorldBuildrEditor/TagsManager.cpp src/WorldBuildrEditor/TagsManager.h src/WorldBuildrUi/SceneEditDialog.cpp src/WorldBuildrUi/SceneEditDialog.h)
+        src/WorldBuildrUi/SpriteDetailsPanel.cpp src/WorldBuildrUi/SpriteDetailsPanel.h
+        src/WorldBuildrUi/TagEditDialog.cpp src/WorldBuildrUi/TagEditDialog.h
+        src/WorldBuildrEditor/TagsManager.cpp src/WorldBuildrEditor/TagsManager.h
+        src/WorldBuildrUi/SceneEditDialog.cpp src/WorldBuildrUi/SceneEditDialog.h)
 target_link_libraries(WorldBuildr
         Qt::Core
         Qt::Gui

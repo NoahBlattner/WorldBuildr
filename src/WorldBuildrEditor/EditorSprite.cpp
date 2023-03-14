@@ -7,7 +7,7 @@
 
 #include "EditorSprite.h"
 #include <QGraphicsSceneMouseEvent>
-#include "GameScene.h"
+#include "GameFramework/GameScene.h"
 #include <iostream>
 #include <QPainter>
 

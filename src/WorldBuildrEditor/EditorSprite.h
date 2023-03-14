@@ -9,7 +9,7 @@
 #define WORLDBUILDR_EDITORSPRITE_H
 
 
-#include "sprite.h"
+#include "GameFramework/sprite.h"
 
 //! Classe représentant une sprite dans l'éditeur.
 //! Une fois ajoutée à une scène, elle écoute le clic gauche de la souris pour envoyer un signal.

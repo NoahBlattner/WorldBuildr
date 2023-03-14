@@ -9,7 +9,7 @@
 #define WORLDBUILDR_SELECTIONZONE_H
 
 
-#include "sprite.h"
+#include "GameFramework/sprite.h"
 
 class EditorSprite;
 

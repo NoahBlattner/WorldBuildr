@@ -17,11 +17,9 @@
 #include "resources.h"
 #include "utilities.h"
 #include "sprite.h"
-#include "EditorSprite.h"
-#include "SelectionZone.h"
-#include "EditorManager.h"
-#include "EditorActionPanel.h"
-#include "GameView.h"
+#include "WorldBuildrEditor/EditorSprite.h"
+#include "WorldBuildrEditor/SelectionZone.h"
+#include "WorldBuildrEditor/EditorManager.h"
 
 const int SCENE_WIDTH = 1280;
 

@@ -8,8 +8,8 @@
 #include <QSpinBox>
 #include <QLabel>
 #include <QPushButton>
-#include "GameScene.h"
-#include "resources.h"
+#include "GameFramework/GameScene.h"
+#include "GameFramework/resources.h"
 
 #include "SceneEditDialog.h"
 
