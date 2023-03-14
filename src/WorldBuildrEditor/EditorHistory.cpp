@@ -15,6 +15,10 @@ EditorHistory::EditorHistory(EditorManager *editorManager) {
     m_pEditorManager = editorManager;
 }
 
+EditorHistory::~EditorHistory() {
+    clearHistory();
+}
+
 //! Ajoute une action simple à l'historique
 //! \param action L'action effectuée
 //! \param additionalData Les données supplémentaires
@@ -158,10 +162,8 @@ void EditorHistory::deleteActionsTo(int index) {
 
 //! Supprime tout l'historique
 void EditorHistory::clearHistory() {
-    for (int i = m_states.size()-1; i >= 0; i--) {
-        deleteActionAndUnreferencedSprites(i);
-        m_states.removeLast();
-    }
+    // Supprime tout l'historique
+    deleteActionsTo(m_states.size()-1);
     m_currentStateIndex = -1;
 }
 
