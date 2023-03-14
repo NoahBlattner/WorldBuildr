@@ -47,6 +47,7 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     m_pEditorManager->createNewEditorSprite(GameFramework::imagesPath() + "demo/ball.png", QPointF(200, 200));
     m_pEditorManager->createNewEditorSprite(GameFramework::imagesPath() + "demo/tennisball.png", QPointF(300, 300));
     m_pEditorManager->createNewEditorSprite(GameFramework::imagesPath() + "demo/plane_cartoon.png", QPointF(400, 400));
+    m_pEditorManager-> setBackGroundImage(GameFramework::imagesPath() + "demo/landscape_background.jpg");
 
     // Réinitialise l'historique pour supprimer les actions de création de sprites
     m_pEditorManager->resetHistory();
