@@ -62,6 +62,7 @@ class EditorManager : public QWidget {
 
 public:
     explicit EditorManager(GameCore* core);
+    ~EditorManager();
 
     void resetEditor();
 

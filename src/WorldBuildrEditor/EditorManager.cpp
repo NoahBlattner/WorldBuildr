@@ -31,6 +31,19 @@ EditorManager::EditorManager(GameCore* core) {
     connect(core, &GameCore::notifyMouseButtonReleased, this, &EditorManager::onMouseButtonReleased);
 }
 
+EditorManager::~EditorManager() {
+    // Supprime l'historique
+    delete m_editorHistory;
+
+    // Supprime les sprites
+    for (auto* sprite : m_pEditorSprites) {
+        delete sprite;
+    }
+
+    // Supprime la zone de sélection
+    delete m_pMultiSelectionZone;
+}
+
 /********************************************
  * Gestion des touche et boutons de la souris
  *******************************************/
