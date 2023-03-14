@@ -9,7 +9,7 @@
 
 set PATH=%PATH%;C:\Qt\Tools\mingw1120_64\bin
 
-C:\Qt\6.3.0\mingw_64\bin\qmake.exe ..\src\GameFramework.pro
+C:\Qt\6.4.0\mingw_64\bin\qmake.exe ..\src\WorldBuildr.pro
 
 C:\Qt\Tools\mingw1120_64\bin\mingw32-make.exe -f Makefile qmake_all
 
@@ -21,10 +21,10 @@ C:\Qt\Tools\mingw1120_64\bin\mingw32-make.exe clean -j2
 
 :: Cr�ation du dossier release qui contiendra les fichiers de d�ploiement
 mkdir ..\release
-copy .\release\GameFramework.exe ..\release\ /Y
+copy .\release\WorldBuildr.exe ..\release\ /Y
 xcopy ..\res ..\release\res\ /E /Y
 
-c:\Qt\6.3.0\mingw_64\bin\windeployqt.exe ..\release\GameFramework.exe
+c:\Qt\6.4.0\mingw_64\bin\windeployqt.exe ..\release\WorldBuildr.exe
 
 :: Suppression du dossier inutiles cr��s par windeployqt
 rmdir ..\release\translations /S /Q
