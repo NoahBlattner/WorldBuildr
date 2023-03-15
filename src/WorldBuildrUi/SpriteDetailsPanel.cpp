@@ -233,7 +233,7 @@ void SpriteDetailsPanel::initInputs() {
 
     // Creation et setup des champs de taille
     m_pScaleEdit = new QDoubleSpinBox();
-    m_pScaleEdit->setRange(.05, 5);
+    m_pScaleEdit->setRange(.05, 10);
     m_pScaleEdit->setStyleSheet(GameFramework::loadStyleSheetString("spinboxStyle.qss"));
 
     // Creation et setup du champ de rotation

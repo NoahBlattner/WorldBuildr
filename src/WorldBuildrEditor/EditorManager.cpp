@@ -591,12 +591,9 @@ EditorSprite* EditorManager::duplicateEditorSprite(EditorSprite* pEditSprite) {
     // On crée un nouveau sprite d'éditeur
     auto* duplicatedSprite = pEditSprite->clone();
 
-    // On ajoute le sprite à l'éditeur décalé de 10 pixels
-    addEditorSprite(duplicatedSprite, pEditSprite->pos());
-
     // On déplace le sprite dupliqué
     if (m_arrowKeysVector == QVector2D(0,0)) { // Si aucune touche de direction n'est enfoncée
-        duplicatedSprite->moveBy(10, 10);
+        duplicatedSprite->setPos(pEditSprite->pos() + QPointF(20,20));
     } else { // Si une touche de direction est enfoncée
         if (m_arrowKeysVector.x() > 0) { // Si la touche de droite est enfoncée
             duplicatedSprite->setX(pEditSprite->right());
@@ -610,6 +607,9 @@ EditorSprite* EditorManager::duplicateEditorSprite(EditorSprite* pEditSprite) {
             duplicatedSprite->setY(pEditSprite->top() - duplicatedSprite->height());
         }
     }
+
+    // On ajoute le sprite à l'éditeur décalé de 10 pixels
+    addEditorSprite(duplicatedSprite, duplicatedSprite->pos());
 
     // Historique
     m_editorHistory->requestResumeHistory();
