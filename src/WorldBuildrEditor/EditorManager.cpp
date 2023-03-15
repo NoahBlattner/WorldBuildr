@@ -32,13 +32,13 @@ EditorManager::EditorManager(GameCore* core) {
 }
 
 EditorManager::~EditorManager() {
+    // Supprime les sprites depuis l'éditeur
+    for (auto* pSprite : m_pEditorSprites) {
+        deleteEditorSprite(pSprite);
+    }
+
     // Supprime l'historique
     delete m_editorHistory;
-
-    // Supprime les sprites
-    for (auto* sprite : m_pEditorSprites) {
-        delete sprite;
-    }
 
     // Supprime la zone de sélection
     delete m_pMultiSelectionZone;
@@ -573,6 +573,9 @@ void EditorManager::addEditorSprite(EditorSprite *pEditorSprite, const QPointF &
     // On ajoute le sprite à la scène
     m_pScene->addSpriteToScene(pEditorSprite);
 
+    // On sélectionne le nouveau sprite
+    selectEditorSprite(pEditorSprite);
+
     // Connecte le signal de click du sprite à la fonction de traitement du click
     connect(pEditorSprite, &EditorSprite::editorSpriteLeftClicked, this, &EditorManager::editorSpriteClicked);
 
@@ -590,9 +593,6 @@ EditorSprite* EditorManager::duplicateEditorSprite(EditorSprite* pEditSprite) {
 
     // On ajoute le sprite à l'éditeur décalé de 10 pixels
     addEditorSprite(duplicatedSprite, pEditSprite->pos());
-
-    // On sélectionne le nouveau sprite
-    selectEditorSprite(duplicatedSprite);
 
     // On déplace le sprite dupliqué
     if (m_arrowKeysVector == QVector2D(0,0)) { // Si aucune touche de direction n'est enfoncée

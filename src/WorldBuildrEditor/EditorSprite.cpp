@@ -57,7 +57,7 @@ void EditorSprite::setTag(const QString &tag) {
 
 //! \brief Retourne le tag de la sprite.
 //! \return Tag de la sprite.
-QString EditorSprite::getTag() {
+QString EditorSprite::getTag() const {
     return data(TAG_KEY).toString();
 }
 
@@ -72,6 +72,9 @@ EditorSprite *EditorSprite::clone() const {
     clone->setPos(pos());
     clone->setRotation(rotation());
     clone->setScale(scale());
+    clone->setZValue(zValue());
+    clone->setOpacity(opacity());
+    clone->setTag(getTag());
     return clone;
 }
 

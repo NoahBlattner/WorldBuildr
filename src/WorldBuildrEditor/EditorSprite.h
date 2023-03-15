@@ -34,7 +34,7 @@ public:
     bool getEditSelected() const;
 
     void setTag(const QString& tag);
-    QString getTag();
+    QString getTag() const;
     void removeTag();
 
     QString getImgPath() const { return m_imagePath; }
