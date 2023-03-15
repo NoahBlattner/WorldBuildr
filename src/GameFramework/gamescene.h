@@ -69,6 +69,7 @@ public:
     int width() const { return static_cast<int>(sceneRect().width()); }
     void setHeight(int sceneHeight);
     int height() const { return static_cast<int>(sceneRect().height()); }
+    void sceneResized();
 
     void registerSpriteForTick(Sprite* pSprite);
     void unregisterSpriteFromTick(Sprite* pSprite);

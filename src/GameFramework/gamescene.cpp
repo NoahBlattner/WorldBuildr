@@ -210,16 +210,25 @@ void GameScene::setBackgroundColor(QColor color) {
 //! \param sceneWidth   Largeur de la scène en pixels.
 void GameScene::setWidth(int sceneWidth)  {
     setSceneRect(0,0, sceneWidth, height());
-
-    outlineRect->setRect(0, 0, sceneWidth, height());
+    sceneResized();
 }
 
 //! Change la hauteur de la scène.
 //! \param sceneHeight   Hauteur de la scène, en pixels.
 void GameScene::setHeight(int sceneHeight)  {
     setSceneRect(0,0, width(), sceneHeight);
+    sceneResized();
+}
 
-    outlineRect->setRect(0, 0, width(), sceneHeight);
+//! Adapte les propriétés de la scène à sa taille
+//! Doit être appelé après que l'on change une dimension de la scène
+void GameScene::sceneResized() {
+    // Adapter la taille du rectangle de contour
+    outlineRect->setRect(0, 0, width(), height());
+
+    // Adapter la taille de l'image de fond
+    auto rescaledBackgroundImage = m_pBackgroundImage->scaled(width(), height());
+    setBackgroundImage(rescaledBackgroundImage);
 }
 
 //! Le sprite donné sera informé du tick.
