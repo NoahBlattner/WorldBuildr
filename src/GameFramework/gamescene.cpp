@@ -15,7 +15,6 @@
 #include <QKeyEvent>
 #include <QPainter>
 #include <QPen>
-
 #include "gamecore.h"
 #include "resources.h"
 #include "sprite.h"
@@ -206,29 +205,30 @@ void GameScene::setBackgroundColor(QColor color) {
     this->setBackgroundBrush(QBrush(color));
 }
 
-//! Change la largeur de la scène.
+//! Change la taille de la scène.
 //! \param sceneWidth   Largeur de la scène en pixels.
-void GameScene::setWidth(int sceneWidth)  {
-    setSceneRect(0,0, sceneWidth, height());
-    sceneResized();
-}
+//! \param sceneHeight  Hauteur de la scène, en pixels.
+//! \param resizeObjects    Si vrai, les objets de la scène seront redimensionnés
+void GameScene::setSize(QSizeF newSize, bool resizeObjects) {
+    float widthRatio = (float)newSize.width() / (float)width();
+    float heightRatio = (float)newSize.height() / (float)height();
 
-//! Change la hauteur de la scène.
-//! \param sceneHeight   Hauteur de la scène, en pixels.
-void GameScene::setHeight(int sceneHeight)  {
-    setSceneRect(0,0, width(), sceneHeight);
-    sceneResized();
-}
+    // Adapter la taille de la scène
+    setSceneRect(0,0, newSize.width(), newSize.height());
 
-//! Adapte les propriétés de la scène à sa taille
-//! Doit être appelé après que l'on change une dimension de la scène
-void GameScene::sceneResized() {
     // Adapter la taille du rectangle de contour
     outlineRect->setRect(0, 0, width(), height());
 
     // Adapter la taille de l'image de fond
     auto rescaledBackgroundImage = m_pBackgroundImage->scaled(width(), height());
     setBackgroundImage(rescaledBackgroundImage);
+
+    if (resizeObjects) { // Redimensionner les objets si nécessaire
+        for(Sprite* pSprite : sprites()) {
+            pSprite->setPos(pSprite->pos().x() * widthRatio, pSprite->pos().y() * heightRatio);
+            pSprite->setScale(pSprite->scale() * widthRatio);
+        }
+    }
 }
 
 //! Le sprite donné sera informé du tick.

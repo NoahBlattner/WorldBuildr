@@ -35,6 +35,8 @@ private:
     QSpinBox* m_widthInput;
     QSpinBox* m_heightInput;
 
+    QCheckBox* m_resizeObjectsInput;
+
     QPushButton* m_okButton;
 
     void initLayout();

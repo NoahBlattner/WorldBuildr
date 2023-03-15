@@ -402,8 +402,7 @@ QSize EditorManager::getSceneSize() const {
 //! Modifie la taille de la scène.
 //! \param size    Nouvelle taille de la scène.
 void EditorManager::setSceneSize(QSize size) {
-    m_pScene->setWidth(size.width());
-    m_pScene->setHeight(size.height());
+    m_pScene->setSize(size);
 }
 
 //! Indique si l'éditeur contient le sprite donné.

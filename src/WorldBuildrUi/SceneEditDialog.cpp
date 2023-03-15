@@ -8,6 +8,7 @@
 #include <QSpinBox>
 #include <QLabel>
 #include <QPushButton>
+#include <QCheckBox>
 #include "GameScene.h"
 #include "resources.h"
 
@@ -42,6 +43,7 @@ void SceneEditDialog::initLayout() {
     // Ajout du layout au layout principal
     mainLayout->addLayout(heightLayout);
     mainLayout->addLayout(widthLayout);
+    mainLayout->addWidget(m_resizeObjectsInput);
     mainLayout->addWidget(m_okButton);
 
     // Ajout du layout principal à la fenêtre
@@ -61,6 +63,11 @@ void SceneEditDialog::initInputs() {
     m_heightInput->setValue(m_scene->height());
     m_heightInput->setStyleSheet(GameFramework::loadStyleSheetString("spinboxStyle.qss"));
 
+    // Création du checkbox pour redimensionner les objets
+    m_resizeObjectsInput = new QCheckBox("Resize objects");
+    m_resizeObjectsInput->setChecked(true);
+    m_resizeObjectsInput->setStyleSheet(GameFramework::loadStyleSheetString("checkboxStyle.qss"));
+
     // Création du bouton OK
     m_okButton = new QPushButton("Appliquer");
     m_okButton->setStyleSheet(GameFramework::loadStyleSheetString("buttonStyle.qss"));
@@ -68,8 +75,7 @@ void SceneEditDialog::initInputs() {
 
 //! Slot appelé lorsque le bouton OK est cliqué.
 void SceneEditDialog::onOkButtonClicked() {
-    m_scene->setWidth(m_widthInput->value());
-    m_scene->setHeight(m_heightInput->value());
+    m_scene->setSize(QSizeF(m_widthInput->value(), m_heightInput->value()) , m_resizeObjectsInput->isChecked());
     close();
 }
 
