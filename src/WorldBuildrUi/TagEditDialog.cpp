@@ -179,6 +179,8 @@ void TagEditDialog::onSelectButtonClicked() {
 
 //! Slot appelé lors du clic sur le bouton de désélection de tag
 void TagEditDialog::onNoTagButtonClicked() {
+    m_pCurrentTagEdit->setText("");
+
     // Suppression du tag du sprite
     m_pSprite->removeTag();
 }

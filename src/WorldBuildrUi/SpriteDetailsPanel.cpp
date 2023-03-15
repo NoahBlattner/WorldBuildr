@@ -72,7 +72,7 @@ void SpriteDetailsPanel::connectSpriteSignals() const {// Connecter les signaux 
 }
 
 //! Déconnecte les signaux du sprite.
-void SpriteDetailsPanel::disconnectSpriteSignals() const {// Déconnecter les signaux du sprite
+void SpriteDetailsPanel::disconnectSpriteSignals() {// Déconnecter les signaux du sprite
     if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
         return;
     disconnect(m_pSprite, &EditorSprite::editorSpriteModified, this, &SpriteDetailsPanel::onSpriteModified);
@@ -81,9 +81,6 @@ void SpriteDetailsPanel::disconnectSpriteSignals() const {// Déconnecter les si
 
 //! Délie le sprite du panneau de détails.
 void SpriteDetailsPanel::onUnbindSprite() {
-    if (m_pSprite == nullptr) // Si le sprite est nul, on ne fait rien
-        return;
-
     disconnectSpriteSignals();
 
     m_pSprite = nullptr;

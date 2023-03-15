@@ -37,7 +37,7 @@ EditorManager::~EditorManager() {
         deleteEditorSprite(pSprite);
     }
 
-    // Supprime l'historique
+    // Supprime l'historique. Ceci supprime aussi les sprites puisqu'ils ne sont plus référencés par l'éditeur
     delete m_editorHistory;
 
     // Supprime la zone de sélection

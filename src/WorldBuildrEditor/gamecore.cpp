@@ -65,8 +65,8 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
 
 //! Destructeur de GameCore : efface les scènes
 GameCore::~GameCore() {
-    delete m_pScene;
     delete m_pEditorManager;
+    delete m_pScene;
     m_pScene = nullptr;
     m_pEditorManager = nullptr;
 }

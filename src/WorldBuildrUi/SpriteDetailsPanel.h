@@ -100,7 +100,7 @@ private:
 
     void updatePanel();
 
-    void disconnectSpriteSignals() const;
+    void disconnectSpriteSignals();
 
     void connectSpriteSignals() const;
 };
