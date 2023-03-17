@@ -504,6 +504,7 @@ void EditorManager::editorSpriteClicked(EditorSprite* pEditSprite) {
 void EditorManager::createSelectionZone(QPointF startPositon) {
     if (m_pMultiSelectionZone != nullptr) {
         m_pMultiSelectionZone->endSelection();
+        delete m_pMultiSelectionZone;
     }
 
     m_pMultiSelectionZone = new SelectionZone(m_pScene, startPositon);
@@ -573,7 +574,7 @@ void EditorManager::addEditorSprite(EditorSprite *pEditorSprite, const QPointF &
     m_pScene->addSpriteToScene(pEditorSprite);
 
     // On sélectionne le nouveau sprite
-    selectEditorSprite(pEditorSprite);
+    selectSingleEditorSprite(pEditorSprite);
 
     // Connecte le signal de click du sprite à la fonction de traitement du click
     connect(pEditorSprite, &EditorSprite::editorSpriteLeftClicked, this, &EditorManager::editorSpriteClicked);
@@ -608,7 +609,7 @@ EditorSprite* EditorManager::duplicateEditorSprite(EditorSprite* pEditSprite) {
     }
 
     // On ajoute le sprite à l'éditeur décalé de 10 pixels
-    addEditorSprite(duplicatedSprite, duplicatedSprite->pos());
+    addEditorSprite(duplicatedSprite, duplicatedSprite->pos());$
 
     // Historique
     m_editorHistory->requestResumeHistory();
