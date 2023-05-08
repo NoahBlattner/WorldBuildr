@@ -609,7 +609,7 @@ EditorSprite* EditorManager::duplicateEditorSprite(EditorSprite* pEditSprite) {
     }
 
     // On ajoute le sprite à l'éditeur décalé de 10 pixels
-    addEditorSprite(duplicatedSprite, duplicatedSprite->pos());$
+    addEditorSprite(duplicatedSprite, duplicatedSprite->pos());
 
     // Historique
     m_editorHistory->requestResumeHistory();

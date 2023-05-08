@@ -218,12 +218,12 @@ void SpriteDetailsPanel::initInputs() {
     // Creation et setup des champs de position
     m_pXPositionEdit = new QSpinBox();
     m_pXPositionEdit->setRange(0, 10000);
-    m_pXPositionEdit->setSingleStep(10);
+    m_pXPositionEdit->setSingleStep(1);
     m_pXPositionEdit->setSuffix(" px");
     m_pXPositionEdit->setStyleSheet(GameFramework::loadStyleSheetString("spinboxStyle.qss"));
     m_pYPositionEdit = new QSpinBox();
     m_pYPositionEdit->setRange(0, 10000);
-    m_pYPositionEdit->setSingleStep(10);
+    m_pYPositionEdit->setSingleStep(1);
     m_pYPositionEdit->setSuffix(" px");
     m_pYPositionEdit->setStyleSheet(GameFramework::loadStyleSheetString("spinboxStyle.qss"));
     m_pZPositionEdit = new QSpinBox();

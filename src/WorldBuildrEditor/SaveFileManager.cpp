@@ -74,7 +74,7 @@ void SaveFileManager::load(EditorManager *editorManager, QString saveFilePath) {
     // On charge le fond
     QString backgroundPath = QDir::toNativeSeparators(json.object()["background"].toString());
     if (!backgroundPath.isEmpty()) {
-        editorManager->setBackGroundImage( GameFramework::resourcesPath() + backgroundPath);
+        editorManager->setBackGroundImage( GameFramework::imagesPath() + "editorImages/" + backgroundPath);
     }
 }
 
@@ -134,7 +134,7 @@ QJsonObject SaveFileManager::convertEditorToJsonObject(EditorManager* editorMana
     json["tags"] = convertTagsToJsonArray(TagsManager::getTags());
     json["sceneWidth"] = editorManager->getSceneSize().width();
     json["sceneHeight"] = editorManager->getSceneSize().height();
-    json["background"] = QDir::toNativeSeparators(editorManager->getBackgroundImagePath()).remove(QDir::toNativeSeparators(GameFramework::resourcesPath()));
+    json["background"] = QDir::toNativeSeparators(editorManager->getBackgroundImagePath()).split(QDir::separator()).last();
     json["sprites"] = convertSpritesToJsonArray(editorManager -> getEditorSprites());
     return json;
 }
@@ -158,7 +158,7 @@ QJsonArray SaveFileManager::convertSpritesToJsonArray(const QList<EditorSprite *
         spriteJson["x"] = sprite->x();
         spriteJson["y"] = sprite->y();
         spriteJson["scale"] = sprite->scale();
-        spriteJson["texturePath"] = QDir::toNativeSeparators(sprite->getImgPath()).remove(QDir::toNativeSeparators(GameFramework::resourcesPath()));
+        spriteJson["textureName"] = sprite->getImgPath(). split(QDir::separator()).last();
         spriteJson["rotation"] = sprite->rotation();
         spriteJson["tag"] = sprite->getTag();
         json.append(spriteJson);
@@ -202,7 +202,8 @@ QList<EditorSprite*> SaveFileManager::loadSpritesFromJson(const QJsonArray& json
     for (QJsonValue jsonValue: jsonArray) { // Pour chaque sprite
         QJsonObject spriteJson = jsonValue . toObject();
         auto* sprite = new EditorSprite(
-                QDir::toNativeSeparators(GameFramework::resourcesPath() + jsonValue["texturePath"] . toString()));
+                QDir::toNativeSeparators(GameFramework::imagesPath() + "editorImages/" + jsonValue["textureName"].toString()));
+        qDebug() << GameFramework::imagesPath() + "/editorImages/" + jsonValue["textureName"].toString();
         sprite -> setX(spriteJson["x"] . toDouble());
         sprite -> setY(spriteJson["y"] . toDouble());
         sprite -> setRotation(spriteJson["rotation"] . toInt());

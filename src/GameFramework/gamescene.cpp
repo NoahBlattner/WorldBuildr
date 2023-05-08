@@ -220,8 +220,10 @@ void GameScene::setSize(QSizeF newSize, bool resizeObjects) {
     outlineRect->setRect(0, 0, width(), height());
 
     // Adapter la taille de l'image de fond
-    auto rescaledBackgroundImage = m_pBackgroundImage->scaled(width(), height());
-    setBackgroundImage(rescaledBackgroundImage);
+    if (m_pBackgroundImage) {
+        auto rescaledBackgroundImage = m_pBackgroundImage -> scaled(width(), height());
+        setBackgroundImage(rescaledBackgroundImage);
+    }
 
     if (resizeObjects) { // Redimensionner les objets si nécessaire
         for(Sprite* pSprite : sprites()) {
