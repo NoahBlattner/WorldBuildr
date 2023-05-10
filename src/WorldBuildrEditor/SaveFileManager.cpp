@@ -160,6 +160,8 @@ QJsonArray SaveFileManager::convertSpritesToJsonArray(const QList<EditorSprite *
         spriteJson["scale"] = sprite->scale();
         spriteJson["textureName"] = sprite->getImgPath(). split(QDir::separator()).last();
         spriteJson["rotation"] = sprite->rotation();
+        spriteJson["opacity"] = sprite->opacity();
+        spriteJson["z-index"] = sprite->zValue();
         spriteJson["tag"] = sprite->getTag();
         json.append(spriteJson);
     }
@@ -208,6 +210,8 @@ QList<EditorSprite*> SaveFileManager::loadSpritesFromJson(const QJsonArray& json
         sprite -> setY(spriteJson["y"] . toDouble());
         sprite -> setRotation(spriteJson["rotation"] . toInt());
         sprite -> setScale(spriteJson["scale"] . toDouble());
+        sprite -> setOpacity(spriteJson["opacity"] . toDouble());
+        sprite -> setZValue(spriteJson["z-index"] . toInt());
         sprite -> setTag(spriteJson["tag"] . toString());
         sprites . append(sprite);
     }
